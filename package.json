@@ -10,7 +10,7 @@
     "ut:watch": "jest --watch",
     "ut:coverage": "jest --coverage",
     "build": "rimraf ./dist && tsc -p ./packages/tsconfig.prod.json",
-    "e2e": "npm run build & mocha packages/e2e/run.js"
+    "e2e": "npm run build && mocha packages/e2e/run.js"
   },
   "main": "dist/app",
   "bin": "./bin/index.js",
