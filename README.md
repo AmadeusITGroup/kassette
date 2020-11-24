@@ -1,6 +1,12 @@
 # kassette
 
-kassette is a development server, used mainly for testing, which proxies requests and is able to easily manage local mocks.
+<p align="center">
+  <img src="doc/assets/images/kassette-logo.png" alt="kassette-logo" width="200px" height="90px"/>
+  <br>
+  <i>kassette is a development server, used mainly for testing, which proxies requests and
+    <br>is able to easily manage local mocks.</i>
+  <br>
+</p>
 
 To use it:
 
