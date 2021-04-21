@@ -10,7 +10,7 @@
 
 To use it:
 
-- install with `npm install kassette`
+- install with `npm install @amadeus-it-group/kassette`
 - add this command to your `package.json` scripts: `kassette -c kassette.config.js`
 - and create the configuration file `kassette.config.js`:
 
@@ -66,7 +66,7 @@ With npm, you can install it in two locations:
 
 Besides where it is installed, you have at least two ways to install it:
 
-- from the npm registry: package's name is `kassette`
+- from the npm registry: package's name is `@amadeus-it-group/kassette`
 - from a git clone (see below)
 
 ### Installing from a git clone
@@ -75,7 +75,7 @@ Clone this repository, and run `npm link` to install it globally on your compute
 
 If you want to use it globally only, then there is nothing more to do.
 
-If you want to install it locally though, you need to add one more step. You won't be able to use a `package.json` dependency, but you can install it manually using `npm link kassette` from inside your project.
+If you want to install it locally though, you need to add one more step. You won't be able to use a `package.json` dependency, but you can install it manually using `npm link @amadeus-it-group/kassette` from inside your project.
 
 
 
