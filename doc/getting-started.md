@@ -24,6 +24,9 @@ Table of contents:
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
 
 ```javascript
+/**
+ * @return { import("@amadeus-it-group/kassette").ConfigurationSpec }
+ */
 exports.getConfiguration = () => {
   return {
     port: 4200,
@@ -52,6 +55,9 @@ Thanks to default behavior it will also:
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
 
 ```javascript
+/**
+ * @return { import("@amadeus-it-group/kassette").ConfigurationSpec }
+ */
 exports.getConfiguration = () => {
   return {
     port: 4200,
@@ -89,6 +95,9 @@ This will:
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
 
 ```javascript
+/**
+ * @return { import("@amadeus-it-group/kassette").ConfigurationSpec }
+ */
 exports.getConfiguration = async () => {
   return {
     // default properties for the "mock" instance
@@ -179,6 +188,9 @@ Besides the basic properties already explained for previous use cases, this will
 Run `kassette -c kassette.config.js -p 8000 --folder ./snapshots` with `kassette.config.js` file:
 
 ```javascript
+/**
+ * @return { import("@amadeus-it-group/kassette").ConfigurationSpec }
+ */
 exports.getConfiguration = async () => {
   return {
     // overridden by command line, will be 8000 eventually

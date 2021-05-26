@@ -15,6 +15,9 @@ To use it:
 - and create the configuration file `kassette.config.js`:
 
 ```javascript
+/**
+ * @return { import("@amadeus-it-group/kassette").ConfigurationSpec }
+ */
 exports.getConfiguration = () => {
   return {
     port: 4200,
