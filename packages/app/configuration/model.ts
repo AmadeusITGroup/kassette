@@ -8,6 +8,9 @@ import {
   HookFunction,
 } from '../mocking';
 import {
+  OnProxyConnectFunction,
+} from '../server/proxy';
+import {
   OnListenFunction,
   OnExitFunction,
 } from '../server';
@@ -25,6 +28,8 @@ export type Mode =
   'manual';
 export type Delay = 'recorded' | number;
 
+export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
+
 /**
  * The set of possible properties defined through the CLI
  * (it is reduced since it can't contain runtime values)
@@ -36,6 +41,8 @@ interface BaseCLIConfigurationSpec {
   delay: Delay;
   mocksFolder: string;
   remoteURL: string;
+  proxyConnectMode: ProxyConnectMode;
+  tlsCAKeyPath: string;
 }
 
 /**
@@ -44,6 +51,7 @@ interface BaseCLIConfigurationSpec {
  */
 export interface BaseConfigurationSpec extends BaseCLIConfigurationSpec {
   readonly hook?: HookFunction | null | undefined;
+  readonly onProxyConnect?: OnProxyConnectFunction | null | undefined;
   readonly onListen?: OnListenFunction | null | undefined;
   readonly onExit?: OnExitFunction | null | undefined;
   readonly console?: Console | null | undefined;
@@ -95,11 +103,14 @@ export interface IMergedConfiguration {
   readonly skipLog: IConfigurationProperty<boolean>;
   readonly port: IConfigurationProperty<number>;
   readonly mode: IConfigurationProperty<Mode>;
+  readonly proxyConnectMode: IConfigurationProperty<ProxyConnectMode>;
   readonly delay: IConfigurationProperty<Delay>;
   readonly mocksFolder: IConfigurationProperty<string>;
   readonly remoteURL: IConfigurationProperty<string | null>;
+  readonly tlsCAKeyPath: IConfigurationProperty<string | null>;
   readonly hook: IConfigurationProperty<HookFunction>;
   readonly onListen: IConfigurationProperty<OnListenFunction>;
+  readonly onProxyConnect: IConfigurationProperty<OnProxyConnectFunction>;
   readonly onExit: IConfigurationProperty<OnExitFunction>;
   readonly console: IConfigurationProperty<Console>;
 }

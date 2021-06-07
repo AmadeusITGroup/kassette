@@ -39,6 +39,7 @@
     "@types/koa-router": "^7.4.2",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^15.12.5",
+    "@types/node-forge": "^0.10.0",
     "@types/yargs": "^17.0.0",
     "chai": "^4.2.0",
     "husky": "^6.0.0",
@@ -60,6 +61,7 @@
     "date-fns": "^2.22.1",
     "interpret": "^2.2.0",
     "mime-types": "^2.1.21",
+    "node-forge": "^0.10.0",
     "rechoir": "^0.7.0",
     "yargs": "^17.0.1"
   }

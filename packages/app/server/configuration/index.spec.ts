@@ -82,6 +82,9 @@ describe('server configuration', () => {
         configuration: {
           filePath: 'dummy/conf/path',
           port: {value: 8080, origin: 'cli'},
+          tlsCAKeyPath: {value: 'dummy/tls/path', origin: 'cli'},
+          proxyConnectMode: {value: 'intercept', origin: 'default'},
+          onProxyConnect: { value: nop, origin: 'file'},
           remoteURL: {value: 'http://dummy.com:5555', origin: 'file'},
           mocksFolder: {value: 'dummy/relative', origin: 'file'},
           mode: {value: 'remote', origin: 'default'},
@@ -102,9 +105,12 @@ describe('server configuration', () => {
 - (${highlighted('cli')} | file | api | default) port: ${highlighted('8080')}
 - (cli | ${highlighted('file')} | api | default) URL: ${highlighted('"http://dummy.com:5555"')}
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
+- (cli | file | api | ${highlighted('default')}) proxy connect mode: ${highlighted('"intercept"')}
+- (${highlighted('cli')} | file | api | default) CA key file path: ${highlighted('"dummy/tls/path"')}
 - (cli | ${highlighted('file')} | api | default) mocks folder: ${highlighted('"dummy/relative"')}
 - (cli | file | api | ${highlighted('default')}) delay: ${highlighted('"recorded"')}
 - (cli | ${highlighted('file')} | api | default) custom request handler: ${highlighted('✓')}
+- (cli | ${highlighted('file')} | api | default) on proxy connect handler: ${highlighted('✓')}
 - (cli | ${highlighted('file')} | api | default) on listen handler: ${highlighted('✓')}
 - (cli | file | api | ${highlighted('default')}) on exit handler: ${highlighted('✗', 'red')}
 - (cli | file | ${highlighted('api')} | default) custom logger: ${highlighted('✓')}
@@ -121,6 +127,9 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
         configuration: {
           filePath: null,
           port: {value: 8080, origin: 'cli'},
+          tlsCAKeyPath: {value: null, origin: 'default'},
+          proxyConnectMode: {value: 'forward', origin: 'cli'},
+          onProxyConnect: { value: nop, origin: 'api'},
           remoteURL: {value: 'http://dummy.com:5555', origin: 'file'},
           mocksFolder: {value: 'dummy/relative', origin: 'file'},
           mode: {value: 'remote', origin: 'default'},
@@ -141,9 +150,12 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
 - (${highlighted('cli')} | file | api | default) port: ${highlighted('8080')}
 - (cli | ${highlighted('file')} | api | default) URL: ${highlighted('"http://dummy.com:5555"')}
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
+- (${highlighted('cli')} | file | api | default) proxy connect mode: ${highlighted('"forward"')}
+- (cli | file | api | ${highlighted('default')}) CA key file path: ${highlighted('null')}
 - (cli | ${highlighted('file')} | api | default) mocks folder: ${highlighted('"dummy/relative"')}
 - (cli | file | api | ${highlighted('default')}) delay: ${highlighted('"recorded"')}
 - (cli | ${highlighted('file')} | api | default) custom request handler: ${highlighted('✓')}
+- (cli | file | ${highlighted('api')} | default) on proxy connect handler: ${highlighted('✓')}
 - (cli | ${highlighted('file')} | api | default) on listen handler: ${highlighted('✓')}
 - (cli | file | api | ${highlighted('default')}) on exit handler: ${highlighted('✗', 'red')}
 - (cli | file | ${highlighted('api')} | default) custom logger: ${highlighted('✓')}

@@ -16,6 +16,7 @@ export * from './requesting/model';
 export * from './request/model';
 export * from './response/model';
 export * from './server-response/model';
+export * from './proxy/model';
 
 
 

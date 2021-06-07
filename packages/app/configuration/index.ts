@@ -15,6 +15,7 @@ import { FileConfigurationError } from '../error';
 
 import {
   Mode,
+  ProxyConnectMode,
   ConfigurationSpec,
   IConfigurationFile,
   GetConfigurationProps,
@@ -76,6 +77,18 @@ export async function getConfiguration({
       apiValue: apiConfiguration.mode,
       defaultValue: 'local_or_download',
     }),
+    proxyConnectMode: buildProperty<ProxyConnectMode>({
+      cliValue: cliConfiguration.proxyConnectMode,
+      fileValue: fileConfiguration.proxyConnectMode,
+      apiValue: apiConfiguration.proxyConnectMode,
+      defaultValue: 'intercept',
+    }),
+    tlsCAKeyPath: buildProperty({
+      cliValue: cliConfiguration.tlsCAKeyPath,
+      fileValue: fileConfiguration.tlsCAKeyPath,
+      apiValue: apiConfiguration.tlsCAKeyPath,
+      defaultValue: null,
+    }),
     delay: buildProperty({
       cliValue: cliConfiguration.delay,
       fileValue: fileConfiguration.delay,
@@ -104,6 +117,12 @@ export async function getConfiguration({
       cliValue: null,
       fileValue: fileConfiguration.hook,
       apiValue: apiConfiguration.hook,
+      defaultValue: () => {},
+    }),
+    onProxyConnect: buildProperty({
+      cliValue: null,
+      fileValue: fileConfiguration.onProxyConnect,
+      apiValue: fileConfiguration.onProxyConnect,
       defaultValue: () => {},
     }),
     console: buildProperty({

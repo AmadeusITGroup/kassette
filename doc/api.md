@@ -93,6 +93,26 @@ To include or exclude data, not every kind of data has the same complexity. For 
 
 Here are the options you can give:
 
+- `protocol`:
+  - content: protocol (normalized to lower case) such as `http` or `https`, without the trailing `:`
+  - possible values:
+    - `true` to include it, `false` to exclude it
+    - an object `{include: true|false}` which has the same meaning as above (provided for consistency with other options below)
+  - default value: `false`
+- `hostname`:
+  - content: host name (normalized to lower case)
+  - possible values:
+    - `true` to include it, `false` to exclude it
+    - an object with properties:
+      - `include`: `true` or `false`, same meaning as above
+      - `filter(hostname: string) => string`: a function used to filter the content of the hostname
+  - default value: `false`
+- `port`:
+  - content: port number or an empty string when using the default port for the protocol
+  - possible values:
+    - `true` to include it, `false` to exclude it
+    - an object `{include: true|false}` which has the same meaning as above (provided for consistency with other options below)
+  - default value: `false`
 - `method`:
   - content: HTTP method (normalized to lower case)
   - possible values:
@@ -145,6 +165,9 @@ const checksum = await mock.checksum({
   format: 'binary',
 
   method: true, // equivalent to {include: true}
+  protocol: true,
+  hostname: true,
+  port: true,
   pathname: {
     // but not necessary, we will omit it for other properties
     include: true,
@@ -232,7 +255,9 @@ API:
 
 The URL of the remote backend, from which only __protocol__, __hostname__ and __port__ are used.
 
-Can be left `null`, in which case anything leading to sending the request to the remote backend will trigger an exception and stop the program
+Can be left `null`, in which case anything leading to sending the request to the remote backend will trigger an exception and stop the program.
+
+Can also contain the special `"*"` value, which means reading from the request the remote backend to target. This is useful when using kassette as a browser proxy.
 
 API:
 
@@ -350,6 +375,9 @@ The mock instance contains a property `request`, with the API described below.
 ### URL
 
 - `url`: the URL as a Node.js `URL` object
+- `protocol`: the protocol part of the URL such as `http` or `https`, without the trailing `:`
+- `hostname`: the hostname part of the URL (not including the port number, if any)
+- `port`: the port part of the URL (if different from the default port for the protocol)
 - `pathname`: the path part of the URL, including the leading `/` (but not including the anchor/hash nor the query/search)
 - `queryParameters`: the query/search parameters taken from the URL, as a read-only map of strings
 
@@ -358,6 +386,8 @@ The mock instance contains a property `request`, with the API described below.
 - `headers`: the headers, as defined on the `original` request object
 - `method`: the HTTP method, in lower case
 - `body`: the body content, as a `Buffer`
+- `connectionsStack`: an array of objects `{protocol, hostname, port}` describing the stack of connections. The first element in the array is the initial connection to the port kassette is listening to. A new object is added for each intercepted call to the HTTP [`CONNECT`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT) method, with the corresponding hostname/port specified in the parameter of `CONNECT`. The protocol can be `http` or `https`. Usually, `connectionsStack` will contain two items when kassette is used as a browser proxy and intercepting a connection to a secure website (https), and only one item in other cases. It is however possible to use kassette for more advanced scenarios with multiple layers of proxy servers, and in that case `connectionsStack` reflects the corresponding layers of proxy servers.
+- `connection`: a shortcut to the last item in `connectionsStack`
 
 <a id="markdown-setting-response-data" name="setting-response-data"></a>
 ## Setting response data

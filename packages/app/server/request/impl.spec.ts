@@ -7,8 +7,14 @@ import { Request } from './impl';
 ////////////////////////////////////////////////////////////////////////////////
 
 describe('Request', () => {
+  const socket = {
+    localAddress: '127.0.0.1',
+    localPort: 8080,
+  };
+
   it('should provide method, lower cased', () => {
     const request = new Request({
+      socket,
       method: 'GET',
       headers: {},
       url: 'http://localhost:8080/my/api',
@@ -19,6 +25,7 @@ describe('Request', () => {
   it('should provide the given body', () => {
     const body = 'Hello';
     const request = new Request({
+      socket,
       method: 'GET',
       headers: {},
       url: 'http://localhost:8080/my/api',
@@ -32,6 +39,7 @@ describe('Request', () => {
       'x-header': 'custom value',
     };
     const request = new Request({
+      socket,
       method: 'GET',
       headers,
       url: 'http://localhost:8080/my/api',
@@ -49,6 +57,7 @@ describe('Request', () => {
     const url = `${protocol}//${host}${pathname}${search}`;
 
     const request = new Request({
+      socket,
       method: 'GET',
       headers: {},
       url,
@@ -75,6 +84,7 @@ describe('Request', () => {
     const url = `${protocol}//${host}${pathname}${search}`;
 
     const request = new Request({
+      socket,
       method: 'GET',
       headers: {},
       url,
@@ -93,6 +103,7 @@ describe('Request', () => {
     const url = `${protocol}//${host}${pathname}${search}`;
 
     const request = new Request({
+      socket,
       method: 'GET',
       headers: {},
       url,

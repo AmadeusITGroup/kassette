@@ -57,7 +57,7 @@ export class ServerError extends AppError {
 export class MissingRemoteURLError extends AppError {
   constructor(
   ) {
-    super(null, 'missing_remote_url', 'Remote URL is not specified, cannot forward the request to the backend');
+    super(null, 'missing_remote_url', 'Remote URL is not specified, cannot forward the request to the backend. Specify "*" to read the URL from the request (when using kassette as a browser proxy).');
     this.name = 'MissingRemoteURLError';
   }
 }

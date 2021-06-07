@@ -44,6 +44,8 @@ Now run your script to launch the proxy!
 
 With this configuration, input requests targeting URLs starting with `/api/` will get processed, and local mocks will be used if present, otherwise data will be downloaded from `http://127.0.0.1:3000` with a forwarded request, persisted and used for future input requests.
 
+Note that kassette can also be configured to run as a browser proxy, reading the target URL from the request, and intercepting HTTPS communications.
+
 Check [_Getting started_](./doc/getting-started.md) to learn more.
 
 
@@ -54,6 +56,8 @@ Check [_Getting started_](./doc/getting-started.md) to learn more.
 - easily computed and set local mock path
 - fill response to client from backend response, downloaded or persisted
 - modify response to client manually
+- can optionally act as the browser proxy
+- generate TLS certificates on the fly to intercept HTTPS communications (as a man-in-the-middle)
 - integrates nicely into your editor and source control: a simple hierarchy of files is generated in a clean way for inspection, edition, diffing, etc.
 
 

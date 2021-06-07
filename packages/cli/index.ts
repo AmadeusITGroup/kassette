@@ -4,7 +4,7 @@ import * as yargs from 'yargs';
 
 // ------------------------------------------------------------------------- app
 
-import { runFromCLI, Mode } from '../app';
+import { runFromCLI, Mode, ProxyConnectMode } from '../app';
 
 ////////////////////////////////////////////////////////////////////////////////
 // XXX 2019-01-09T16:24:12+01:00 IMPORTANT
@@ -50,10 +50,12 @@ const {version} = require('../../package.json');
     .option('u', {
       alias: ['url', 'remote', 'remote-url'],
       describe: 'remote server url',
+      string: true,
     })
     .option('f', {
       alias: ['folder', 'mocks-folder'],
       describe: 'path to mocks base folder',
+      string: true,
       // default: './mocks',
     })
     .option('m', {
@@ -61,6 +63,17 @@ const {version} = require('../../package.json');
       describe: 'server mode',
       choices: ['download', 'local_or_download', 'local_or_remote', 'local', 'remote', 'manual'],
       // default: 'local_or_download',
+    })
+    .option('x', {
+      alias: 'proxy-connect-mode',
+      describe: 'proxy connect mode',
+      choices: ['close', 'intercept', 'forward', 'manual'],
+      // default: 'intercept',
+    })
+    .option('k', {
+      alias: 'tls-ca-key',
+      describe: 'path to a PEM-encoded CA certificate and key file, created if it does not exist.',
+      string: true,
     })
     .option('d', {
       alias: ['delay'],
@@ -76,13 +89,16 @@ const {version} = require('../../package.json');
 
   await runFromCLI({
     cliConfiguration: {
-      remoteURL: options.u as string,
+      remoteURL: options.u,
       port: options.p,
       delay: delay as number | undefined,
       mode: options.m as Mode,
-      mocksFolder: options.f as string,
+      proxyConnectMode: options.x as ProxyConnectMode,
+      mocksFolder: options.f,
       skipLog: options.q,
+      tlsCAKeyPath: options.k,
     },
     configurationPath: options.c as string,
   });
+
 })();

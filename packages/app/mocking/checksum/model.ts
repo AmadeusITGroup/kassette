@@ -30,6 +30,14 @@ export type Spec<Specific> = Include | Specific;
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+export interface ProtocolSpec extends BaseSpec {}
+
+export interface HostnameSpec extends BaseSpec {
+  filter?: (hostname: string) => MaybeAsync<string>;
+}
+
+export interface PortSpec extends BaseSpec {}
+
 export interface MethodSpec extends BaseSpec {}
 
 export interface PathnameSpec extends BaseSpec {
@@ -82,6 +90,9 @@ export interface ChecksumArgs {
   type?: string;
   format?: crypto.BinaryToTextEncoding;
 
+  protocol?: Spec<ProtocolSpec>;
+  hostname?: Spec<HostnameSpec>;
+  port?: Spec<PortSpec>;
   method?: Spec<MethodSpec>;
   pathname?: Spec<PathnameSpec>;
   body?: Spec<BodySpec>;
