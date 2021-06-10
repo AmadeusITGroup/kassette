@@ -97,7 +97,7 @@ export async function processList(spec: ListOrFilter, input: ObjectMap, defaultC
       }
     }
     output = {} as any;
-    for (let key of properties) {
+    for (const key of properties) {
       let targetKey = key;
       if (!caseSensitive) targetKey = targetKey.toLowerCase();
       output[targetKey] = input[key];

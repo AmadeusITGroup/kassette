@@ -500,7 +500,7 @@ describe('checksum', () => {
                 output[key.toUpperCase()] = value;
               }
               return output;
-            }
+            },
           },
           body: false,
         });
@@ -765,7 +765,7 @@ describe('checksum', () => {
                 output[key.toUpperCase()] = value;
               }
               return output;
-            }
+            },
           },
           body: false,
           query: false,
@@ -948,7 +948,7 @@ describe('checksum', () => {
           body: false,
           query: false,
           customData: {
-            custom: 'data'
+            custom: 'data',
           },
         });
         expect(result).toEqual(clean`

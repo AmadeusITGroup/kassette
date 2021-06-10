@@ -310,7 +310,7 @@ export class Mock implements IMock {
     const inputRequestBodyFile = this._createFileHandler(this._getBodyFileName(
       `${CONF.inputRequestBaseFilename}-body`,
       this.request.headers['content-type'],
-    ))
+    ));
     await inputRequestFile.write(stringifyPretty({
       headers: this.request.headers,
       method: this.request.method,
@@ -445,7 +445,7 @@ export class Mock implements IMock {
     const forwardedRequestBodyFile = this._createFileHandler(this._getBodyFileName(
       `${CONF.forwardedRequestBaseFilename}-body`,
       remotePayload.requestOptions.headers['content-type'],
-    ))
+    ));
     await forwardedRequestFile.write(stringifyPretty({
       bodyType: remotePayload.requestOptions.body instanceof Buffer ? 'buffer' : 'string',
       headers: remotePayload.requestOptions.headers,
