@@ -32,7 +32,7 @@ A custom solution has been implemented to create, setup and run the end-to-end t
 
 Behind this, [Mocha](https://mochajs.org/) is used to run the process and therefore the tests, and [Chai](https://www.chaijs.com/) is used to perform the assertions.
 
-For now, [puppeteer](https://github.com/GoogleChrome/puppeteer) is used to manipulate a headless Chrome as a client to make the requests and gather the responses.
+For now, [playwright](https://playwright.dev) is used to manipulate a headless Chrome as a client to make the requests and gather the responses.
 
 
 
