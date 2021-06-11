@@ -140,7 +140,7 @@ Also note that if you provide one of the options, giving a configuration object 
 Example:
 
 ```javascript
-const {checksum, content} = await mock.checksum({
+const checksum = await mock.checksum({
   type: 'MD5',
   format: 'binary',
 
@@ -178,12 +178,11 @@ const {checksum, content} = await mock.checksum({
 
 #### Output
 
-The method returns two properties:
+The method returns the actual checksum value, that you can then use for instance to add to the mock's path.
 
-- `checksum`: the actual checksum value, that you can then use for instance to add to the mock's path
-- `content`: the final content, as a string, which was built according to your options and the request's data and used to compute the checksum. This can be handy for debugging.
+It also stores the computed content in property `checksumContent` (in the `mock` object), as a string. It is built according to your options and the request's data and used to compute the checksum. This can be handy for debugging.
 
-You can always access the latest computed checksum content in property `checksumContent`. Note that we designed the API so that the `checksum` method is called only once for a given request/mock.
+Note that we designed the API so that it is usually not needed to call the `checksum` method more than once for a given request/mock.
 
 Also, checksum data is persisted, so that you can debug more easily, especially by committing it into your SCM to analyze changes across versions of your code. File is along with the other files of the mock under file name `checksum`.
 
