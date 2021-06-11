@@ -59,7 +59,7 @@
     "date-fns": "^1.29.0",
     "interpret": "^1.1.0",
     "mime-types": "^2.1.21",
-    "rechoir": "^0.6.2",
+    "rechoir": "^0.7.0",
     "yargs": "^12.0.2"
   }
 }
