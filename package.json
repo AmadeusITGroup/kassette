@@ -33,7 +33,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^7.1.2",
-    "@types/jest": "^23.3.5",
+    "@types/jest": "^26.0.23",
     "@types/koa": "^2.0.47",
     "@types/koa-router": "^7.0.35",
     "@types/mime-types": "^2.1.0",
