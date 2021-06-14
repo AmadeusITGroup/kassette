@@ -5,7 +5,8 @@
   "scripts": {
     "prepare": "husky install",
     "lint": "tslint -c packages/tslint.json \"packages/**/*.ts\"",
-    "format": "prettier --write packages/**/*.ts",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
     "test": "npm run ut",
     "ut": "jest",
     "ut:watch": "jest --watch",
