@@ -38,7 +38,7 @@
     "@types/koa-router": "^7.0.35",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^10.12.0",
-    "@types/yargs": "^12.0.1",
+    "@types/yargs": "^17.0.0",
     "chai": "^4.2.0",
     "husky": "^1.1.2",
     "jest": "^27.0.4",
@@ -60,6 +60,6 @@
     "interpret": "^2.2.0",
     "mime-types": "^2.1.21",
     "rechoir": "^0.7.0",
-    "yargs": "^12.0.2"
+    "yargs": "^17.0.1"
   }
 }

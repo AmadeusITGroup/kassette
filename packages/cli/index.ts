@@ -20,67 +20,69 @@ import { runFromCLI, Mode } from '../app';
 
 const {version} = require('../../package.json');
 
-const options = yargs
-  .scriptName('kassette')
-  .wrap(null)
-  .usage(`$0 version ${version}`)
-  .example('$0 -c proxy.config.js', 'Start proxy with configuration file proxy.config.js')
-  .epilogue('Please visit repository for more information: https://github.com/AmadeusITGroup/kassette')
-  .help('h')
-  .alias('h', 'help')
-  .version(version)
-  .alias('v', 'version')
-  .option('c', {
-    alias: ['conf', 'config', 'configuration'],
-    describe: 'path to configuration file',
-  })
-  .option('q', {
-    alias: ['quiet', 'skip-logs'],
-    describe: 'skip logs',
-    type: 'boolean',
-    // default: false,
-  })
-  .option('p', {
-    alias: ['port'],
-    describe: 'port on which to run the server',
-    type: 'number',
-    // default: 8080,
-  })
-  .option('u', {
-    alias: ['url', 'remote', 'remote-url'],
-    describe: 'remote server url',
-  })
-  .option('f', {
-    alias: ['folder', 'mocks-folder'],
-    describe: 'path to mocks base folder',
-    // default: './mocks',
-  })
-  .option('m', {
-    alias: 'mode',
-    describe: 'server mode',
-    choices: ['download', 'local_or_download', 'local_or_remote', 'local', 'remote', 'manual'],
-    // default: 'local_or_download',
-  })
-  .option('d', {
-    alias: ['delay'],
-    describe: 'mock response artificial delay',
-    // default: 'recorded',
-  })
-  .argv;
+(async () => {
+  const options = await yargs
+    .scriptName('kassette')
+    .wrap(null)
+    .usage(`$0 version ${version}`)
+    .example('$0 -c proxy.config.js', 'Start proxy with configuration file proxy.config.js')
+    .epilogue('Please visit repository for more information: https://github.com/AmadeusITGroup/kassette')
+    .help('h')
+    .alias('h', 'help')
+    .version(version)
+    .alias('v', 'version')
+    .option('c', {
+      alias: ['conf', 'config', 'configuration'],
+      describe: 'path to configuration file',
+    })
+    .option('q', {
+      alias: ['quiet', 'skip-logs'],
+      describe: 'skip logs',
+      type: 'boolean',
+      // default: false,
+    })
+    .option('p', {
+      alias: ['port'],
+      describe: 'port on which to run the server',
+      type: 'number',
+      // default: 8080,
+    })
+    .option('u', {
+      alias: ['url', 'remote', 'remote-url'],
+      describe: 'remote server url',
+    })
+    .option('f', {
+      alias: ['folder', 'mocks-folder'],
+      describe: 'path to mocks base folder',
+      // default: './mocks',
+    })
+    .option('m', {
+      alias: 'mode',
+      describe: 'server mode',
+      choices: ['download', 'local_or_download', 'local_or_remote', 'local', 'remote', 'manual'],
+      // default: 'local_or_download',
+    })
+    .option('d', {
+      alias: ['delay'],
+      describe: 'mock response artificial delay',
+      // default: 'recorded',
+    })
+    .argv;
 
-let { d: delay } = options;
-if (delay != null && delay !== 'recorded') {
-  delay = parseInt(delay as string, 10);
-}
+  let { d: delay } = options;
+  if (delay != null && delay !== 'recorded') {
+    delay = parseInt(delay as string, 10);
+  }
 
-runFromCLI({
-  cliConfiguration: {
-    remoteURL: options.u as string,
-    port: options.p,
-    delay: delay as number | undefined,
-    mode: options.m as Mode,
-    mocksFolder: options.f as string,
-    skipLog: options.q,
-  },
-  configurationPath: options.c as string,
-});
+  await runFromCLI({
+    cliConfiguration: {
+      remoteURL: options.u as string,
+      port: options.p,
+      delay: delay as number | undefined,
+      mode: options.m as Mode,
+      mocksFolder: options.f as string,
+      skipLog: options.q,
+    },
+    configurationPath: options.c as string,
+  });
+})();
