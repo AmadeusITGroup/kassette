@@ -55,7 +55,7 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "chalk": "^2.4.1",
+    "chalk": "^4.1.1",
     "date-fns": "^1.29.0",
     "interpret": "^2.2.0",
     "mime-types": "^2.1.21",
