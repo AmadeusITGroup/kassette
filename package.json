@@ -33,7 +33,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^7.1.2",
-    "@types/jest": "^23.3.5",
+    "@types/jest": "^26.0.23",
     "@types/koa": "^2.0.47",
     "@types/koa-router": "^7.0.35",
     "@types/mime-types": "^2.1.0",
@@ -41,7 +41,7 @@
     "@types/yargs": "^12.0.1",
     "chai": "^4.2.0",
     "husky": "^1.1.2",
-    "jest": "^23.6.0",
+    "jest": "^27.0.4",
     "koa": "^2.6.2",
     "koa-router": "^7.4.0",
     "memfs": "^3.2.2",
@@ -49,7 +49,7 @@
     "playwright": "^1.12.2",
     "prettier": "^2.3.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^23.10.4",
+    "ts-jest": "^27.0.3",
     "ts-node": "^7.0.0",
     "tslint": "^6.0.0",
     "typescript": "^4.3.2"

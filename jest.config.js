@@ -1,3 +1,4 @@
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
@@ -9,7 +10,7 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      tsConfig: 'packages/tsconfig.json',
+      tsconfig: 'packages/tsconfig.json',
     },
   },
   'testRegex': 'packages[\\/\\\\].*\\.spec\\.ts$',
