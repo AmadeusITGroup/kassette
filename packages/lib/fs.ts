@@ -99,6 +99,6 @@ export class FileHandler implements IFileHandler {
   }
 
   async write(content: Buffer | string | null | undefined): Promise<void> {
-    return writeFile(this.path, content != null ? content : new Buffer(0));
+    return writeFile(this.path, content != null ? content : Buffer.alloc(0));
   }
 }
