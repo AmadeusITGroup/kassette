@@ -301,6 +301,7 @@ Options:
   -h, --help                             Show help  [boolean]
   -c, --conf, --config, --configuration  path to configuration file
   -q, --quiet, --skip-logs               skip logs  [boolean]
+      --hostname, --host                 hostname on which to run the server  [string]
   -p, --port                             port on which to run the server  [number]
   -u, --url, --remote, --remote-url      remote server url  [string]
   -f, --folder, --mocks-folder           path to mocks base folder  [string]

@@ -59,6 +59,7 @@ Here is the configuration sources precedence when a same configuration property 
 
 Check available options using `kassette --help` or `kassette -h`. To summarize, here are the possible options:
 
+- `hostname`: `--hostname` • `--host`
 - `port`: `-p` • `--port`
 - `remoteURL`: `-u` • `--url` • `--remote` • `--remote-url`
 - `mocksFolder`: `-f` • `--folder` • `--mocks-folder`
@@ -105,6 +106,9 @@ __All properties are optional__, not only because most of them have __suitable d
 <a id="markdown-server" name="server"></a>
 ## Server
 
+- `hostname`: the hostname on which the proxy should listen. Uses `127.0.0.1` by default, which only allows local connections. To allow remote connections, use the ip address of the specific network interface that should be allowed to connect or the unspecified IPv4 (`0.0.0.0`) or IPv6 (`::`) address.
+
+  **Note that kassette has not been reviewed for security issues. It is intended to be used in a safe local/testing environment. Binding it to an open connection can result in compromising your computer or your network.**
 - `port`: the port on which the proxy should listen
   - if the port is not available, it will fail and stop the program; try again with another, available port
   - if `port` is set to `0`, the proxy will listen on a random port (actually depends on the OS implementation): use the callback `onListen` to catch its value

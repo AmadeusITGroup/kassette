@@ -138,7 +138,7 @@ export async function spawnServer({configuration, root}: ApplicationData): Promi
   // server that can receive both http and https connections
   const netServer = createNetServer(handleSocket);
 
-  netServer.listen(configuration.port.value, function(this: Socket) {
+  netServer.listen(configuration.port.value, configuration.hostname.value, function(this: Socket) {
     const port = (this.address() as AddressInfo).port;
     configuration.onListen.value({port});
 

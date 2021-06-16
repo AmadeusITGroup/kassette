@@ -41,6 +41,12 @@ const {version} = require('../../package.json');
       type: 'boolean',
       // default: false,
     })
+    .option('hostname', {
+      alias: ['host'],
+      describe: 'hostname on which to run the server',
+      type: 'string',
+      // default: '127.0.0.1'
+    })
     .option('p', {
       alias: ['port'],
       describe: 'port on which to run the server',
@@ -90,6 +96,7 @@ const {version} = require('../../package.json');
   await runFromCLI({
     cliConfiguration: {
       remoteURL: options.u,
+      hostname: options.hostname,
       port: options.p,
       delay: delay as number | undefined,
       mode: options.m as Mode,
