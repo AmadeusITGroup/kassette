@@ -80,7 +80,7 @@ export function isListing(value: any): value is ListSpec {
 
 export interface ChecksumArgs {
   type?: string;
-  format?: crypto.HexBase64Latin1Encoding;
+  format?: crypto.BinaryToTextEncoding;
 
   method?: Spec<MethodSpec>;
   pathname?: Spec<PathnameSpec>;
