@@ -2,10 +2,12 @@
 
 import {
   createServer,
-  Server,
+  IncomingMessage,
 } from 'http';
 
 import {
+  createServer as createNetServer,
+  Server,
   Socket,
   AddressInfo,
 } from 'net';
@@ -47,6 +49,10 @@ import {
   build as buildConfiguration,
 } from './configuration';
 
+import { TLSManager } from './tls';
+import { ProxyConnectAPI } from './proxy';
+import { setConnectionProtocol } from './connection';
+
 // ------------------------------------------------------------------------ conf
 
 import CONF from './conf';
@@ -76,7 +82,7 @@ export * from './server-response';
 ////////////////////////////////////////////////////////////////////////////////
 
 /** Spawns the server */
-export function spawnServer({configuration, root}: ApplicationData): Server {
+export async function spawnServer({configuration, root}: ApplicationData): Promise<Server> {
   const server = createServer(async (request, response) => {
     const mock = new Mock({
       options: {root, userConfiguration: configuration},
@@ -94,7 +100,45 @@ export function spawnServer({configuration, root}: ApplicationData): Server {
     await mock.process();
   });
 
-  server.listen(configuration.port.value, function(this: Socket) {
+  const tlsManager = new TLSManager({tlsCAKeyPath: configuration.tlsCAKeyPath.value, root});
+  await tlsManager.init();
+
+  const handleSocket = (socket: Socket) => {
+    socket.once('data', async data => {
+      socket.pause();
+      socket.unshift(data);
+      // cf https://github.com/mscdex/httpolyglot/issues/3#issuecomment-173680155
+      // HTTPS:
+      if (data.readUInt8(0) === 22) {
+        socket = await tlsManager.process(socket);
+        setConnectionProtocol(socket, 'https');
+      } else {
+        await Promise.resolve();
+        setConnectionProtocol(socket, 'http');
+      }
+      server.emit('connection', socket);
+      socket.resume();
+    });
+  };
+
+  server.on('connect', async (request: IncomingMessage, socket: Socket, data: Buffer) => {
+    if (data.length > 0) {
+      socket.unshift(data);
+    }
+    const api = new ProxyConnectAPI(request, configuration.proxyConnectMode.value, handleSocket);
+    logInfo({
+      timestamp: true,
+      message: CONF.messages.handlingRequest,
+      data: `${request.method} ${request.url}`,
+    });
+    await configuration.onProxyConnect.value(api);
+    api.process();
+  });
+
+  // server that can receive both http and https connections
+  const netServer = createNetServer(handleSocket);
+
+  netServer.listen(configuration.port.value, function(this: Socket) {
     const port = (this.address() as AddressInfo).port;
     configuration.onListen.value({port});
 
@@ -102,9 +146,9 @@ export function spawnServer({configuration, root}: ApplicationData): Server {
     logSeparator();
   });
 
-  server.on('close', () => configuration.onExit.value());
+  netServer.on('close', () => configuration.onExit.value());
 
-  return server;
+  return netServer;
 }
 
 
@@ -123,7 +167,7 @@ export async function _run(configuration: IMergedConfiguration | null): Promise<
 
   const data = {configuration, root: process.cwd()};
   logApplicationData(data);
-  const server = spawnServer(data);
+  const server = await spawnServer(data);
 
   const output = function() {
     return new Promise(resolve => server.close(resolve));

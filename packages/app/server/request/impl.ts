@@ -16,6 +16,7 @@ import { fromPairs } from '../../../lib/object';
 // -------------------------------------------------------------------- internal
 
 import { IFetchedRequest } from './model';
+import { connectionToURL, getSocketConnections } from '../connection';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Request
@@ -34,6 +35,17 @@ export class Request implements IFetchedRequest {
   ) {}
 
   @CachedProperty()
+  get connectionsStack() {
+    return getSocketConnections(this.original.socket);
+  }
+
+  @CachedProperty()
+  get connection() {
+    const stack = this.connectionsStack;
+    return stack[stack.length - 1];
+  }
+
+  @CachedProperty()
   get method(): string {
     return this.original.method!.toLowerCase();
   }
@@ -45,8 +57,12 @@ export class Request implements IFetchedRequest {
 
   @CachedProperty()
   get url(): URL {
-    return new URL(this.original.url!, 'http://127.0.0.1'); // "new URL" requires a base URL if relative
-    // using new URL is handier but we don't care about the base, so provide anything here
+    const baseURL = connectionToURL(this.connection);
+    const host = this.headers.host;
+    if (host) {
+      baseURL.host = host;
+    }
+    return new URL(this.original.url!, baseURL);
   }
 
   @CachedProperty()
@@ -57,5 +73,20 @@ export class Request implements IFetchedRequest {
   @CachedProperty()
   get pathname(): string {
     return this.url.pathname;
+  }
+
+  @CachedProperty()
+  get protocol(): string {
+    return this.url.protocol.replace(/:$/, '');
+  }
+
+  @CachedProperty()
+  get hostname(): string {
+    return this.url.hostname;
+  }
+
+  @CachedProperty()
+  get port(): string {
+    return this.url.port;
   }
 }

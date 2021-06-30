@@ -8,6 +8,8 @@ Table of contents:
   - [Run with a simple hook](#run-with-a-simple-hook)
   - [Run with an advanced hook](#run-with-an-advanced-hook)
   - [Override configuration file options with CLI options](#override-configuration-file-options-with-cli-options)
+  - [Run as a browser proxy](#run-as-a-browser-proxy)
+  - [Filter TLS connections to intercept as a browser proxy](#filter-tls-connections-to-intercept-as-a-browser-proxy)
   - [Get help in the terminal](#get-help-in-the-terminal)
   - [Run with no option](#run-with-no-option)
 - [Configuration](#configuration)
@@ -205,6 +207,86 @@ exports.getConfiguration = async () => {
 - `port` gets overridden by command line
 - `mocksFolder` gets specified by command line
 
+<a id="markdown-run-as-a-browser-proxy" name="run-as-a-browser-proxy"></a>
+## Run as a browser proxy
+
+Run: `kassette -u '*' -m remote`
+
+This starts kassette as a browser proxy. Using kassette as the browser proxy allows to easily intercept all requests made by the browser without having to change any URL.
+
+The `-u '*'` argument means that kassette will read from each request which remote server to target for that request (as it is transmitted when using a browser proxy).
+
+The `-m remote` argument means kassette will transfer the requests to the remote server and will not store anything locally.
+
+Once kassette is started, you have to configure your browser to use kassette as its proxy. For example, if you use [playwright](https://playwright.dev), you can run start it with the `--proxy-server` argument:
+
+```sh
+# you can also use ff (Firefox) or wk (WebKit) instead of cr (Chromium) below:
+npx playwright cr --proxy-server=http://127.0.0.1:8080
+```
+
+Or you can use the following script to start the browser with [playwright](https://playwright.dev) while ignoring https errors (because of the certificate used by kassette that is not recognized by the browser):
+
+```js
+const { chromium } = require("playwright");
+
+(async () => {
+  const browser = await chromium.launch({
+    headless: false,
+    proxy: {
+      server: "http://127.0.0.1:8080"
+    }
+  });
+  const context = await browser.newContext({
+    ignoreHTTPSErrors: true
+  });
+  const page = await context.newPage();
+  await page.goto("https://github.com/AmadeusITGroup/kassette");
+})();
+```
+
+<a id="markdown-filter-tls-connections-to-intercept-as-a-browser-proxy" name="filter-tls-connections-to-intercept-as-a-browser-proxy"></a>
+## Filter TLS connections to intercept as a browser proxy
+
+Run `kassette -c kassette.config.js` with `kassette.config.js` file:
+
+```javascript
+/**
+ * @return { import("@amadeus-it-group/kassette").ConfigurationSpec }
+ */
+exports.getConfiguration = () => {
+  return {
+    port: 4200,
+    mocksFolder: './mocks-folder',
+    remoteURL: '*',
+    proxyConnectMode: 'forward',
+    mode: 'local_or_download',
+
+    onProxyConnect: async (request) => {
+      if (request.hostname.endsWith('.mydomain.com') && request.port === 443) {
+        // override the config to intercept TLS connections to *.mydomain.com
+        // those requests will pass through the hook method
+        request.setMode('intercept');
+      }
+      // otherwise, proxyConnectMode: 'forward' will be used (as defined in the config)
+      // those requests will go without decryption directly to the destination server,
+      // so they will not pass through the hook method
+    },
+
+    hook: async ({mock}) => {
+      mock.setLocalPath([
+        // include the protocol, hostname and port in the local path
+        mock.request.protocol,
+        mock.request.hostname,
+        mock.request.port,
+        mock.request.pathname.split('/'),
+        mock.request.method,
+      ]);
+    }
+  };
+}
+```
+
 <a id="markdown-get-help-in-the-terminal" name="get-help-in-the-terminal"></a>
 ## Get help in the terminal
 
@@ -218,11 +300,13 @@ kassette version 1.0.1
 Options:
   -h, --help                             Show help  [boolean]
   -c, --conf, --config, --configuration  path to configuration file
-  -q, --quiet, --skip-log                skip logs  [boolean]
+  -q, --quiet, --skip-logs               skip logs  [boolean]
   -p, --port                             port on which to run the server  [number]
-  -u, --url, --remote, --remote-url      remote server url
-  -f, --folder, --mocks-folder           path to mocks base folder
+  -u, --url, --remote, --remote-url      remote server url  [string]
+  -f, --folder, --mocks-folder           path to mocks base folder  [string]
   -m, --mode                             server mode  [choices: "download", "local_or_download", "local_or_remote", "local", "remote", "manual"]
+  -x, --proxy-connect-mode               proxy connect mode  [choices: "close", "intercept", "forward", "manual"]
+  -k, --tls-ca-key                       path to a PEM-encoded CA certificate and key file, created if it does not exist.  [string]
   -d, --delay                            mock response artificial delay
   -v, --version                          Show version number  [boolean]
 

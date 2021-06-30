@@ -915,6 +915,124 @@ const useCases = [
       });
     },
   },
+
+  {
+    name: 'browser-proxy-https-cross-domain',
+    description: 'should intercept an https cross-domain request',
+    iterations: 1,
+    browserProxy: true,
+    request: async () => {
+      return {
+        request: {
+          url: "https://www.example.org:8081/"
+        }
+      };
+    },
+    onProxyConnect: async (/** @type {import("../..").IProxyConnectAPI} */ request) => {
+      request.setMode('intercept');
+    },
+    proxy: async (/** @type {import("../..").HookAPI} */ {mock}) => {
+      mock.setMode('local');
+      mock.setPayload(mock.createPayload({
+        body: "myResponse",
+        data: { headers: {"Access-Control-Allow-Origin": "*"} }
+      }));
+      return {
+        connections: mock.request.connectionsStack,
+        protocol: mock.request.protocol,
+        hostname: mock.request.hostname,
+        port: mock.request.port
+      };
+    },
+    defineAssertions: ({it, getData, expect}) => {
+      it('should return a custom payload', async () => {
+        const {data} = getData(0);
+        expect(data.client.body).to.be.equal("myResponse");
+        expect(data.proxy.protocol).to.be.equal("https");
+        expect(data.proxy.hostname).to.be.equal("www.example.org");
+        expect(data.proxy.port).to.be.equal("8081");
+        expect(data.proxy.connections.length).to.be.equal(2);
+        expect(data.proxy.connections[0].protocol).to.be.equal("http");
+        expect(data.proxy.connections[0].hostname).to.include("127.0.0.1");
+        expect(data.proxy.connections[1].protocol).to.be.equal("https");
+        expect(data.proxy.connections[1].hostname).to.be.equal("www.example.org");
+        expect(data.proxy.connections[1].port).to.be.equal(8081);
+      });
+    }
+  },
+
+  {
+    name: 'browser-proxy-forward-https-cross-domain',
+    description: 'should forward an https cross-domain request',
+    iterations: 1,
+    browserProxy: true,
+    request: async () => {
+      return {
+        request: {
+          url: "https://www.example.org:8081/"
+        }
+      };
+    },
+    alternativeServe: async (/** @type {import("koa").Context} */{response}) => {
+      response.body = 'alternativeResponse';
+      response.set("Access-Control-Allow-Origin", "*");
+      response.status = 200;
+    },
+    onProxyConnect: async (/** @type {import("../..").IProxyConnectAPI} */ request, {context}) => {
+      const url = new URL(context.alternativeRemoteURL);
+      request.setDestination(url.hostname, +url.port);
+    },
+    proxy: async (/** @type {import("../..").HookAPI} */ {mock}) => {
+      // should not be called at all
+      return {};
+    },
+    defineAssertions: ({it, getData, expect}) => {
+      it('should return a custom payload', async () => {
+        const {data} = getData(0);
+        expect(data.proxy).to.be.undefined;
+        expect(data.client.body).to.be.equal("alternativeResponse");
+      });
+    }
+  },
+
+  {
+    name: 'browser-proxy-http-cross-domain',
+    description: 'should intercept an http cross-domain request',
+    iterations: 1,
+    browserProxy: true,
+    request: async () => {
+      return {
+        request: {
+          url: "http://www.example.org:8082/"
+        }
+      };
+    },
+    proxy: async (/** @type {import("../..").HookAPI} */ {mock}) => {
+      mock.setMode('local');
+      mock.setPayload(mock.createPayload({
+        body: "exampleResponse",
+        data: { headers: {"Access-Control-Allow-Origin": "*"} }
+      }));
+      return {
+        connections: mock.request.connectionsStack,
+        protocol: mock.request.protocol,
+        hostname: mock.request.hostname,
+        port: mock.request.port
+      };
+    },
+    defineAssertions: ({it, getData, expect}) => {
+      it('should return a custom payload', async () => {
+        const {data} = getData(0);
+        expect(data.client.body).to.be.equal("exampleResponse");
+        expect(data.proxy.protocol).to.be.equal("http");
+        expect(data.proxy.hostname).to.be.equal("www.example.org");
+        expect(data.proxy.port).to.be.equal("8082");
+        expect(data.proxy.connections.length).to.be.equal(1);
+        expect(data.proxy.connections[0].protocol).to.be.equal("http");
+        expect(data.proxy.connections[0].hostname).to.include("127.0.0.1");
+      });
+    }
+  },
 ];
 exports.useCases = useCases;
 

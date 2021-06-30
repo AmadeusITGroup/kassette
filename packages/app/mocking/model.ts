@@ -31,9 +31,7 @@ export interface HookAPI {
   console: Console;
 }
 
-export type HookFunction = (parameters: HookAPI) => void;
-
-
+export type HookFunction = (parameters: HookAPI) => void | Promise<void>;
 
 ////////////////////////////////////////////////////////////////////////////////
 //

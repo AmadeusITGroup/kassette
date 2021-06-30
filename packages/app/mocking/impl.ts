@@ -491,12 +491,16 @@ export class Mock implements IMock {
   //////////////////////////////////////////////////////////////////////////////
 
   private async _sendRequestToOriginalServer() {
-    if (this.remoteURL == null) {
+    let baseUrl = this.remoteURL;
+
+    if (baseUrl == null) {
       throw new MissingRemoteURLError();
+    } else if (baseUrl === '*') {
+      baseUrl = this.request.url.toString();
     }
 
     return sendRequest({
-      baseUrl: this.remoteURL,
+      baseUrl,
       original: this.request,
       skipLog: this.skipLog,
     });

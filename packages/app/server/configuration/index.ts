@@ -75,9 +75,12 @@ export function logApplicationData({configuration, root}: ApplicationData) {
   logProperty('port', configuration.port);
   logProperty('URL', configuration.remoteURL);
   logProperty('proxy mode', configuration.mode);
+  logProperty('proxy connect mode', configuration.proxyConnectMode);
+  logProperty('CA key file path', configuration.tlsCAKeyPath);
   logProperty('mocks folder', configuration.mocksFolder);
   logProperty('delay', configuration.delay);
   logProperty('custom request handler', configuration.hook, true);
+  logProperty('on proxy connect handler', configuration.onProxyConnect, true);
   logProperty('on listen handler', configuration.onListen, true);
   logProperty('on exit handler', configuration.onExit, true);
   logProperty('custom logger', configuration.console, true);

@@ -10,7 +10,7 @@ import {
   Spec, DefaultInclude, BaseSpec,
   MaybeAsync,
   MethodSpec, PathnameSpec, BodySpec, QuerySpec,
-  isFilter, isListing, ListOrFilter, HeadersSpec, ObjectMap,
+  isFilter, isListing, ListOrFilter, HeadersSpec, ObjectMap, ProtocolSpec, HostnameSpec, PortSpec,
 } from './model';
 
 
@@ -36,9 +36,24 @@ function identity<T = any>(value: T): T {
 export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<string> {
   const parts: NonSanitizedArray = [];
 
-  function push(header: string, data: string | null) {
-    parts.push(header, data, '');
+  function push(header: string, data: string | null, includeWhenNull = true) {
+    if (data != null || includeWhenNull) {
+      parts.push(header, data, '');
+    }
   }
+
+  push('protocol', await processSpec<ProtocolSpec>(spec.protocol, false, () => {
+    return mock.request.protocol.toLowerCase();
+  }), false);
+
+  push('hostname', await processSpec<HostnameSpec>(spec.hostname, false, async spec => {
+    const filter = spec.filter ?? identity;
+    return await filter(mock.request.hostname.toLowerCase());
+  }), false);
+
+  push('port', await processSpec<PortSpec>(spec.port, false, () => {
+    return mock.request.port;
+  }), false);
 
   push('method', await processSpec<MethodSpec>(spec.method, false, () => {
     return mock.request.method.toLowerCase();
