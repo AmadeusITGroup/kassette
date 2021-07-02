@@ -45,16 +45,16 @@ import CONF from '../conf';
 ////////////////////////////////////////////////////////////////////////////////
 
 export async function requestHTTP({url, method, headers, body}: RequestPayload): Promise<IncomingMessage> {
-  return new Promise<IncomingMessage>(resolve => httpRequest(
+  return new Promise<IncomingMessage>((resolve, reject) => httpRequest(
     url,
     {method, headers},
     message => resolve(message),
-  ).end(body));
+  ).on('error', reject).end(body));
 }
 
 export async function requestHTTPS({url, method, headers, body}: RequestPayload): Promise<IncomingMessage> {
   const {hostname, port, pathname, search, hash} = new URL(url);
-  return new Promise<IncomingMessage>(resolve => httpsRequest(
+  return new Promise<IncomingMessage>((resolve, reject) => httpsRequest(
     // url,
     // {rejectUnauthorized: false, method, headers},
 
@@ -74,7 +74,7 @@ export async function requestHTTPS({url, method, headers, body}: RequestPayload)
       path: [pathname, search, hash].join(''),
     },
     message => resolve(message),
-  ).end(body));
+  ).on('error', reject).end(body));
 }
 
 

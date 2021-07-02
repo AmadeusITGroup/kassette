@@ -21,7 +21,7 @@ import { UserProperty } from '../../lib/user-property';
 
 // ------------------------------------------------------------------------- app
 
-import { logInfo, logSeparator, LogPayload } from '../logger';
+import { logInfo, logSeparator, LogPayload, logError } from '../logger';
 import { MissingRemoteURLError } from '../error';
 
 import { Mode, Delay } from '../configuration';
@@ -256,7 +256,30 @@ export class Mock implements IMock {
       this.logInfo({message: 'Local mock skipped by the user, simply forwarding remote server response'});
     }
 
-    await this.getPayloadAndFillResponse();
+    try {
+      await this.getPayloadAndFillResponse();
+    } catch (exception) {
+      logError({ message: exception.message, exception: exception.original! });
+      await this.fillResponseFromPayload({
+        origin: 'proxy',
+        payload: {
+          body: `kassette error:\n\n${exception.message}`,
+          data: {
+            creationDateTime: new Date(),
+            status: {
+              code: 502,
+              message: 'Bad Gateway',
+            },
+            headers: {
+              'content-type': 'text/plain',
+            },
+            bodyFileName: '',
+            ignoredHeaders: {},
+            time: 0,
+          },
+        },
+      });
+    }
     await this.sendResponse();
     this.logSeparator();
   }
