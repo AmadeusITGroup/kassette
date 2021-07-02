@@ -37,6 +37,9 @@ exports.FakeResponse = function({
 
 exports.FakeRequester = function(callback, buildResponse) {
   return {
+    on: function (event, handler) {
+      return this;
+    },
     end: async body => {
       await nextTick();
       callback(buildResponse({body}));
