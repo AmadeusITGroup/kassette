@@ -59,6 +59,12 @@ export async function getConfiguration({
       apiValue: apiConfiguration.skipLog,
       defaultValue: false,
     }),
+    hostname: buildProperty({
+      cliValue: cliConfiguration.hostname,
+      fileValue: fileConfiguration.hostname,
+      apiValue: apiConfiguration.hostname,
+      defaultValue: '127.0.0.1',
+    }),
     port: buildProperty({
       cliValue: cliConfiguration.port,
       fileValue: fileConfiguration.port,

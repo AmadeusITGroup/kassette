@@ -72,6 +72,7 @@ export function logApplicationData({configuration, root}: ApplicationData) {
     }`,
   });
   logProperty('skip logs', configuration.skipLog, true);
+  logProperty('hostname', configuration.hostname);
   logProperty('port', configuration.port);
   logProperty('URL', configuration.remoteURL);
   logProperty('proxy mode', configuration.mode);

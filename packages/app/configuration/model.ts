@@ -37,6 +37,7 @@ export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
 interface BaseCLIConfigurationSpec {
   skipLog: boolean;
   port: number;
+  hostname: string;
   mode: Mode;
   delay: Delay;
   mocksFolder: string;
@@ -101,6 +102,7 @@ export interface IMergedConfiguration {
   readonly filePath: string | null;
 
   readonly skipLog: IConfigurationProperty<boolean>;
+  readonly hostname: IConfigurationProperty<string>;
   readonly port: IConfigurationProperty<number>;
   readonly mode: IConfigurationProperty<Mode>;
   readonly proxyConnectMode: IConfigurationProperty<ProxyConnectMode>;

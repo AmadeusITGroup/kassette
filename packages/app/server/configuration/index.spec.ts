@@ -81,6 +81,7 @@ describe('server configuration', () => {
         root: 'C:/dummy/root/folder',
         configuration: {
           filePath: 'dummy/conf/path',
+          hostname: {value: '127.0.0.1', origin: 'default'},
           port: {value: 8080, origin: 'cli'},
           tlsCAKeyPath: {value: 'dummy/tls/path', origin: 'cli'},
           proxyConnectMode: {value: 'intercept', origin: 'default'},
@@ -102,6 +103,7 @@ describe('server configuration', () => {
 
 - configuration file path: ${highlighted('dummy/conf/path')}
 - (cli | file | api | ${highlighted('default')}) skip logs: ${highlighted('✗', 'red')}
+- (cli | file | api | ${highlighted('default')}) hostname: ${highlighted('"127.0.0.1"')}
 - (${highlighted('cli')} | file | api | default) port: ${highlighted('8080')}
 - (cli | ${highlighted('file')} | api | default) URL: ${highlighted('"http://dummy.com:5555"')}
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
@@ -126,6 +128,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
         root: 'C:/dummy/root/folder',
         configuration: {
           filePath: null,
+          hostname: {value: '127.0.0.2', origin: 'cli'},
           port: {value: 8080, origin: 'cli'},
           tlsCAKeyPath: {value: null, origin: 'default'},
           proxyConnectMode: {value: 'forward', origin: 'cli'},
@@ -147,6 +150,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
 
 - configuration file path: ${highlighted('<none>', 'red')}
 - (cli | file | api | ${highlighted('default')}) skip logs: ${highlighted('✗', 'red')}
+- (${highlighted('cli')} | file | api | default) hostname: ${highlighted('"127.0.0.2"')}
 - (${highlighted('cli')} | file | api | default) port: ${highlighted('8080')}
 - (cli | ${highlighted('file')} | api | default) URL: ${highlighted('"http://dummy.com:5555"')}
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
