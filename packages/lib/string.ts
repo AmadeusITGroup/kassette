@@ -1,9 +1,6 @@
 // -------------------------------------------------------------------- internal
 
-import {
-  sanitize,
-  NonSanitizedArray,
-} from './array';
+import { sanitize, NonSanitizedArray } from './array';
 
 ////////////////////////////////////////////////////////////////////////////////
 //

@@ -33,10 +33,7 @@ export const isAppError = (error: any): error is AppError => error instanceof Ap
  * @param path The path of the configuration file
  */
 export class FileConfigurationError extends AppError {
-  constructor(
-    original: Error,
-    public readonly path: string,
-  ) {
+  constructor(original: Error, public readonly path: string) {
     super(original, 'file_configuration', `File configuration could not be loaded: ${path}`);
     this.name = 'FileConfigurationError';
   }
@@ -46,18 +43,19 @@ export class FileConfigurationError extends AppError {
  * @param original The original error thrown when starting the server.
  */
 export class ServerError extends AppError {
-  constructor(
-    original: Error,
-  ) {
+  constructor(original: Error) {
     super(original, 'server_error', 'File Configuration could not be loaded');
     this.name = 'ServerError';
   }
 }
 
 export class MissingRemoteURLError extends AppError {
-  constructor(
-  ) {
-    super(null, 'missing_remote_url', 'Remote URL is not specified, cannot forward the request to the backend. Specify "*" to read the URL from the request (when using kassette as a browser proxy).');
+  constructor() {
+    super(
+      null,
+      'missing_remote_url',
+      'Remote URL is not specified, cannot forward the request to the backend. Specify "*" to read the URL from the request (when using kassette as a browser proxy).',
+    );
     this.name = 'MissingRemoteURLError';
   }
 }

@@ -9,10 +9,7 @@ import { extension as mimeTypeToExtension } from 'mime-types';
 // ---------------------------------------------------------------------- common
 
 import { CachedProperty } from '../../lib/oop';
-import {
-  NonSanitizedArray,
-  flatten,
-} from '../../lib/array';
+import { NonSanitizedArray, flatten } from '../../lib/array';
 import { stringifyPretty } from '../../lib/json';
 import { getPathParts as getURLPathParts } from '../../lib/url';
 import { joinPath } from '../../lib/path';
@@ -64,12 +61,13 @@ export class Mock implements IMock {
   //////////////////////////////////////////////////////////////////////////////
 
   private _localPath = new UserProperty<NonSanitizedArray<string>, string>({
-    transform: ({inputOrigin, input}) => inputOrigin === 'none' ? this.defaultLocalPath : joinPath(input),
+    transform: ({ inputOrigin, input }) =>
+      inputOrigin === 'none' ? this.defaultLocalPath : joinPath(input),
   });
 
   private _delay = new UserProperty<Delay, number>({
     getDefaultInput: () => this.options.userConfiguration.delay.value,
-    transform: ({input}) => {
+    transform: ({ input }) => {
       if (input === 'recorded' && this._localPayload != null) {
         return this._localPayload.payload.data.time;
       }
@@ -92,12 +90,9 @@ export class Mock implements IMock {
 
   private _mocksFolder = new UserProperty<NonSanitizedArray<string>, string>({
     getDefaultInput: () => this.options.userConfiguration.mocksFolder.value,
-    transform: ({input}) => {
+    transform: ({ input }) => {
       const folder = joinPath(input);
-      return joinPath([
-        nodePath.isAbsolute(folder) ? null : this.options.root,
-        folder,
-      ]);
+      return joinPath([nodePath.isAbsolute(folder) ? null : this.options.root, folder]);
     },
   });
 
@@ -108,7 +103,9 @@ export class Mock implements IMock {
   public sourcePayload: PayloadWithOrigin | undefined;
 
   private __localPayload: LocalPayload | UserPayload | undefined;
-  private get _localPayload(): LocalPayload | UserPayload | undefined { return this.__localPayload; }
+  private get _localPayload(): LocalPayload | UserPayload | undefined {
+    return this.__localPayload;
+  }
   private set _localPayload(payload: LocalPayload | UserPayload | undefined) {
     this.__localPayload = payload;
     this._delay.resetOutputCache();
@@ -125,100 +122,148 @@ export class Mock implements IMock {
   //////////////////////////////////////////////////////////////////////////////
 
   @CachedProperty()
-  get options(): MockingOptions { return this._spec.options; }
+  get options(): MockingOptions {
+    return this._spec.options;
+  }
   @CachedProperty()
-  get request(): IFetchedRequest { return this._spec.request; }
+  get request(): IFetchedRequest {
+    return this._spec.request;
+  }
   @CachedProperty()
-  get response(): IResponse { return this._spec.response; }
+  get response(): IResponse {
+    return this._spec.response;
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Properties
   //////////////////////////////////////////////////////////////////////////////
 
   private _setUserProperty<T>(property: UserProperty<T>, value: T) {
-    if (value == null) { property.unset(); } else { property.set(value); }
+    if (value == null) {
+      property.unset();
+    } else {
+      property.set(value);
+    }
   }
 
-  public get mode(): Mode { return this._mode.output; }
-  public setMode(value: Mode | null) { this._setUserProperty(this._mode, value); }
+  public get mode(): Mode {
+    return this._mode.output;
+  }
+  public setMode(value: Mode | null) {
+    this._setUserProperty(this._mode, value);
+  }
 
-  public get remoteURL(): string | null { return this._remoteURL.output; }
-  public setRemoteURL(value: string | null) { this._setUserProperty(this._remoteURL, value); }
+  public get remoteURL(): string | null {
+    return this._remoteURL.output;
+  }
+  public setRemoteURL(value: string | null) {
+    this._setUserProperty(this._remoteURL, value);
+  }
 
-  public get mocksFolder(): string { return this._mocksFolder.output; }
-  public setMocksFolder(value: NonSanitizedArray<string> | null) { this._setUserProperty(this._mocksFolder, value); }
+  public get mocksFolder(): string {
+    return this._mocksFolder.output;
+  }
+  public setMocksFolder(value: NonSanitizedArray<string> | null) {
+    this._setUserProperty(this._mocksFolder, value);
+  }
 
-  public get delay(): number { return this._delay.output; }
-  public setDelay(value: Delay | null) { this._setUserProperty(this._delay, value); }
+  public get delay(): number {
+    return this._delay.output;
+  }
+  public setDelay(value: Delay | null) {
+    this._setUserProperty(this._delay, value);
+  }
 
-  public get skipLog(): boolean { return this._skipLog.output; }
-  public setSkipLog(value: boolean) { this._setUserProperty(this._skipLog, value); }
+  public get skipLog(): boolean {
+    return this._skipLog.output;
+  }
+  public setSkipLog(value: boolean) {
+    this._setUserProperty(this._skipLog, value);
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Path management
   //////////////////////////////////////////////////////////////////////////////
 
-  public setLocalPath(value: NonSanitizedArray<string>): void { this._localPath.set(value); }
-  get localPath(): string { return this._localPath.output; }
+  public setLocalPath(value: NonSanitizedArray<string>): void {
+    this._localPath.set(value);
+  }
+  get localPath(): string {
+    return this._localPath.output;
+  }
 
   @CachedProperty()
   get defaultLocalPath(): string {
-    return flatten([
-      getURLPathParts(this.request.url),
-      this.request.method,
-    ])
+    return flatten([getURLPathParts(this.request.url), this.request.method])
       .join('/')
       .split('/')
-      .filter(part => part !== '')
+      .filter((part) => part !== '')
       .join('/');
   }
 
-  get mockFolderFullPath(): string { return nodePath.join(this.mocksFolder, this.localPath); }
+  get mockFolderFullPath(): string {
+    return nodePath.join(this.mocksFolder, this.localPath);
+  }
 
   get hash(): string {
     return getURLPathParts(this.request.url).join('/');
   }
 
-  public async hasLocalFiles(): Promise<boolean> { return this.dataFile.exists(); }
-  public async hasNoLocalFiles(): Promise<boolean> { return !(await this.hasLocalFiles()); }
+  public async hasLocalFiles(): Promise<boolean> {
+    return this.dataFile.exists();
+  }
+  public async hasNoLocalFiles(): Promise<boolean> {
+    return !(await this.hasLocalFiles());
+  }
 
   public checksumContent: string | null = null;
   public async checksum(spec: ChecksumArgs) {
-    const {checksum, content} = await computeChecksum(this, spec);
+    const { checksum, content } = await computeChecksum(this, spec);
     this.checksumContent = content;
     return checksum;
   }
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Processing
   //////////////////////////////////////////////////////////////////////////////
 
   private logInfo(spec: LogPayload) {
-    if (!this.skipLog) { logInfo(spec); }
+    if (!this.skipLog) {
+      logInfo(spec);
+    }
   }
 
   private logSeparator() {
-    if (!this.skipLog) { logSeparator(); }
+    if (!this.skipLog) {
+      logSeparator();
+    }
   }
 
   public async readLocalPayloadAndFillResponse(): Promise<boolean> {
     const payload = await this.readLocalPayload();
-    if (payload == null) { return false; }
+    if (payload == null) {
+      return false;
+    }
     this.fillResponseFromPayload(payload);
     return true;
   }
 
   public async sendResponse() {
     if (this.sourcePayload == null) {
-      this.logInfo({message: 'Sending response with no delay since cannot determine the source payload'});
+      this.logInfo({
+        message: 'Sending response with no delay since cannot determine the source payload',
+      });
     } else if (this.sourcePayload.origin === 'remote') {
-      this.logInfo({message: 'Sending response with no delay since fetched from server'});
+      this.logInfo({ message: 'Sending response with no delay since fetched from server' });
     } else {
       const time = this.delay;
-      this.logInfo({message: 'Sending response with the following delay (value / original / from)', data: `${time} / ${this._delay.input} / ${this._delay.inputOrigin}`});
-      if (time > 0) { await new Promise(resolve => setTimeout(resolve, time)); }
+      this.logInfo({
+        message: 'Sending response with the following delay (value / original / from)',
+        data: `${time} / ${this._delay.input} / ${this._delay.inputOrigin}`,
+      });
+      if (time > 0) {
+        await new Promise((resolve) => setTimeout(resolve, time));
+      }
     }
 
     this.response.send();
@@ -227,33 +272,39 @@ export class Mock implements IMock {
   public async getPayloadAndFillResponse() {
     const { mode } = this;
 
-    if (mode === 'manual') { return; }
+    if (mode === 'manual') {
+      return;
+    }
 
-    const fetchedPayload = await ({
-      'local_or_remote': () => this.readOrFetchPayload(),
-      'local_or_download': () => this.readOrDownloadPayload(),
-      'remote': () => this.fetchPayload(),
-      'local': () => this._getLocalPayload(),
-      'download': () => this.downloadPayload(),
-    }[mode]());
+    const fetchedPayload = await {
+      local_or_remote: () => this.readOrFetchPayload(),
+      local_or_download: () => this.readOrDownloadPayload(),
+      remote: () => this.fetchPayload(),
+      local: () => this._getLocalPayload(),
+      download: () => this.downloadPayload(),
+    }[mode]();
 
     this.fillResponseFromPayload(fetchedPayload);
   }
 
   public async process() {
-    if (this._processed) { return; }
+    if (this._processed) {
+      return;
+    }
     this._processed = true;
 
     const { mode } = this;
 
     if (mode === 'manual') {
-      this.logInfo({message: 'Manual mode on, not doing anything'});
+      this.logInfo({ message: 'Manual mode on, not doing anything' });
       this.logSeparator();
       return;
     }
 
     if (mode === 'remote') {
-      this.logInfo({message: 'Local mock skipped by the user, simply forwarding remote server response'});
+      this.logInfo({
+        message: 'Local mock skipped by the user, simply forwarding remote server response',
+      });
     }
 
     try {
@@ -291,7 +342,7 @@ export class Mock implements IMock {
   private _getBodyFileName(baseName: string, contentType: string | null | undefined): string {
     const extension = contentType == null ? false : mimeTypeToExtension(contentType);
     if (extension === false) return baseName;
-    return (`${baseName}.${extension}`);
+    return `${baseName}.${extension}`;
   }
 
   private _createFileHandler(name: string): FileHandler {
@@ -330,16 +381,20 @@ export class Mock implements IMock {
       message: CONF.messages.writingInputRequest,
       data: nodePath.relative(this.mocksFolder, inputRequestFile.path),
     });
-    const inputRequestBodyFile = this._createFileHandler(this._getBodyFileName(
-      `${CONF.inputRequestBaseFilename}-body`,
-      this.request.headers['content-type'],
-    ));
-    await inputRequestFile.write(stringifyPretty({
-      headers: this.request.headers,
-      method: this.request.method,
-      url: this.request.url,
-      bodyFileName: inputRequestBodyFile.name,
-    }));
+    const inputRequestBodyFile = this._createFileHandler(
+      this._getBodyFileName(
+        `${CONF.inputRequestBaseFilename}-body`,
+        this.request.headers['content-type'],
+      ),
+    );
+    await inputRequestFile.write(
+      stringifyPretty({
+        headers: this.request.headers,
+        method: this.request.method,
+        url: this.request.url,
+        bodyFileName: inputRequestBodyFile.name,
+      }),
+    );
     await inputRequestBodyFile.write(this.request.body.toString());
 
     if (this.checksumContent != null) {
@@ -367,11 +422,13 @@ export class Mock implements IMock {
   // Payload > Reading / creation
   //////////////////////////////////////////////////////////////////////////////
 
-  private _createPayloadFromResponse({response, time}: SendRequestOutput): Payload {
+  private _createPayloadFromResponse({ response, time }: SendRequestOutput): Payload {
     const headers = {};
     const ignoredHeaders = {};
     Object.entries(response.headers).forEach(([header, value]) => {
-      if (value == null) { return; }
+      if (value == null) {
+        return;
+      }
       const container = CONF.ignoredHeaders.includes(header) ? ignoredHeaders : headers;
       (container as any)[header] = value;
     });
@@ -390,22 +447,25 @@ export class Mock implements IMock {
   }
 
   public createPayload(payload: Payload): UserPayload {
-    return {origin: 'user', payload};
+    return { origin: 'user', payload };
   }
 
   public async readLocalPayload(): Promise<LocalPayload | UserPayload | undefined> {
-    if (this._localPayload != null) { return this._localPayload; }
-    if (await this.hasNoLocalFiles()) { return; }
+    if (this._localPayload != null) {
+      return this._localPayload;
+    }
+    if (await this.hasNoLocalFiles()) {
+      return;
+    }
 
-    const data: MockData = JSON.parse(
-      (await this.dataFile.read())!.toString(),
-      (key, value) => key !== 'creationDateTime' || key == null ? value : new Date(value),
+    const data: MockData = JSON.parse((await this.dataFile.read())!.toString(), (key, value) =>
+      key !== 'creationDateTime' || key == null ? value : new Date(value),
     );
     const payload = {
       data: data,
-      body: (await this._createFileHandler(data.bodyFileName).read()),
+      body: await this._createFileHandler(data.bodyFileName).read(),
     };
-    return this._localPayload = {origin: 'local', payload};
+    return (this._localPayload = { origin: 'local', payload });
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -418,11 +478,11 @@ export class Mock implements IMock {
     }
 
     const output = await this._sendRequestToOriginalServer();
-    return this._fetchedPayload = {
+    return (this._fetchedPayload = {
       origin: 'remote',
       payload: await this._createPayloadFromResponse(output),
       requestOptions: output.requestOptions,
-    };
+    });
   }
 
   private async _getLocalPayload(): Promise<LocalPayload | UserPayload | NotFoundPayload> {
@@ -465,17 +525,21 @@ export class Mock implements IMock {
       message: CONF.messages.writingForwardedRequest,
       data: nodePath.relative(this.mocksFolder, forwardedRequestFile.path),
     });
-    const forwardedRequestBodyFile = this._createFileHandler(this._getBodyFileName(
-      `${CONF.forwardedRequestBaseFilename}-body`,
-      remotePayload.requestOptions.headers['content-type'],
-    ));
-    await forwardedRequestFile.write(stringifyPretty({
-      bodyType: remotePayload.requestOptions.body instanceof Buffer ? 'buffer' : 'string',
-      headers: remotePayload.requestOptions.headers,
-      method: remotePayload.requestOptions.method,
-      url: remotePayload.requestOptions.url,
-      bodyFileName: forwardedRequestBodyFile.name,
-    }));
+    const forwardedRequestBodyFile = this._createFileHandler(
+      this._getBodyFileName(
+        `${CONF.forwardedRequestBaseFilename}-body`,
+        remotePayload.requestOptions.headers['content-type'],
+      ),
+    );
+    await forwardedRequestFile.write(
+      stringifyPretty({
+        bodyType: remotePayload.requestOptions.body instanceof Buffer ? 'buffer' : 'string',
+        headers: remotePayload.requestOptions.headers,
+        method: remotePayload.requestOptions.method,
+        url: remotePayload.requestOptions.url,
+        bodyFileName: forwardedRequestBodyFile.name,
+      }),
+    );
     await forwardedRequestBodyFile.write(remotePayload.requestOptions.body.toString());
 
     await this.persistPayload(remotePayload);
@@ -530,11 +594,15 @@ export class Mock implements IMock {
   }
 
   public fillResponseFromPayload(payload: PayloadWithOrigin) {
-    if (this.sourcePayload != null) { return; }
+    if (this.sourcePayload != null) {
+      return;
+    }
 
     this.sourcePayload = payload;
 
-    const { payload: { data, body } } = payload;
+    const {
+      payload: { data, body },
+    } = payload;
 
     const { response } = this;
 

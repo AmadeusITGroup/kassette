@@ -2,7 +2,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-async function execute({name, iteration}) {
+async function execute({ name, iteration }) {
   await executeIteration({
     name,
     iteration,
@@ -10,10 +10,8 @@ async function execute({name, iteration}) {
   });
 }
 
-async function executeIteration({name, iteration, hook}) {
+async function executeIteration({ name, iteration, hook }) {
   window.log(`Executing use case "${name}", iteration ${iteration}`);
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Customize request for test case & push custom data for assertions
@@ -23,7 +21,7 @@ async function executeIteration({name, iteration, hook}) {
   let url = '';
   let requestOptions = {};
   if (hook != null) {
-    const payload = await hook({name, iteration});
+    const payload = await hook({ name, iteration });
     clientData = payload.data;
     requestOptions = payload.request;
     const customUrl = requestOptions.url;
@@ -31,9 +29,7 @@ async function executeIteration({name, iteration, hook}) {
     if (customUrl != null) url = customUrl;
   }
 
-  await window.pushClientData({useCase: name, iteration, data: clientData});
-
-
+  await window.pushClientData({ useCase: name, iteration, data: clientData });
 
   //////////////////////////////////////////////////////////////////////////////
   // Request
@@ -44,8 +40,6 @@ async function executeIteration({name, iteration, hook}) {
   window.log();
   const response = await fetch(url, requestOptions);
   const time = performance.now() - start;
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Push response result
@@ -61,5 +55,5 @@ async function executeIteration({name, iteration, hook}) {
     time,
   };
 
-  await window.pushClientResult({useCase: name, iteration, data});
+  await window.pushClientResult({ useCase: name, iteration, data });
 }

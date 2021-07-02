@@ -1,12 +1,6 @@
 // ------------------------------------------------------------------------- app
 
-import {
-  ConfigurationSpec,
-  CLIConfigurationSpec,
-  IMergedConfiguration,
-} from '../configuration';
-
-
+import { ConfigurationSpec, CLIConfigurationSpec, IMergedConfiguration } from '../configuration';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -17,8 +11,6 @@ export * from './request/model';
 export * from './response/model';
 export * from './server-response/model';
 export * from './proxy/model';
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -35,8 +27,6 @@ export interface Status {
   /** The status message */
   message: string;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -71,8 +61,6 @@ export interface RunOptions {
 }
 
 export type RunResult = () => void;
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //

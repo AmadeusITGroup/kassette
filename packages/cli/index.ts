@@ -18,7 +18,7 @@ import { runFromCLI, Mode, ProxyConnectMode } from '../app';
 // specified in file configuration for instance, making them useless.
 ////////////////////////////////////////////////////////////////////////////////
 
-const {version} = require('../../package.json');
+const { version } = require('../../package.json');
 
 (async () => {
   const options = await yargs
@@ -26,7 +26,9 @@ const {version} = require('../../package.json');
     .wrap(null)
     .usage(`$0 version ${version}`)
     .example('$0 -c proxy.config.js', 'Start proxy with configuration file proxy.config.js')
-    .epilogue('Please visit repository for more information: https://github.com/AmadeusITGroup/kassette')
+    .epilogue(
+      'Please visit repository for more information: https://github.com/AmadeusITGroup/kassette',
+    )
     .help('h')
     .alias('h', 'help')
     .version(version)
@@ -85,8 +87,7 @@ const {version} = require('../../package.json');
       alias: ['delay'],
       describe: 'mock response artificial delay',
       // default: 'recorded',
-    })
-    .argv;
+    }).argv;
 
   let { d: delay } = options;
   if (delay != null && delay !== 'recorded') {
@@ -107,5 +108,4 @@ const {version} = require('../../package.json');
     },
     configurationPath: options.c as string,
   });
-
 })();

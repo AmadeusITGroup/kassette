@@ -1,19 +1,30 @@
 import * as crypto from 'crypto';
 
-import {sanitize, NonSanitizedArray} from '../../../lib/array';
-import {stringifyPretty} from '../../../lib/json';
+import { sanitize, NonSanitizedArray } from '../../../lib/array';
+import { stringifyPretty } from '../../../lib/json';
 
-import {IMock} from '../model';
+import { IMock } from '../model';
 
 import {
-  ChecksumArgs, ChecksumReturn,
-  Spec, DefaultInclude, BaseSpec,
+  ChecksumArgs,
+  ChecksumReturn,
+  Spec,
+  DefaultInclude,
+  BaseSpec,
   MaybeAsync,
-  MethodSpec, PathnameSpec, BodySpec, QuerySpec,
-  isFilter, isListing, ListOrFilter, HeadersSpec, ObjectMap, ProtocolSpec, HostnameSpec, PortSpec,
+  MethodSpec,
+  PathnameSpec,
+  BodySpec,
+  QuerySpec,
+  isFilter,
+  isListing,
+  ListOrFilter,
+  HeadersSpec,
+  ObjectMap,
+  ProtocolSpec,
+  HostnameSpec,
+  PortSpec,
 } from './model';
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -26,7 +37,7 @@ export async function computeChecksum(mock: IMock, spec: ChecksumArgs): Promise<
   const content = await computeContent(mock, spec);
   const checksum = crypto.createHash(type).update(content).digest(format);
 
-  return {checksum, content};
+  return { checksum, content };
 }
 
 function identity<T = any>(value: T): T {
@@ -42,47 +53,78 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
     }
   }
 
-  push('protocol', await processSpec<ProtocolSpec>(spec.protocol, false, () => {
-    return mock.request.protocol.toLowerCase();
-  }), false);
+  push(
+    'protocol',
+    await processSpec<ProtocolSpec>(spec.protocol, false, () => {
+      return mock.request.protocol.toLowerCase();
+    }),
+    false,
+  );
 
-  push('hostname', await processSpec<HostnameSpec>(spec.hostname, false, async spec => {
-    const filter = spec.filter ?? identity;
-    return await filter(mock.request.hostname.toLowerCase());
-  }), false);
+  push(
+    'hostname',
+    await processSpec<HostnameSpec>(spec.hostname, false, async (spec) => {
+      const filter = spec.filter ?? identity;
+      return await filter(mock.request.hostname.toLowerCase());
+    }),
+    false,
+  );
 
-  push('port', await processSpec<PortSpec>(spec.port, false, () => {
-    return mock.request.port;
-  }), false);
+  push(
+    'port',
+    await processSpec<PortSpec>(spec.port, false, () => {
+      return mock.request.port;
+    }),
+    false,
+  );
 
-  push('method', await processSpec<MethodSpec>(spec.method, false, () => {
-    return mock.request.method.toLowerCase();
-  }));
+  push(
+    'method',
+    await processSpec<MethodSpec>(spec.method, false, () => {
+      return mock.request.method.toLowerCase();
+    }),
+  );
 
-  push('pathname', await processSpec<PathnameSpec>(spec.pathname, false, async spec => {
-    const filter = spec.filter ?? identity;
-    return await filter(mock.request.pathname);
-  }));
+  push(
+    'pathname',
+    await processSpec<PathnameSpec>(spec.pathname, false, async (spec) => {
+      const filter = spec.filter ?? identity;
+      return await filter(mock.request.pathname);
+    }),
+  );
 
-  push('body', await processSpec<BodySpec>(spec.body, true, async spec => {
-    const filter = spec.filter ?? identity;
-    return (await filter(mock.request.body)).toString();
-  }));
+  push(
+    'body',
+    await processSpec<BodySpec>(spec.body, true, async (spec) => {
+      const filter = spec.filter ?? identity;
+      return (await filter(mock.request.body)).toString();
+    }),
+  );
 
-  push('query', await processSpec<QuerySpec>(spec.query, true, async spec => {
-    return await processList(spec, mock.request.queryParameters, true);
-  }));
+  push(
+    'query',
+    await processSpec<QuerySpec>(spec.query, true, async (spec) => {
+      return await processList(spec, mock.request.queryParameters, true);
+    }),
+  );
 
-  push('headers', await processSpec<HeadersSpec>(spec.headers, false, async spec => {
-    return await processList(spec, mock.request.headers, false);
-  }));
+  push(
+    'headers',
+    await processSpec<HeadersSpec>(spec.headers, false, async (spec) => {
+      return await processList(spec, mock.request.headers, false);
+    }),
+  );
 
   push('custom data', stringifyPretty(spec.customData));
 
   return sanitize(parts).join('\n');
 }
 
-export async function processList(spec: ListOrFilter, input: ObjectMap, defaultCaseSensitive: boolean): Promise<string> {
+export async function processList(
+  spec: ListOrFilter,
+  input: ObjectMap,
+  defaultCaseSensitive: boolean,
+): Promise<string> {
   let output;
 
   if (isFilter(spec)) {
@@ -100,7 +142,7 @@ export async function processList(spec: ListOrFilter, input: ObjectMap, defaultC
         properties = keys;
       } else {
         let disallowedKeys = keys;
-        if (!caseSensitive) disallowedKeys = disallowedKeys.map(key => key.toLowerCase());
+        if (!caseSensitive) disallowedKeys = disallowedKeys.map((key) => key.toLowerCase());
 
         properties = [];
         for (const key of Object.keys(input)) {
@@ -122,8 +164,6 @@ export async function processList(spec: ListOrFilter, input: ObjectMap, defaultC
   return stringifyPretty(output);
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -142,12 +182,12 @@ export function normalizeSpec<SpecType extends BaseSpec>(
   spec: Spec<SpecType>,
   defaultValue?: DefaultInclude,
 ): any {
-  if (spec === true) return {include: true};
-  if (spec === false) return {include: false};
+  if (spec === true) return { include: true };
+  if (spec === false) return { include: false };
   if (spec == null) {
-    if (defaultValue != null) return {include: defaultValue};
-    return {include: false};
+    if (defaultValue != null) return { include: defaultValue };
+    return { include: false };
   }
-  if (spec.include == null) return Object.assign({}, spec, {include: true});
-  return spec as {include: boolean};
+  if (spec.include == null) return Object.assign({}, spec, { include: true });
+  return spec as { include: boolean };
 }

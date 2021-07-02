@@ -1,13 +1,8 @@
 // ------------------------------------------------------------------------- std
 
-import {
-  IncomingMessage,
-  request as httpRequest,
-} from 'http';
+import { IncomingMessage, request as httpRequest } from 'http';
 
-import {
-  request as httpsRequest,
-} from 'https';
+import { request as httpsRequest } from 'https';
 
 import { URL } from 'url';
 
@@ -20,17 +15,11 @@ import { readAll } from '../../../lib/stream';
 
 // ------------------------------------------------------------------------- app
 
-import {
-  logInfo,
-} from '../../logger';
+import { logInfo } from '../../logger';
 
 // -------------------------------------------------------------------- internal
 
-import {
-  SendRequestOutput,
-  SendRequestSpec,
-  RequestPayload,
-} from './model';
+import { SendRequestOutput, SendRequestSpec, RequestPayload } from './model';
 
 import { ServerResponse } from '../server-response';
 
@@ -38,48 +27,56 @@ import { ServerResponse } from '../server-response';
 
 import CONF from '../conf';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function requestHTTP({url, method, headers, body}: RequestPayload): Promise<IncomingMessage> {
-  return new Promise<IncomingMessage>((resolve, reject) => httpRequest(
-    url,
-    {method, headers},
-    message => resolve(message),
-  ).on('error', reject).end(body));
+export async function requestHTTP({
+  url,
+  method,
+  headers,
+  body,
+}: RequestPayload): Promise<IncomingMessage> {
+  return new Promise<IncomingMessage>((resolve, reject) =>
+    httpRequest(url, { method, headers }, (message) => resolve(message))
+      .on('error', reject)
+      .end(body),
+  );
 }
 
-export async function requestHTTPS({url, method, headers, body}: RequestPayload): Promise<IncomingMessage> {
-  const {hostname, port, pathname, search, hash} = new URL(url);
-  return new Promise<IncomingMessage>((resolve, reject) => httpsRequest(
-    // url,
-    // {rejectUnauthorized: false, method, headers},
+export async function requestHTTPS({
+  url,
+  method,
+  headers,
+  body,
+}: RequestPayload): Promise<IncomingMessage> {
+  const { hostname, port, pathname, search, hash } = new URL(url);
+  return new Promise<IncomingMessage>((resolve, reject) =>
+    httpsRequest(
+      // url,
+      // {rejectUnauthorized: false, method, headers},
 
-    // XXX 2018-12-17T11:57:56+01:00
-    // This is to make it compatible with older versions of Node.js
-    // as well as some 3rd-party dependencies used in e2e testing
-    // see https://github.com/TooTallNate/node-agent-base/issues/24
-    // agent-base is indirectly used by puppeteer
-    // and patches this Node.js core API
-    {
-      rejectUnauthorized: false,
-      method,
-      headers,
+      // XXX 2018-12-17T11:57:56+01:00
+      // This is to make it compatible with older versions of Node.js
+      // as well as some 3rd-party dependencies used in e2e testing
+      // see https://github.com/TooTallNate/node-agent-base/issues/24
+      // agent-base is indirectly used by puppeteer
+      // and patches this Node.js core API
+      {
+        rejectUnauthorized: false,
+        method,
+        headers,
 
-      hostname,
-      port,
-      path: [pathname, search, hash].join(''),
-    },
-    message => resolve(message),
-  ).on('error', reject).end(body));
+        hostname,
+        port,
+        path: [pathname, search, hash].join(''),
+      },
+      (message) => resolve(message),
+    )
+      .on('error', reject)
+      .end(body),
+  );
 }
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -93,7 +90,9 @@ export async function measure(callback: Function) {
   const end = now();
 
   return {
-    start, end, duration: end - start,
+    start,
+    end,
+    duration: end - start,
     output,
   };
 }
@@ -120,9 +119,8 @@ export async function sendRequest({
     logInfo({ timestamp: true, message: CONF.messages.sendingRequest, data: url });
   }
 
-  const request = targetURL.protocol.slice(0, -1).toLowerCase() === 'http'
-    ? requestHTTP
-    : requestHTTPS;
+  const request =
+    targetURL.protocol.slice(0, -1).toLowerCase() === 'http' ? requestHTTP : requestHTTPS;
 
   const requestOptions = {
     url,

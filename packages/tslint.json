@@ -3,51 +3,30 @@
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
-    "comment-format": [
-      true,
-      "check-space"
-    ],
+    "comment-format": [true, "check-space"],
     "curly": false,
     "eofline": true,
     "forin": true,
     "import-spacing": true,
-    "indent": [
-      true,
-      "spaces"
-    ],
+    "indent": [true, "spaces"],
     "interface-over-type-literal": true,
     "label-position": true,
     "member-access": false,
     "member-ordering": [
       false,
       {
-        "order": [
-          "static-field",
-          "instance-field",
-          "static-method",
-          "instance-method"
-        ]
+        "order": ["static-field", "instance-field", "static-method", "instance-method"]
       }
     ],
     "no-arg": true,
     "no-bitwise": false,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-super": true,
     "no-empty": false,
     "no-eval": true,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    "no-inferrable-types": [true, "ignore-params"],
     "no-misused-new": true,
     "no-shadowed-variable": false,
     "no-string-literal": false,
@@ -58,33 +37,18 @@
     "no-unused-expression": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
-    "one-line": [
-      true,
-      "check-open-brace",
-      "check-catch",
-      "check-else",
-      "check-whitespace"
-    ],
+    "one-line": [true, "check-open-brace", "check-catch", "check-else", "check-whitespace"],
     "prefer-const": true,
-    "quotemark": [
-      true,
-      "single"
-    ],
+    "quotemark": [true, "single"],
     "radix": true,
-    "semicolon": [
-      true,
-      "always"
-    ],
+    "semicolon": [true, "always"],
     "trailing-comma": [
       true,
       {
         "multiline": "always"
       }
     ],
-    "triple-equals": [
-      true,
-      "allow-null-check"
-    ],
+    "triple-equals": [true, "allow-null-check"],
     "typedef-whitespace": [
       true,
       {

@@ -1,16 +1,8 @@
 // ------------------------------------------------------------------------- std
 
-import {
-  createServer,
-  IncomingMessage,
-} from 'http';
+import { createServer, IncomingMessage } from 'http';
 
-import {
-  createServer as createNetServer,
-  Server,
-  Socket,
-  AddressInfo,
-} from 'net';
+import { createServer as createNetServer, Server, Socket, AddressInfo } from 'net';
 
 // ---------------------------------------------------------------------- common
 
@@ -18,36 +10,19 @@ import { readAll } from '../../lib/stream';
 
 // ------------------------------------------------------------------------- app
 
-import {
-  createGlobalLogger,
+import { createGlobalLogger, logInfo, logSeparator, getConsole } from '../logger';
 
-  logInfo,
-  logSeparator,
-  getConsole,
-} from '../logger';
-
-import {
-  IMergedConfiguration,
-} from '../configuration';
+import { IMergedConfiguration } from '../configuration';
 
 import { Mock } from '../mocking';
 
 // -------------------------------------------------------------------- internal
 
-import {
-  CLIOptions,
-  APIOptions,
-  RunOptions,
-  RunResult,
-  ApplicationData,
-} from './model';
+import { CLIOptions, APIOptions, RunOptions, RunResult, ApplicationData } from './model';
 
 import { Request } from './request';
 import { Response } from './response';
-import {
-  logApplicationData,
-  build as buildConfiguration,
-} from './configuration';
+import { logApplicationData, build as buildConfiguration } from './configuration';
 
 import { TLSManager } from './tls';
 import { ProxyConnectAPI } from './proxy';
@@ -56,8 +31,6 @@ import { setConnectionProtocol } from './connection';
 // ------------------------------------------------------------------------ conf
 
 import CONF from './conf';
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -72,8 +45,6 @@ export * from './response';
 /** A wrapper around a Node.js response from a server (`IncomingMessage`) */
 export * from './server-response';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Server
 // FIXME 2018-09-25T14:00:24+02:00
@@ -82,10 +53,10 @@ export * from './server-response';
 ////////////////////////////////////////////////////////////////////////////////
 
 /** Spawns the server */
-export async function spawnServer({configuration, root}: ApplicationData): Promise<Server> {
+export async function spawnServer({ configuration, root }: ApplicationData): Promise<Server> {
   const server = createServer(async (request, response) => {
     const mock = new Mock({
-      options: {root, userConfiguration: configuration},
+      options: { root, userConfiguration: configuration },
       request: new Request(request, await readAll(request)),
       response: new Response(response),
     });
@@ -96,15 +67,15 @@ export async function spawnServer({configuration, root}: ApplicationData): Promi
       data: `${request.method} ${request.url}`,
     });
 
-    await configuration.hook.value({mock, console: getConsole()});
+    await configuration.hook.value({ mock, console: getConsole() });
     await mock.process();
   });
 
-  const tlsManager = new TLSManager({tlsCAKeyPath: configuration.tlsCAKeyPath.value, root});
+  const tlsManager = new TLSManager({ tlsCAKeyPath: configuration.tlsCAKeyPath.value, root });
   await tlsManager.init();
 
   const handleSocket = (socket: Socket) => {
-    socket.once('data', async data => {
+    socket.once('data', async (data) => {
       socket.pause();
       socket.unshift(data);
       // cf https://github.com/mscdex/httpolyglot/issues/3#issuecomment-173680155
@@ -138,11 +109,11 @@ export async function spawnServer({configuration, root}: ApplicationData): Promi
   // server that can receive both http and https connections
   const netServer = createNetServer(handleSocket);
 
-  netServer.listen(configuration.port.value, configuration.hostname.value, function(this: Socket) {
+  netServer.listen(configuration.port.value, configuration.hostname.value, function (this: Socket) {
     const port = (this.address() as AddressInfo).port;
-    configuration.onListen.value({port});
+    configuration.onListen.value({ port });
 
-    logInfo({ message: CONF.messages.listening, data: port});
+    logInfo({ message: CONF.messages.listening, data: port });
     logSeparator();
   });
 
@@ -151,26 +122,26 @@ export async function spawnServer({configuration, root}: ApplicationData): Promi
   return netServer;
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Execution
 ////////////////////////////////////////////////////////////////////////////////
 
 export async function _run(configuration: IMergedConfiguration | null): Promise<RunResult> {
-  if (configuration == null) { return () => {}; }
+  if (configuration == null) {
+    return () => {};
+  }
 
   const console = configuration.console.value;
   if (console != null) {
     createGlobalLogger(console);
   }
 
-  const data = {configuration, root: process.cwd()};
+  const data = { configuration, root: process.cwd() };
   logApplicationData(data);
   const server = await spawnServer(data);
 
-  const output = function() {
-    return new Promise(resolve => server.close(resolve));
+  const output = function () {
+    return new Promise((resolve) => server.close(resolve));
   };
 
   output.server = server;

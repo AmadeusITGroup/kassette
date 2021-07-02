@@ -1,6 +1,10 @@
 import { GetConfigurationProps } from '../model';
 
-export async function getConfiguration({apiConfiguration, cliConfiguration, context}: GetConfigurationProps) {
+export async function getConfiguration({
+  apiConfiguration,
+  cliConfiguration,
+  context,
+}: GetConfigurationProps) {
   return {
     remoteURL: 'remoteURL',
     port: apiConfiguration.port,

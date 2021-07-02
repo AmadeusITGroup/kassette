@@ -1,7 +1,5 @@
 import { Request } from './impl';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,37 +11,46 @@ describe('Request', () => {
   };
 
   it('should provide method, lower cased', () => {
-    const request = new Request({
-      socket,
-      method: 'GET',
-      headers: {},
-      url: 'http://localhost:8080/my/api',
-    } as any, Buffer.from(''));
+    const request = new Request(
+      {
+        socket,
+        method: 'GET',
+        headers: {},
+        url: 'http://localhost:8080/my/api',
+      } as any,
+      Buffer.from(''),
+    );
     expect(request.method).toBe('get');
   });
 
   it('should provide the given body', () => {
     const body = 'Hello';
-    const request = new Request({
-      socket,
-      method: 'GET',
-      headers: {},
-      url: 'http://localhost:8080/my/api',
-    } as any, Buffer.from(body));
+    const request = new Request(
+      {
+        socket,
+        method: 'GET',
+        headers: {},
+        url: 'http://localhost:8080/my/api',
+      } as any,
+      Buffer.from(body),
+    );
     expect(request.body.toString()).toBe(body);
   });
 
   it('should provide the headers', () => {
     const headers = {
-      'accepts': 'application/json',
+      accepts: 'application/json',
       'x-header': 'custom value',
     };
-    const request = new Request({
-      socket,
-      method: 'GET',
-      headers,
-      url: 'http://localhost:8080/my/api',
-    } as any, Buffer.from(''));
+    const request = new Request(
+      {
+        socket,
+        method: 'GET',
+        headers,
+        url: 'http://localhost:8080/my/api',
+      } as any,
+      Buffer.from(''),
+    );
     expect(request.headers).toEqual(headers);
   });
 
@@ -56,12 +63,15 @@ describe('Request', () => {
     const search = '?query=parameter&additional=argument';
     const url = `${protocol}//${host}${pathname}${search}`;
 
-    const request = new Request({
-      socket,
-      method: 'GET',
-      headers: {},
-      url,
-    } as any, Buffer.from(''));
+    const request = new Request(
+      {
+        socket,
+        method: 'GET',
+        headers: {},
+        url,
+      } as any,
+      Buffer.from(''),
+    );
 
     expect(request.url.href).toBe(url);
     expect(request.url.protocol).toBe(protocol);
@@ -83,12 +93,15 @@ describe('Request', () => {
     const search = '?query=parameter&additional=argument';
     const url = `${protocol}//${host}${pathname}${search}`;
 
-    const request = new Request({
-      socket,
-      method: 'GET',
-      headers: {},
-      url,
-    } as any, Buffer.from(''));
+    const request = new Request(
+      {
+        socket,
+        method: 'GET',
+        headers: {},
+        url,
+      } as any,
+      Buffer.from(''),
+    );
 
     expect(request.pathname).toBe(pathname);
   });
@@ -102,12 +115,15 @@ describe('Request', () => {
     const search = '?query=parameter&additional=argument';
     const url = `${protocol}//${host}${pathname}${search}`;
 
-    const request = new Request({
-      socket,
-      method: 'GET',
-      headers: {},
-      url,
-    } as any, Buffer.from(''));
+    const request = new Request(
+      {
+        socket,
+        method: 'GET',
+        headers: {},
+        url,
+      } as any,
+      Buffer.from(''),
+    );
 
     expect(request.queryParameters).toEqual({
       query: 'parameter',

@@ -19,8 +19,6 @@ export interface PropertyCache<Type> {
   invalid: boolean;
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,22 +81,32 @@ export class UserProperty<Input, Output = Input> {
       origin = 'none';
     }
 
-    const value = {input, inputOrigin: origin};
+    const value = { input, inputOrigin: origin };
     this._inputCache.value = value;
     this._inputCache.invalid = false;
     return value;
   }
 
-  get userInputIsSet(): boolean { return this._userInputIsSet; }
-  get userInput(): Input | undefined { return this._userInput; }
-  get hasDefaultInput(): boolean { return this._spec.getDefaultInput != null; }
+  get userInputIsSet(): boolean {
+    return this._userInputIsSet;
+  }
+  get userInput(): Input | undefined {
+    return this._userInput;
+  }
+  get hasDefaultInput(): boolean {
+    return this._spec.getDefaultInput != null;
+  }
   get defaultInput(): Input | undefined {
     if (this._spec.getDefaultInput != null) {
       return this._spec.getDefaultInput();
     }
   }
-  get input(): Input | undefined { return this.inputAndOrigin.input; }
-  get inputOrigin(): InputOrigin { return this.inputAndOrigin.inputOrigin; }
+  get input(): Input | undefined {
+    return this.inputAndOrigin.input;
+  }
+  get inputOrigin(): InputOrigin {
+    return this.inputAndOrigin.inputOrigin;
+  }
 
   resetInputCache() {
     this._inputCache.invalid = true;
@@ -117,7 +125,7 @@ export class UserProperty<Input, Output = Input> {
 
     let transform = this._spec.transform;
     if (transform == null) {
-      transform = ({input}: ProcessorArg<Input>): any => input;
+      transform = ({ input }: ProcessorArg<Input>): any => input;
     }
 
     const value = transform(this.inputAndOrigin);

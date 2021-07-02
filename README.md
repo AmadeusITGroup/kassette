@@ -25,19 +25,16 @@ exports.getConfiguration = () => {
     remoteURL: 'http://127.0.0.1:3000',
     mode: 'local_or_download',
 
-    hook: async ({mock}) => {
+    hook: async ({ mock }) => {
       if (!mock.request.pathname.startsWith('/api/')) {
         mock.setMode('remote');
         return;
       }
 
-      mock.setLocalPath([
-        mock.request.pathname.split('/').slice(1),
-        mock.request.method,
-      ]);
-    }
+      mock.setLocalPath([mock.request.pathname.split('/').slice(1), mock.request.method]);
+    },
   };
-}
+};
 ```
 
 Now run your script to launch the proxy!
@@ -47,7 +44,6 @@ With this configuration, input requests targeting URLs starting with `/api/` wil
 Note that kassette can also be configured to run as a browser proxy, reading the target URL from the request, and intercepting HTTPS communications.
 
 Check [_Getting started_](./doc/getting-started.md) to learn more.
-
 
 ## Main features
 
@@ -60,15 +56,13 @@ Check [_Getting started_](./doc/getting-started.md) to learn more.
 - generate TLS certificates on the fly to intercept HTTPS communications (as a man-in-the-middle)
 - integrates nicely into your editor and source control: a simple hierarchy of files is generated in a clean way for inspection, edition, diffing, etc.
 
-
-
 ## Installation
 
 This is a Node.js project using npm for dependency management, so ensure you have those two properly installed. Node.js LTS onwards is supported.
 
 With npm, you can install it in two locations:
 
-- locally inside your project and run it the usual way (__using a npm script__ or accessing the path explicitly `node_modules/.bin/kassette`)
+- locally inside your project and run it the usual way (**using a npm script** or accessing the path explicitly `node_modules/.bin/kassette`)
 - or install it globally and run it using the command `kassette` (not advised for self-contained projects)
 
 Besides where it is installed, you have at least two ways to install it:
@@ -84,17 +78,9 @@ If you want to use it globally only, then there is nothing more to do.
 
 If you want to install it locally though, you need to add one more step. You won't be able to use a `package.json` dependency, but you can install it manually using `npm link @amadeus-it-group/kassette` from inside your project.
 
-
-
-
-
 ## User documentation
 
 It is advised to start with the [_Getting started_](./doc/getting-started.md) article which describes a few practical usage examples, then check the reference for the [configuration](./doc/configuration.md) and the [API](./doc/api.md).
-
-
-
-
 
 ## Developing / Contributing
 

@@ -6,10 +6,6 @@ This module takes care of:
 - calling the bootstrap function of the application, passing the configuration input
 - providing a basic console interface
 
-
-
-
-
 # Dependencies
 
 - `yargs`: for command line options parsing

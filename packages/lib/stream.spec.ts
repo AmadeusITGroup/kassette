@@ -16,8 +16,12 @@ describe('stream', () => {
           }
         }
 
-        private _pushData(chunk: string) { this._onData(Buffer.from(chunk)); }
-        private _end() { this._onEnd(); }
+        private _pushData(chunk: string) {
+          this._onData(Buffer.from(chunk));
+        }
+        private _end() {
+          this._onEnd();
+        }
 
         start() {
           this._pushData('hel');
@@ -27,7 +31,7 @@ describe('stream', () => {
       }
       const stream = new MyStream();
 
-      const promise = readAll(stream).then(result => {
+      const promise = readAll(stream).then((result) => {
         expect(result.toString()).toEqual('hello');
       });
 
@@ -41,7 +45,9 @@ describe('stream', () => {
         read(size: number) {
           this.push(content.slice(0, size));
           content = content.slice(size);
-          if (content === '') { this.push(null); }
+          if (content === '') {
+            this.push(null);
+          }
         },
 
         write(chunk: any, _encoding: string, callback: Function) {
@@ -50,7 +56,7 @@ describe('stream', () => {
         },
       });
 
-      const promise = readAll(stream).then(result => {
+      const promise = readAll(stream).then((result) => {
         expect(result.toString()).toEqual('hello');
       });
 

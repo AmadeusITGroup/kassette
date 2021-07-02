@@ -4,10 +4,6 @@ Run `npm run build` to build the project.
 
 It uses `tsc` directly with a production configuration.
 
-
-
-
-
 # Testing
 
 ## Unit tests
@@ -34,17 +30,9 @@ Behind this, [Mocha](https://mochajs.org/) is used to run the process and theref
 
 For now, [playwright](https://playwright.dev) is used to manipulate a headless Chrome as a client to make the requests and gather the responses.
 
-
-
-
-
 # Versioning
 
 The project follows [semantic versioning](https://semver.org/).
-
-
-
-
 
 # Releasing
 

@@ -11,7 +11,9 @@ describe('string', () => {
     });
 
     it('should handle nested arrays', () => {
-      expect(safeBuildString(['hello', null, [' my', undefined, ' dear', [' world']], ' today', null])).toEqual('hello my dear world today');
+      expect(
+        safeBuildString(['hello', null, [' my', undefined, ' dear', [' world']], ' today', null]),
+      ).toEqual('hello my dear world today');
     });
   });
 });

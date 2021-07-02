@@ -1,13 +1,11 @@
 // ------------------------------------------------------------------------- std
 
-const {promises: fs} = require('fs');
+const { promises: fs } = require('fs');
 const nodePath = require('path');
 
 // -------------------------------------------------------------------- internal
 
-const {PATHS} = require('./paths');
-
-
+const { PATHS } = require('./paths');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Local library
@@ -22,8 +20,6 @@ function getDefault(container, property, defaultValue) {
   return value;
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -34,13 +30,19 @@ class ResultsHandler {
     this._resultsPath = nodePath.join(PATHS.resultsFolder, 'orchestrator.json');
   }
 
-  async initialize() { return this._write(); }
-  async finalize() { return this._write(); }
-  async getResults() { return this.results; }
+  async initialize() {
+    return this._write();
+  }
+  async finalize() {
+    return this._write();
+  }
+  async getResults() {
+    return this.results;
+  }
 
   pusher(processName) {
     return async (payload) => {
-      let {useCase, iteration, data} = payload;
+      let { useCase, iteration, data } = payload;
       if (data == null) data = {};
       this._getIteration(useCase, iteration)[processName] = data;
       await this._write();
@@ -52,7 +54,7 @@ class ResultsHandler {
   }
 
   _getUseCase(name) {
-    return getDefault(this.results, name, {useCase: name, iterations: []});
+    return getDefault(this.results, name, { useCase: name, iterations: [] });
   }
 
   _getIteration(useCaseName, index) {

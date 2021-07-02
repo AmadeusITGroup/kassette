@@ -2,8 +2,6 @@ import { Response } from '../server';
 
 import { Mock } from './impl';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -15,8 +13,8 @@ describe('mocking', () => {
       const mock = new Mock({
         options: {
           userConfiguration: {
-            mode: {value: 'remote'},
-            remoteURL: {value: globalRemoteURL},
+            mode: { value: 'remote' },
+            remoteURL: { value: globalRemoteURL },
           },
         },
       } as any);
@@ -41,7 +39,7 @@ describe('mocking', () => {
       const mock = new Mock({
         options: {
           userConfiguration: {
-            delay: {value: 65},
+            delay: { value: 65 },
           },
         },
       } as any);
@@ -65,18 +63,20 @@ describe('mocking', () => {
   });
 
   describe('paths', () => {
-    function clean(path: string) { return path.replace(/\\/g, '/'); }
+    function clean(path: string) {
+      return path.replace(/\\/g, '/');
+    }
 
     it('should work', () => {
       const mock = new Mock({
         options: {
           root: 'root',
           userConfiguration: {
-            mocksFolder: {value: 'mocks-root'},
+            mocksFolder: { value: 'mocks-root' },
           },
         },
         request: {
-          url: {pathname: '/url/path'},
+          url: { pathname: '/url/path' },
           method: 'post',
         },
       } as any);
@@ -106,8 +106,8 @@ describe('mocking', () => {
           body: 'hello',
           data: {
             creationDateTime: new Date(),
-            headers: {'x-custom': 'custom'},
-            status: {code: 204, message: 'custom message'},
+            headers: { 'x-custom': 'custom' },
+            status: { code: 204, message: 'custom message' },
             ignoredHeaders: {},
             bodyFileName: 'dummy',
             time: 0,
@@ -123,21 +123,23 @@ describe('mocking', () => {
     describe('fillResponseFromPayload', () => {
       it('should work', () => {
         const response = new Response(null as any);
-        const mock = new Mock({response} as any);
+        const mock = new Mock({ response } as any);
 
-        const headers = {'x-custom': 'custom'};
-        const status = {code: 204, message: 'custom message'};
-        mock.fillResponseFromPayload(mock.createPayload({
-          body: 'hello',
-          data: {
-            creationDateTime: new Date(),
-            headers,
-            status,
-            ignoredHeaders: {},
-            bodyFileName: 'dummy',
-            time: 0,
-          },
-        }));
+        const headers = { 'x-custom': 'custom' };
+        const status = { code: 204, message: 'custom message' };
+        mock.fillResponseFromPayload(
+          mock.createPayload({
+            body: 'hello',
+            data: {
+              creationDateTime: new Date(),
+              headers,
+              status,
+              ignoredHeaders: {},
+              bodyFileName: 'dummy',
+              time: 0,
+            },
+          }),
+        );
 
         expect(response.headers).toEqual(headers);
         expect(response.status).toEqual(status);

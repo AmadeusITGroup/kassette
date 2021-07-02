@@ -2,8 +2,6 @@ import * as nodePath from 'path';
 
 import { load } from './module';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +22,7 @@ describe('module', () => {
     // I'd drop Jest rather than introduce workarounds.
     it.skip('should load module and reload on demand', async () => {
       async function run(reload = false, offset = 0) {
-        const {loaded, module} = await load<Interface>({path, reload});
+        const { loaded, module } = await load<Interface>({ path, reload });
         expect(loaded).toBeTruthy();
         expect(module).not.toBeNull();
         expect(module!.getValue()).toBe(0 + offset);

@@ -11,9 +11,7 @@ import { extensions } from 'interpret';
 
 // -------------------------------------------------------------------- internal
 
-import {
-  sanitize,
-} from './array';
+import { sanitize } from './array';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -34,7 +32,11 @@ export interface LoadResult<Module = any> {
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function load<Module = any>({path, reload = false, register = true}: LoadSpec): Promise<LoadResult<Module>> {
+export async function load<Module = any>({
+  path,
+  reload = false,
+  register = true,
+}: LoadSpec): Promise<LoadResult<Module>> {
   let registered;
 
   if (!register) {
@@ -42,9 +44,10 @@ export async function load<Module = any>({path, reload = false, register = true}
   } else {
     const basePath = nodePath.dirname(path);
 
-    const filenameParts = nodePath.basename(path)
+    const filenameParts = nodePath
+      .basename(path)
       .split('.')
-      .filter(part => part.length > 0);
+      .filter((part) => part.length > 0);
 
     if (filenameParts.length >= 1) {
       filenameParts.shift();
@@ -59,21 +62,22 @@ export async function load<Module = any>({path, reload = false, register = true}
         ],
         [],
       )
-      .map(extension => nodePath.join(basePath, ['index', ...extension].join('.'))); // "index" is just a dummy name, it could be anything
+      .map((extension) => nodePath.join(basePath, ['index', ...extension].join('.'))); // "index" is just a dummy name, it could be anything
 
-    registered = paths.findIndex(testPath => {
-      try {
-        prepare(extensions, testPath);
-        return true;
-      } catch (exception) {
-        return false;
-      }
-    }) !== -1;
+    registered =
+      paths.findIndex((testPath) => {
+        try {
+          prepare(extensions, testPath);
+          return true;
+        } catch (exception) {
+          return false;
+        }
+      }) !== -1;
   }
 
   if (reload && registered) {
     delete require.cache[require.resolve(path)];
   }
 
-  return !registered ? {loaded: false} : {loaded: true, module: await import(path)};
+  return !registered ? { loaded: false } : { loaded: true, module: await import(path) };
 }

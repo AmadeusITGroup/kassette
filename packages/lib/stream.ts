@@ -10,7 +10,7 @@ export interface StreamLike {
 
 /** For Node.js Stream-like objects, fetches all the data and returns it as a buffer */
 export async function readAll(message: StreamLike): Promise<Buffer> {
-  return new Promise<Buffer>(resolve => {
+  return new Promise<Buffer>((resolve) => {
     const chunks: Buffer[] = [];
     message.on('data', (chunk: Buffer) => chunks.push(chunk));
     message.on('end', () => resolve(Buffer.concat(chunks)));

@@ -2,9 +2,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-type ObjectMap<T> = {[key in string]: T};
+type ObjectMap<T> = { [key in string]: T };
 
-export const isObject = <T>(value: any): value is ObjectMap<T> => ({}).toString.call(value).slice(8, -1) === 'Object';
+export const isObject = <T>(value: any): value is ObjectMap<T> =>
+  ({}.toString.call(value).slice(8, -1) === 'Object');
 
 export const copyDeep = (object: Readonly<ObjectMap<any>>): ObjectMap<any> => {
   const copy: ObjectMap<any> = {};
@@ -38,7 +39,9 @@ export const mergeDeepLeft = (
 };
 
 export const fromPairs = <T>(pairs: [string, T][]): ObjectMap<T> =>
-  pairs.reduce<ObjectMap<T>>((output, [key, value]) => (output[key] = value, output), {});
+  pairs.reduce<ObjectMap<T>>((output, [key, value]) => ((output[key] = value), output), {});
 
 export const rejectVoid = <T = any>(object: ObjectMap<T>): ObjectMap<NonNullable<T>> =>
-  fromPairs(Object.entries(object).filter(([_key, value]) => value != null)) as ObjectMap<NonNullable<T>>;
+  fromPairs(Object.entries(object).filter(([_key, value]) => value != null)) as ObjectMap<
+    NonNullable<T>
+  >;

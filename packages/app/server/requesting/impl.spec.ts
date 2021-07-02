@@ -3,40 +3,31 @@ jest.mock('http');
 
 import chalk from 'chalk';
 
-import {
-  requestHTTP,
-  requestHTTPS,
-  measure,
-  sendRequest,
-} from './impl';
+import { requestHTTP, requestHTTPS, measure, sendRequest } from './impl';
 
 import { readAll } from '../../../lib/stream';
 import { IFetchedRequest } from '../request/model';
 import { URL } from 'url';
 import { createGlobalLogger } from '../../logger';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 function createLogger() {
-  const output: {message: any, type: 'log' | 'error'}[] = [];
+  const output: { message: any; type: 'log' | 'error' }[] = [];
   const console = {
-    log: (message: any) => output.push({message, type: 'log'}),
-    error: (message: any) => output.push({message, type: 'error'}),
+    log: (message: any) => output.push({ message, type: 'log' }),
+    error: (message: any) => output.push({ message, type: 'error' }),
   };
   createGlobalLogger(console);
-  const clear = () => output.length = 0;
-  return {output, clear};
+  const clear = () => (output.length = 0);
+  return { output, clear };
 }
 
 function highlighted(text: string, color = 'green'): string {
   return chalk.bold((chalk as any)[color](text));
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -46,7 +37,7 @@ describe('requesting', () => {
   describe('measure', () => {
     it('should return start, end, duration and output', async () => {
       const delay = 1000;
-      const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time));
+      const wait = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
       let called = false;
       let finished = false;
       const returnedValue = {};
@@ -57,7 +48,7 @@ describe('requesting', () => {
         return returnedValue;
       };
 
-      const {start, end, duration, output} = await measure(myAsyncFunction);
+      const { start, end, duration, output } = await measure(myAsyncFunction);
 
       expect(called).toBeTruthy();
       expect(finished).toBeTruthy();
@@ -78,13 +69,13 @@ describe('requesting', () => {
   describe('requestHTTP', () => {
     it('should send HTTP request and get raw response', async () => {
       const url = 'http://remote.dev/my/api';
-      const method =  'GET';
+      const method = 'GET';
       const headers = {
         'x-custom': 'custom',
       };
       const body = 'Hello';
 
-      const rawResponse = await requestHTTP({url, method, headers, body});
+      const rawResponse = await requestHTTP({ url, method, headers, body });
 
       expect(rawResponse.statusCode).toBe(200);
       expect(rawResponse.statusMessage).toBe('OK');
@@ -92,7 +83,11 @@ describe('requesting', () => {
         'content-type': 'application/json',
       });
       expect(JSON.parse((await readAll(rawResponse)).toString())).toEqual({
-        url, method, headers, body, secure: false,
+        url,
+        method,
+        headers,
+        body,
+        secure: false,
       });
     });
   });
@@ -104,13 +99,13 @@ describe('requesting', () => {
       const path = '/my/api';
       const url = `https://${hostname}:${port}${path}`;
 
-      const method =  'GET';
+      const method = 'GET';
       const headers = {
         'x-custom': 'custom',
       };
       const body = 'Hello';
 
-      const rawResponse = await requestHTTPS({url, method, headers, body});
+      const rawResponse = await requestHTTPS({ url, method, headers, body });
 
       expect(rawResponse.statusCode).toBe(200);
       expect(rawResponse.statusMessage).toBe('OK');
@@ -118,14 +113,20 @@ describe('requesting', () => {
         'content-type': 'application/json',
       });
       expect(JSON.parse((await readAll(rawResponse)).toString())).toEqual({
-        method, headers, body, hostname, port, path, secure: true,
+        method,
+        headers,
+        body,
+        hostname,
+        port,
+        path,
+        secure: true,
       });
     });
   });
 
   describe('sendRequest', () => {
     it('should copy input data and send request', async () => {
-      const {output} = createLogger();
+      const { output } = createLogger();
 
       const result = await sendRequest({
         baseUrl: 'http://target:5000',
@@ -136,7 +137,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: {'x-original': 'original'},
+          headers: { 'x-original': 'original' },
         } as unknown as IFetchedRequest,
       });
 
@@ -151,15 +152,16 @@ describe('requesting', () => {
       expect(sentRequest.body).toEqual('Original');
       expect(sentRequest.secure).toBeFalsy();
 
-      const timestampPattern = /\d{4}\/\d{2}\/\d{2} \d{2}\:\d{2}\:\d{2}[ap]m [+-]\d{2}\:\d{2}/.source;
+      const timestampPattern = /\d{4}\/\d{2}\/\d{2} \d{2}\:\d{2}\:\d{2}[ap]m [+-]\d{2}\:\d{2}/
+        .source;
 
-      const messagePattern = ` - Sending request to: ${highlighted('http://target:5000/original?original=original')}`
+      const messagePattern = ` - Sending request to: ${highlighted(
+        'http://target:5000/original?original=original',
+      )}`
         .replace(/\//g, '\\/')
         .replace(/\[/g, '\\[')
         .replace(/\?/g, '\\?')
-        .replace(/\u001b/g, '\\u001b')
-        ;
-
+        .replace(/\u001b/g, '\\u001b');
       expect(output).toEqual([
         {
           type: 'log',
@@ -183,7 +185,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: {'x-original': 'original'},
+          headers: { 'x-original': 'original' },
         } as unknown as IFetchedRequest,
       });
 
@@ -202,7 +204,7 @@ describe('requesting', () => {
     });
 
     it('should be able to skip log', async () => {
-      const {output} = createLogger();
+      const { output } = createLogger();
 
       await sendRequest({
         skipLog: true,
@@ -214,7 +216,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: {'x-original': 'original'},
+          headers: { 'x-original': 'original' },
         } as unknown as IFetchedRequest,
       });
 
@@ -232,7 +234,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: {'x-original': 'original'},
+          headers: { 'x-original': 'original' },
         } as unknown as IFetchedRequest,
       });
 

@@ -6,11 +6,7 @@ import { stringifyPretty } from '../../../lib/json';
 
 import { isAppError } from '../../error';
 
-import {
-  buildString,
-  logInfo,
-  logError,
-} from '../../logger';
+import { buildString, logInfo, logError } from '../../logger';
 
 import {
   IMergedConfiguration,
@@ -21,12 +17,7 @@ import {
 
 // -------------------------------------------------------------------- internal
 
-import {
-  RunOptions,
-  ApplicationData,
-} from '../model';
-
-
+import { RunOptions, ApplicationData } from '../model';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logging
@@ -51,10 +42,14 @@ export function logProperty(
     checked: !checkable ? undefined : property.origin !== 'default',
     data: checkable ? undefined : stringifyPretty(property.value),
     message: buildString([
-      '- (', { text: 'cli', color: greenIfFrom('cli') },
-      ' | ', { text: 'file', color: greenIfFrom('file') },
-      ' | ', { text: 'api', color: greenIfFrom('api') },
-      ' | ', { text: 'default', color: greenIfFrom('default') },
+      '- (',
+      { text: 'cli', color: greenIfFrom('cli') },
+      ' | ',
+      { text: 'file', color: greenIfFrom('file') },
+      ' | ',
+      { text: 'api', color: greenIfFrom('api') },
+      ' | ',
+      { text: 'default', color: greenIfFrom('default') },
       ') ',
       name,
     ]),
@@ -62,7 +57,7 @@ export function logProperty(
 }
 
 /** Logs the full use configuration object as other application data */
-export function logApplicationData({configuration, root}: ApplicationData) {
+export function logApplicationData({ configuration, root }: ApplicationData) {
   logInfo({ message: 'Running server with configuration: ', extraLine: true });
   logInfo({
     message: `- configuration file path: ${
@@ -86,7 +81,7 @@ export function logApplicationData({configuration, root}: ApplicationData) {
   logProperty('on exit handler', configuration.onExit, true);
   logProperty('custom logger', configuration.console, true);
 
-  logInfo({message: ''});
+  logInfo({ message: '' });
 
   logInfo({
     message: 'Root folder used for relative paths resolution',
@@ -94,8 +89,6 @@ export function logApplicationData({configuration, root}: ApplicationData) {
     extraLine: true,
   });
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Building

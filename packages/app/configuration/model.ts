@@ -4,16 +4,9 @@ import { ImmutableFullyOptional } from '../../lib/interfaces';
 
 // ------------------------------------------------------------------------- app
 
-import {
-  HookFunction,
-} from '../mocking';
-import {
-  OnProxyConnectFunction,
-} from '../server/proxy';
-import {
-  OnListenFunction,
-  OnExitFunction,
-} from '../server';
+import { HookFunction } from '../mocking';
+import { OnProxyConnectFunction } from '../server/proxy';
+import { OnListenFunction, OnExitFunction } from '../server';
 
 import { Console } from '../logger';
 
@@ -23,9 +16,12 @@ import { Console } from '../logger';
 
 /** The main working mode of the proxy */
 export type Mode =
-  'local' | 'remote' | 'download' |
-  'local_or_remote' | 'local_or_download' |
-  'manual';
+  | 'local'
+  | 'remote'
+  | 'download'
+  | 'local_or_remote'
+  | 'local_or_download'
+  | 'manual';
 export type Delay = 'recorded' | number;
 
 export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';

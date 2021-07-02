@@ -1,11 +1,11 @@
 import {
-  TYPE, AppError, isAppError,
+  TYPE,
+  AppError,
+  isAppError,
   FileConfigurationError,
   ServerError,
   MissingRemoteURLError,
 } from './';
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //

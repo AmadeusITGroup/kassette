@@ -5,10 +5,7 @@ import * as fs from 'fs';
 
 const volume = (fs as any).__volume;
 
-import {
-  exists,
-  FileHandler,
-} from './fs';
+import { exists, FileHandler } from './fs';
 
 describe('fs', () => {
   beforeEach(() => {
@@ -18,7 +15,7 @@ describe('fs', () => {
   describe('exists', () => {
     it('should return whether existing or not', async () => {
       volume.fromJSON({
-        'existing': 'I exist',
+        existing: 'I exist',
       });
       expect(await exists('existing')).toBeTruthy();
       expect(await exists('non-existing')).toBeFalsy();
@@ -40,7 +37,7 @@ describe('fs', () => {
     it('should be created with a root and name', () => {
       const root = '/root';
       const name = 'filename';
-      const handler = new FileHandler({root, name});
+      const handler = new FileHandler({ root, name });
       expect(handler.name).toBe(name);
       expect(handler.path.split(/[\\\/]/g)).toEqual(['', 'root', name]);
     });
@@ -50,14 +47,14 @@ describe('fs', () => {
         '/root/existing': 'I exist',
       });
       let handler;
-      handler = new FileHandler({root: '/root', name: 'existing'});
+      handler = new FileHandler({ root: '/root', name: 'existing' });
       expect(await handler.exists()).toBeTruthy();
-      handler = new FileHandler({root: '/root', name: 'non-existing'});
+      handler = new FileHandler({ root: '/root', name: 'non-existing' });
       expect(await handler.exists()).toBeFalsy();
     });
 
     it('should read and write', async () => {
-      const handler = new FileHandler({root: '/root', name: 'existing'});
+      const handler = new FileHandler({ root: '/root', name: 'existing' });
 
       expect(await handler.read()).toBeNull();
 

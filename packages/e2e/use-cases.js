@@ -15,34 +15,33 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 function fromPairs(pairs) {
-  return pairs.reduce((output, [key, value]) => (output[key] = value, output), {});
+  return pairs.reduce((output, [key, value]) => ((output[key] = value), output), {});
 }
 
-async function readMock({folder}) {
+async function readMock({ folder }) {
   const path = require('path');
   const fs = require('fs').promises;
 
   const data = JSON.parse(await fs.readFile(path.join(folder, 'data.json')));
   const body = await fs.readFile(path.join(folder, data.bodyFileName));
 
-  return {data, body};
+  return { data, body };
 }
 
-async function getLocalMockInfo({folder}) {
-  const {promises: fs} = require('fs');
+async function getLocalMockInfo({ folder }) {
+  const { promises: fs } = require('fs');
 
-    let files = [];
-    try {
-      files = await fs.readdir(folder)
-    } catch (exception) {
-      if (exception.code !== 'ENOENT') throw exception;
-    }
+  let files = [];
+  try {
+    files = await fs.readdir(folder);
+  } catch (exception) {
+    if (exception.code !== 'ENOENT') throw exception;
+  }
 
-    const mock = files.length === 0 ? null : await readMock({folder});
+  const mock = files.length === 0 ? null : await readMock({ folder });
 
-    return {files, mock};
+  return { files, mock };
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Data
@@ -106,8 +105,6 @@ const useCases = [
   //   },
   // },
 
-
-
   //////////////////////////////////////////////////////////////////////////////
   // Headers management
   //////////////////////////////////////////////////////////////////////////////
@@ -118,7 +115,9 @@ const useCases = [
     iterations: 2,
 
     request: async () => {
-      const providedHeaders = [{name: 'x-custom-header-from-client', value: 'custom header from client'}];
+      const providedHeaders = [
+        { name: 'x-custom-header-from-client', value: 'custom header from client' },
+      ];
 
       return {
         request: {
@@ -127,80 +126,97 @@ const useCases = [
               'x-client-header-overridden-by-backend': 'from client, to be overridden by backend',
               'x-client-header-overridden-by-proxy': 'from client, to be overridden by proxy',
             },
-            fromPairs(providedHeaders.map(({name, value}) => [name, value])),
+            fromPairs(providedHeaders.map(({ name, value }) => [name, value])),
           ),
         },
-        data: {providedHeaders},
+        data: { providedHeaders },
       };
     },
 
-    serve: async ({response, request}) => {
-      const providedHeaders = [{name: 'x-custom-header-from-backend', value: 'custom header from backend'}];
-      const overriddenHeaders = [{name: 'x-client-header-overridden-by-backend', value: 'from client, overridden by backend'}];
+    serve: async ({ response, request }) => {
+      const providedHeaders = [
+        { name: 'x-custom-header-from-backend', value: 'custom header from backend' },
+      ];
+      const overriddenHeaders = [
+        {
+          name: 'x-client-header-overridden-by-backend',
+          value: 'from client, overridden by backend',
+        },
+      ];
 
-      const headers = [
-        'x-custom-header-from-client',
-        'x-use-case-name',
-        'x-use-case-iteration',
-      ]
-        .map(name => ({name, value: request.headers[name]}))
+      const headers = ['x-custom-header-from-client', 'x-use-case-name', 'x-use-case-iteration']
+        .map((name) => ({ name, value: request.headers[name] }))
         .concat([
           ...providedHeaders,
           ...overriddenHeaders,
-          {name: 'x-backend-header-overridden-by-proxy', value: 'from backend, to be overridden by proxy'},
-        ])
+          {
+            name: 'x-backend-header-overridden-by-proxy',
+            value: 'from backend, to be overridden by proxy',
+          },
+        ]);
 
-      headers.forEach(({name, value}) => response.set(name, value));
+      headers.forEach(({ name, value }) => response.set(name, value));
 
       response.status = 200;
 
-      return {providedHeaders, overriddenHeaders};
+      return { providedHeaders, overriddenHeaders };
     },
 
-    proxy: async ({mock}) => {
-      const providedHeaders = [{name: 'x-custom-header-from-proxy', value: 'custom header from proxy'}];
+    proxy: async ({ mock }) => {
+      const providedHeaders = [
+        { name: 'x-custom-header-from-proxy', value: 'custom header from proxy' },
+      ];
       const overriddenHeaders = [
-        {name: 'x-client-header-overridden-by-proxy', value: 'from client, overridden by proxy'},
-        {name: 'x-backend-header-overridden-by-proxy', value: 'from backend, overridden by proxy'},
+        { name: 'x-client-header-overridden-by-proxy', value: 'from client, overridden by proxy' },
+        {
+          name: 'x-backend-header-overridden-by-proxy',
+          value: 'from backend, overridden by proxy',
+        },
       ];
 
-      const headers = [
-        ...providedHeaders,
-        ...overriddenHeaders,
-      ];
+      const headers = [...providedHeaders, ...overriddenHeaders];
       await mock.getPayloadAndFillResponse();
       mock.setMode('manual');
-      mock.response.setHeaders(fromPairs(headers.map(({name, value}) => [name, value])));
+      mock.response.setHeaders(fromPairs(headers.map(({ name, value }) => [name, value])));
       await mock.sendResponse();
 
-      return {providedHeaders, overriddenHeaders};
+      return { providedHeaders, overriddenHeaders };
     },
 
-    defineAssertions: ({describe, it, getData, expect, useCase}) => {
+    defineAssertions: ({ describe, it, getData, expect, useCase }) => {
       describe('headers feeding', () => {
         it('should have custom header from client', async () => {
           for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-            const {data} = getData(iteration);
-            data.clientData.providedHeaders.forEach(({name, value}) =>
-              expect(data.client.headers[name]).to.equal(value, 'Headers sent by the client should be added by the backend in the response and not dropped by the proxy in any direction (client <=> backend)')
+            const { data } = getData(iteration);
+            data.clientData.providedHeaders.forEach(({ name, value }) =>
+              expect(data.client.headers[name]).to.equal(
+                value,
+                'Headers sent by the client should be added by the backend in the response and not dropped by the proxy in any direction (client <=> backend)',
+              ),
             );
           }
         });
 
         it('should have custom header from backend', async () => {
           for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-            const {data} = getData(iteration);
-            getData(0).data.backend.providedHeaders.forEach(({name, value}) =>
-              expect(data.client.headers[name]).to.equal(value, 'Headers added to the response from the backend should not be dropped by the proxy')
+            const { data } = getData(iteration);
+            getData(0).data.backend.providedHeaders.forEach(({ name, value }) =>
+              expect(data.client.headers[name]).to.equal(
+                value,
+                'Headers added to the response from the backend should not be dropped by the proxy',
+              ),
             );
           }
         });
 
         it('should have custom header from proxy', async () => {
           for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-            const {data} = getData(iteration);
-            data.proxy.providedHeaders.forEach(({name, value}) =>
-              expect(data.client.headers[name]).to.equal(value, 'The proxy should be able to add headers')
+            const { data } = getData(iteration);
+            data.proxy.providedHeaders.forEach(({ name, value }) =>
+              expect(data.client.headers[name]).to.equal(
+                value,
+                'The proxy should be able to add headers',
+              ),
             );
           }
         });
@@ -209,26 +225,30 @@ const useCases = [
       describe('headers overriding', () => {
         it('should receive headers overridden by backend', async () => {
           for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-            const {data} = getData(iteration);
-            getData(0).data.backend.overriddenHeaders.forEach(({name, value}) =>
-              expect(data.client.headers[name]).to.equal(value, 'Headers overridden by backend should not be dropped by the proxy')
+            const { data } = getData(iteration);
+            getData(0).data.backend.overriddenHeaders.forEach(({ name, value }) =>
+              expect(data.client.headers[name]).to.equal(
+                value,
+                'Headers overridden by backend should not be dropped by the proxy',
+              ),
             );
           }
         });
 
         it('should receive own header overridden by proxy', async () => {
           for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-            const {data} = getData(iteration);
-            data.proxy.overriddenHeaders.forEach(({name, value}) =>
-              expect(data.client.headers[name]).to.equal(value, 'The proxy should be able to override header coming from the backend')
+            const { data } = getData(iteration);
+            data.proxy.overriddenHeaders.forEach(({ name, value }) =>
+              expect(data.client.headers[name]).to.equal(
+                value,
+                'The proxy should be able to override header coming from the backend',
+              ),
             );
           }
         });
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Backend switching
@@ -239,33 +259,34 @@ const useCases = [
     description: 'backend switching',
     iterations: 1,
 
-    alternativeServe: async ({response}) => {
+    alternativeServe: async ({ response }) => {
       const output = {};
       response.body = output.body = 'from alternative backend';
       response.status = output.status = 200;
       return output;
     },
 
-    serve: async ({response}) => {
+    serve: async ({ response }) => {
       const output = {};
       response.body = output.body = 'from main backend';
       response.status = output.status = 404;
       return output;
     },
 
-    proxy: async ({mock}, {context}) => {
+    proxy: async ({ mock }, { context }) => {
       mock.setRemoteURL(context.alternativeRemoteURL);
     },
 
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should get the data from the alternative backend', async () => {
-        const {data} = getData(0);
-        expect(data.client.status.code).to.equal(data.alternativeBackend.status, 'Received status should be coming from the alternative backend, not the main one')
+        const { data } = getData(0);
+        expect(data.client.status.code).to.equal(
+          data.alternativeBackend.status,
+          'Received status should be coming from the alternative backend, not the main one',
+        );
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Mock files generation
@@ -309,11 +330,11 @@ const useCases = [
     description: 'mock files generation',
     iterations: 5,
 
-    request: async ({iteration}) => {
-      return {request: {headers: {'x-iteration': iteration}}};
+    request: async ({ iteration }) => {
+      return { request: { headers: { 'x-iteration': iteration } } };
     },
 
-    serve: async ({response, request}) => {
+    serve: async ({ response, request }) => {
       const output = {};
       const iteration = request.headers['x-iteration'];
       response.body = output.body = `from backend: ${iteration}`;
@@ -321,7 +342,7 @@ const useCases = [
       return output;
     },
 
-    proxy: async ({mock}, {iteration}) => {
+    proxy: async ({ mock }, { iteration }) => {
       const filesRoot = mock.mockFolderFullPath;
 
       if (iteration === 0) {
@@ -330,7 +351,7 @@ const useCases = [
         mock.setMode('remote');
         await mock.process();
         const wrappedPayload = mock.sourcePayload;
-        return {filesRoot, wrappedPayload};
+        return { filesRoot, wrappedPayload };
       } else if (iteration === 1) {
         mock.setMode('local_or_download');
         await mock.process();
@@ -356,23 +377,26 @@ const useCases = [
         mock.setMode('download');
         await mock.process();
         const wrappedPayload = mock.sourcePayload;
-        return {filesRoot, wrappedPayload};
+        return { filesRoot, wrappedPayload };
       } else if (iteration === 4) {
         mock.setMode('local');
         await mock.process();
         const wrappedPayload = mock.sourcePayload;
-        return {filesRoot, wrappedPayload};
+        return { filesRoot, wrappedPayload };
       }
     },
 
-    postProcess: async ({data}) => {
-      return getLocalMockInfo({folder: data.proxy.filesRoot});
+    postProcess: async ({ data }) => {
+      return getLocalMockInfo({ folder: data.proxy.filesRoot });
     },
 
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should not persist any data if mode is remote', async () => {
-        const {data} = getData(0);
-        expect(data.postProcessing.files, 'When working in "remote" mode, the proxy should not create local files').to.be.empty;
+        const { data } = getData(0);
+        expect(
+          data.postProcessing.files,
+          'When working in "remote" mode, the proxy should not create local files',
+        ).to.be.empty;
         expect(data.proxy.wrappedPayload.origin).to.equal('remote');
       });
 
@@ -381,16 +405,40 @@ const useCases = [
         let iterationData;
 
         iterationData = getData(1).data;
-        expect(iterationData.postProcessing.files).to.have.lengthOf(6, 'When proxy works in "local_or_download" mode, it should create a set of local mock files');
-        expect(iterationData.proxy.wrappedPayload.origin).to.equal('remote', 'Getting the current payload during the iteration where the proxy is creating the local files should indicate the payload comes from the "remote" source (the backend)');
-        expect(iterationData.postProcessing.mock.body.toString()).to.equal(expectedBody, 'Mock content must come from iteration 1, when it was stored');
-        expect(iterationData.client.body).to.equal(expectedBody, 'Received body must come from the mock stored at iteration 1');
+        expect(iterationData.postProcessing.files).to.have.lengthOf(
+          6,
+          'When proxy works in "local_or_download" mode, it should create a set of local mock files',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'Getting the current payload during the iteration where the proxy is creating the local files should indicate the payload comes from the "remote" source (the backend)',
+        );
+        expect(iterationData.postProcessing.mock.body.toString()).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 1, when it was stored',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock stored at iteration 1',
+        );
 
         iterationData = getData(2).data;
-        expect(iterationData.postProcessing.files).to.have.lengthOf(6, 'Files should remain present in subsequent iterations');
-        expect(iterationData.proxy.wrappedPayload.origin).to.equal('local', 'Getting the current payload during the iteration where the proxy has already local files available should indicate the payload comes from the "local" source');
-        expect(iterationData.postProcessing.mock.body.toString()).to.equal(expectedBody, 'Mock content must come from iteration 1, when it was stored');
-        expect(iterationData.client.body).to.equal(expectedBody, 'Received body must come from the mock stored at iteration 1');
+        expect(iterationData.postProcessing.files).to.have.lengthOf(
+          6,
+          'Files should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'local',
+          'Getting the current payload during the iteration where the proxy has already local files available should indicate the payload comes from the "local" source',
+        );
+        expect(iterationData.postProcessing.mock.body.toString()).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 1, when it was stored',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock stored at iteration 1',
+        );
       });
 
       it('should update mock unconditionally in download mode', async () => {
@@ -398,21 +446,40 @@ const useCases = [
         let iterationData;
 
         iterationData = getData(3).data;
-        expect(iterationData.postProcessing.files).to.have.lengthOf(6, 'When proxy works in "download" mode, it should create/update a set of local mock files');
-        expect(iterationData.proxy.wrappedPayload.origin).to.equal('remote', 'In "download" mode, the data forwarded to the client comes from the remote backend.');
-        expect(iterationData.postProcessing.mock.body.toString()).to.equal(expectedBody, 'Mock content must come from iteration 4, when it was updated');
-        expect(iterationData.client.body).to.equal(expectedBody, 'Received body must come from the mock updated at iteration 4');
+        expect(iterationData.postProcessing.files).to.have.lengthOf(
+          6,
+          'When proxy works in "download" mode, it should create/update a set of local mock files',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'In "download" mode, the data forwarded to the client comes from the remote backend.',
+        );
+        expect(iterationData.postProcessing.mock.body.toString()).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
 
         iterationData = getData(4).data;
-        expect(iterationData.postProcessing.files).to.have.lengthOf(6, 'Files should remain present in subsequent iterations');
+        expect(iterationData.postProcessing.files).to.have.lengthOf(
+          6,
+          'Files should remain present in subsequent iterations',
+        );
         expect(iterationData.proxy.wrappedPayload.origin).to.equal('local');
-        expect(iterationData.postProcessing.mock.body.toString()).to.equal(expectedBody, 'Mock content must come from iteration 4, when it was updated');
-        expect(iterationData.client.body).to.equal(expectedBody, 'Received body must come from the mock updated at iteration 4');
+        expect(iterationData.postProcessing.mock.body.toString()).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Mode: local or remote
@@ -429,14 +496,18 @@ const useCases = [
     description: 'mode: local or remote',
     iterations: 4,
 
-    request: async ({iteration}) => {
-      return {request: {headers: {
-        'x-iteration': iteration,
-        'x-variant': ['mocked', 'mocked', 'remote', 'remote'][iteration],
-      }}};
+    request: async ({ iteration }) => {
+      return {
+        request: {
+          headers: {
+            'x-iteration': iteration,
+            'x-variant': ['mocked', 'mocked', 'remote', 'remote'][iteration],
+          },
+        },
+      };
     },
 
-    serve: async ({response, request}) => {
+    serve: async ({ response, request }) => {
       const output = {};
       const iteration = request.headers['x-iteration'];
       response.body = output.body = `from backend: ${iteration}`;
@@ -444,46 +515,44 @@ const useCases = [
       return output;
     },
 
-    proxy: async ({mock}, {iteration}) => {
+    proxy: async ({ mock }, { iteration }) => {
       mock.setLocalPath([mock.localPath, mock.request.headers['x-variant']]);
       const filesRoot = mock.mockFolderFullPath;
 
       mock.setMode(iteration === 0 ? 'download' : 'local_or_remote');
       await mock.process();
       const wrappedPayload = mock.sourcePayload;
-      return {filesRoot, wrappedPayload};
+      return { filesRoot, wrappedPayload };
     },
 
-    postProcess: async ({data}) => {
-      return getLocalMockInfo({folder: data.proxy.filesRoot});
+    postProcess: async ({ data }) => {
+      return getLocalMockInfo({ folder: data.proxy.filesRoot });
     },
 
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should download the first time in download mode', async () => {
-        const {data} = getData(0);
+        const { data } = getData(0);
         expect(data.postProcessing.files).to.have.lengthOf(6);
       });
 
       it('should serve the mock when existing', async () => {
-        const {data} = getData(1);
+        const { data } = getData(1);
         expect(data.client.body).to.equal('from backend: 0');
       });
 
       it('should fetch from backend with no download when mock does not exist', async () => {
-        const {data} = getData(2);
+        const { data } = getData(2);
         expect(data.client.body).to.equal('from backend: 2');
         expect(data.postProcessing.files).to.have.lengthOf(0);
       });
 
       it('should fetch again from backend since mock was not recorded', async () => {
-        const {data} = getData(3);
+        const { data } = getData(3);
         expect(data.client.body).to.equal('from backend: 3');
         expect(data.postProcessing.files).to.have.lengthOf(0);
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Response sending delay
@@ -494,14 +563,14 @@ const useCases = [
     description: 'response sending delay',
     iterations: 3,
 
-    serve: async ({response}) => {
+    serve: async ({ response }) => {
       const output = {};
       response.body = output.body = 'This comes from the backend and has no custom delay';
       response.status = output.status = 200;
       return output;
     },
 
-    proxy: async ({mock}, {iteration}) => {
+    proxy: async ({ mock }, { iteration }) => {
       const output = {};
 
       output.body = 'This comes from the proxy (local mock) and has a custom delay';
@@ -529,26 +598,35 @@ const useCases = [
       return output;
     },
 
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should not apply custom delay when fetched from backend', async () => {
-        const {data} = getData(0);
-        expect(data.proxy.delay - data.client.time).to.be.at.least(1500, 'The delay is not applied when fetching the payload from the backend the first time. Therefore, the actual time spent by processing the request should be way lower than the custom delay we have set high on purpose.');
+        const { data } = getData(0);
+        expect(data.proxy.delay - data.client.time).to.be.at.least(
+          1500,
+          'The delay is not applied when fetching the payload from the backend the first time. Therefore, the actual time spent by processing the request should be way lower than the custom delay we have set high on purpose.',
+        );
       });
 
       it('should apply custom delay when fetched locally', async () => {
-        const {data} = getData(1);
-        expect(data.client.time).to.be.closeTo(data.proxy.delay, 35, 'Timing is approximate, but it should be more or less corresponding to the custom delay time');
+        const { data } = getData(1);
+        expect(data.client.time).to.be.closeTo(
+          data.proxy.delay,
+          35,
+          'Timing is approximate, but it should be more or less corresponding to the custom delay time',
+        );
       });
 
       it('should apply recorded delay when fetched locally and configured so', async () => {
         const initialTime = getData(0).data.client.time;
-        const {data} = getData(2);
-        expect(data.client.time).to.be.closeTo(initialTime, 30, 'Timing is approximate, but it should be more or less corresponding to the initial time the request spent');
+        const { data } = getData(2);
+        expect(data.client.time).to.be.closeTo(
+          initialTime,
+          30,
+          'Timing is approximate, but it should be more or less corresponding to the initial time the request spent',
+        );
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Custom file extension
@@ -574,27 +652,26 @@ const useCases = [
       };
     },
 
-    serve: async ({response}) => {
+    serve: async ({ response }) => {
       const output = {};
       response.type = output.extension = 'yaml';
-      response.body = '- some yaml'
+      response.body = '- some yaml';
       response.status = 200;
       return output;
     },
 
-    proxy: async ({mock}) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local_or_download');
-      return {root: mock.mockFolderFullPath};
+      return { root: mock.mockFolderFullPath };
     },
 
-    postProcess: async ({data}) => {
+    postProcess: async ({ data }) => {
       const nodePath = require('path');
-      const {promises: fs, constants: fsConstants} = require('fs');
+      const { promises: fs, constants: fsConstants } = require('fs');
 
       async function getBodyFilename(dataFileName) {
-        return JSON.parse(
-          await fs.readFile(nodePath.join(data.proxy.root, dataFileName)),
-        ).bodyFileName;
+        return JSON.parse(await fs.readFile(nodePath.join(data.proxy.root, dataFileName)))
+          .bodyFileName;
       }
 
       async function fileExists(filename) {
@@ -612,21 +689,24 @@ const useCases = [
         const filename = await getBodyFilename(dataFileName);
         const exists = await fileExists(filename);
         const extension = nodePath.extname(filename).slice(1);
-        return {extension, exists};
+        return { extension, exists };
       }
 
       const mock = await getExtensionAndExistence('data.json');
       const inputRequest = await getExtensionAndExistence('input-request.json');
       const forwardedRequest = await getExtensionAndExistence('forwarded-request.json');
 
-      return {mock, inputRequest, forwardedRequest};
+      return { mock, inputRequest, forwardedRequest };
     },
 
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should record and create the filename with the custom extension', async () => {
-        const {data} = getData(0);
+        const { data } = getData(0);
 
-        expect(data.postProcessing.mock.extension).to.equal(data.backend.extension, 'The proxy determines the extension based on the returned content type, and should apply it to the file name used to store the body, filename itself stored in payload');
+        expect(data.postProcessing.mock.extension).to.equal(
+          data.backend.extension,
+          'The proxy determines the extension based on the returned content type, and should apply it to the file name used to store the body, filename itself stored in payload',
+        );
         expect(data.postProcessing.mock.exists).to.be.true;
 
         expect(data.postProcessing.inputRequest.extension).to.equal(data.clientData.extension);
@@ -638,8 +718,6 @@ const useCases = [
     },
   },
 
-
-
   //////////////////////////////////////////////////////////////////////////////
   // Local mode and no mock found
   //////////////////////////////////////////////////////////////////////////////
@@ -649,13 +727,13 @@ const useCases = [
     description: 'return 404 when no mock is found in local mode',
     iterations: 1,
 
-    proxy: async ({mock}) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local');
     },
 
-    defineAssertions: ({it, getData, expect, useCase}) => {
+    defineAssertions: ({ it, getData, expect, useCase }) => {
       it('should receive 404 when no mock available', () => {
-        const {data} = getData(0);
+        const { data } = getData(0);
         expect(data.client.status.code).to.equal(404);
       });
     },
@@ -663,10 +741,11 @@ const useCases = [
 
   {
     name: 'local-mode-404-override',
-    description: 'user should be able to detect missing mock and return custom one, as well as persist it',
+    description:
+      'user should be able to detect missing mock and return custom one, as well as persist it',
     iterations: 2,
 
-    proxy: async ({mock}) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local');
 
       if (await mock.hasNoLocalFiles()) {
@@ -678,28 +757,26 @@ const useCases = [
               code: 404,
             },
             time: 0,
-          }
+          },
         });
         mock.setPayload(payload);
         await mock.persistPayload(payload);
       }
     },
 
-    defineAssertions: ({it, getData, expect, useCase}) => {
+    defineAssertions: ({ it, getData, expect, useCase }) => {
       it('should be able to return a custom payload', () => {
-        const {data} = getData(0);
+        const { data } = getData(0);
         expect(data.client.body).to.equal('...');
         expect(data.client.status.code).to.equal(404);
       });
       it('should be able to persist this payload', () => {
-        const {data} = getData(1);
+        const { data } = getData(1);
         expect(data.client.body).to.equal('...');
         expect(data.client.status.code).to.equal(404);
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -710,11 +787,11 @@ const useCases = [
     description: 'create empty mock when content is not found on backend',
     iterations: 2,
 
-    serve: async ({response}) => {
+    serve: async ({ response }) => {
       response.status = 404;
     },
 
-    proxy: async ({mock}) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local_or_download');
       const statusCode = 200;
       const body = '...';
@@ -735,7 +812,7 @@ const useCases = [
                 code: statusCode,
               },
               time: 0,
-            }
+            },
           });
           mock.setPayload(localPayload);
           finalPayload = localPayload;
@@ -745,16 +822,14 @@ const useCases = [
         await mock.sendResponse();
       }
 
-      return {root: mock.mockFolderFullPath, statusCode, body};
+      return { root: mock.mockFolderFullPath, statusCode, body };
     },
 
-    postProcess: async ({data}) => {
+    postProcess: async ({ data }) => {
       const nodePath = require('path');
-      const {promises: fs} = require('fs');
+      const { promises: fs } = require('fs');
 
-      const mockData = JSON.parse(
-        await fs.readFile(nodePath.join(data.proxy.root, 'data.json')),
-      );
+      const mockData = JSON.parse(await fs.readFile(nodePath.join(data.proxy.root, 'data.json')));
 
       return {
         statusCode: mockData.status.code,
@@ -762,10 +837,10 @@ const useCases = [
       };
     },
 
-    defineAssertions: ({it, getData, expect, useCase}) => {
+    defineAssertions: ({ it, getData, expect, useCase }) => {
       it('should receive a custom mock when status is not 200', async () => {
         for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-          const {data} = getData(iteration);
+          const { data } = getData(iteration);
           expect(data.client.status.code).to.equal(data.proxy.statusCode);
           expect(data.client.body).to.equal(data.proxy.body);
         }
@@ -773,7 +848,7 @@ const useCases = [
 
       it('should record the custom mock when status is not 200', async () => {
         for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-          const {data} = getData(iteration);
+          const { data } = getData(iteration);
           expect(data.postProcessing.statusCode).to.equal(data.proxy.statusCode);
           expect(data.postProcessing.body).to.equal(data.proxy.body);
         }
@@ -781,18 +856,17 @@ const useCases = [
     },
   },
 
-
-
   //////////////////////////////////////////////////////////////////////////////
   // Content encoding
   //////////////////////////////////////////////////////////////////////////////
 
   {
     name: 'content-compression',
-    description: 'content compression should not be done by the backends respecting the given header',
+    description:
+      'content compression should not be done by the backends respecting the given header',
     iterations: 1,
 
-    serve: async ({request, response}) => {
+    serve: async ({ request, response }) => {
       const gzip = require('util').promisify(require('zlib').gzip);
 
       const output = {};
@@ -807,32 +881,32 @@ const useCases = [
       return output;
     },
 
-    proxy: async ({mock}, {iteration}) => {
+    proxy: async ({ mock }, { iteration }) => {
       mock.setMode('local_or_download');
-      const {payload: {body}} = await (iteration === 0 ? mock.fetchPayload() : mock.readLocalPayload());
+      const {
+        payload: { body },
+      } = await (iteration === 0 ? mock.fetchPayload() : mock.readLocalPayload());
       return {
         body: body.toString(),
         root: mock.mockFolderFullPath,
       };
     },
 
-    postProcess: async ({data}) => {
+    postProcess: async ({ data }) => {
       const nodePath = require('path');
-      const {promises: fs} = require('fs');
+      const { promises: fs } = require('fs');
 
-      const mockData = JSON.parse(
-        await fs.readFile(nodePath.join(data.proxy.root, 'data.json')),
-      );
+      const mockData = JSON.parse(await fs.readFile(nodePath.join(data.proxy.root, 'data.json')));
 
       return {
         body: (await fs.readFile(nodePath.join(data.proxy.root, mockData.bodyFileName))).toString(),
       };
     },
 
-    defineAssertions: ({it, getData, expect, useCase}) => {
+    defineAssertions: ({ it, getData, expect, useCase }) => {
       it('should receive and store an uncompressed body', async () => {
         for (let iteration = 0; iteration < useCase.iterations; iteration++) {
-          const {data} = getData(iteration);
+          const { data } = getData(iteration);
           expect(data.proxy.body).to.equal(data.backend.body);
           expect(data.postProcessing.body).to.equal(data.backend.body);
           expect(data.client.headers['content-encoding']).to.be.undefined;
@@ -840,8 +914,6 @@ const useCases = [
       });
     },
   },
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Checksum
@@ -853,20 +925,22 @@ const useCases = [
     iterations: 2,
 
     request() {
-      return {request: {
-        url: '/pathname?query=value',
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
+      return {
+        request: {
+          url: '/pathname?query=value',
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            date: new Date(),
+            constant: 'value',
+          }),
         },
-        body: JSON.stringify({
-          date: new Date(),
-          constant: 'value',
-        }),
-      }};
+      };
     },
 
-    proxy: async ({mock}) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local_or_download');
       const checksum = await mock.checksum({
         query: true,
@@ -875,8 +949,8 @@ const useCases = [
             const data = JSON.parse(body);
             delete data.date;
             return JSON.stringify(data);
-          }
-        }
+          },
+        },
       });
       mock.setLocalPath([mock.localPath, checksum]);
 
@@ -887,9 +961,9 @@ const useCases = [
       };
     },
 
-    postProcess: async ({data}) => {
+    postProcess: async ({ data }) => {
       const nodePath = require('path');
-      const {promises: fs} = require('fs');
+      const { promises: fs } = require('fs');
 
       let exists;
       let content = null;
@@ -901,16 +975,16 @@ const useCases = [
         exists = false;
       }
 
-      return {exists, content};
+      return { exists, content };
     },
 
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should have a checksum file with expected content', async () => {
-        const {data} = getData(0);
+        const { data } = getData(0);
         expect(data.postProcessing.exists).to.be.true;
         expect(data.postProcessing.content).to.be.equal(data.proxy.checksumContent);
 
-        const {data:data2} = getData(1);
+        const { data: data2 } = getData(1);
         expect(data2.proxy.root).to.be.equal(data.proxy.root);
       });
     },
@@ -924,41 +998,43 @@ const useCases = [
     request: async () => {
       return {
         request: {
-          url: "https://www.example.org:8081/"
-        }
+          url: 'https://www.example.org:8081/',
+        },
       };
     },
     onProxyConnect: async (/** @type {import("../..").IProxyConnectAPI} */ request) => {
       request.setMode('intercept');
     },
-    proxy: async (/** @type {import("../..").HookAPI} */ {mock}) => {
+    proxy: async (/** @type {import("../..").HookAPI} */ { mock }) => {
       mock.setMode('local');
-      mock.setPayload(mock.createPayload({
-        body: "myResponse",
-        data: { headers: {"Access-Control-Allow-Origin": "*"} }
-      }));
+      mock.setPayload(
+        mock.createPayload({
+          body: 'myResponse',
+          data: { headers: { 'Access-Control-Allow-Origin': '*' } },
+        }),
+      );
       return {
         connections: mock.request.connectionsStack,
         protocol: mock.request.protocol,
         hostname: mock.request.hostname,
-        port: mock.request.port
+        port: mock.request.port,
       };
     },
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should return a custom payload', async () => {
-        const {data} = getData(0);
-        expect(data.client.body).to.be.equal("myResponse");
-        expect(data.proxy.protocol).to.be.equal("https");
-        expect(data.proxy.hostname).to.be.equal("www.example.org");
-        expect(data.proxy.port).to.be.equal("8081");
+        const { data } = getData(0);
+        expect(data.client.body).to.be.equal('myResponse');
+        expect(data.proxy.protocol).to.be.equal('https');
+        expect(data.proxy.hostname).to.be.equal('www.example.org');
+        expect(data.proxy.port).to.be.equal('8081');
         expect(data.proxy.connections.length).to.be.equal(2);
-        expect(data.proxy.connections[0].protocol).to.be.equal("http");
-        expect(data.proxy.connections[0].hostname).to.include("127.0.0.1");
-        expect(data.proxy.connections[1].protocol).to.be.equal("https");
-        expect(data.proxy.connections[1].hostname).to.be.equal("www.example.org");
+        expect(data.proxy.connections[0].protocol).to.be.equal('http');
+        expect(data.proxy.connections[0].hostname).to.include('127.0.0.1');
+        expect(data.proxy.connections[1].protocol).to.be.equal('https');
+        expect(data.proxy.connections[1].hostname).to.be.equal('www.example.org');
         expect(data.proxy.connections[1].port).to.be.equal(8081);
       });
-    }
+    },
   },
 
   {
@@ -969,30 +1045,33 @@ const useCases = [
     request: async () => {
       return {
         request: {
-          url: "https://www.example.org:8081/"
-        }
+          url: 'https://www.example.org:8081/',
+        },
       };
     },
-    alternativeServe: async (/** @type {import("koa").Context} */{response}) => {
+    alternativeServe: async (/** @type {import("koa").Context} */ { response }) => {
       response.body = 'alternativeResponse';
-      response.set("Access-Control-Allow-Origin", "*");
+      response.set('Access-Control-Allow-Origin', '*');
       response.status = 200;
     },
-    onProxyConnect: async (/** @type {import("../..").IProxyConnectAPI} */ request, {context}) => {
+    onProxyConnect: async (
+      /** @type {import("../..").IProxyConnectAPI} */ request,
+      { context },
+    ) => {
       const url = new URL(context.alternativeRemoteURL);
       request.setDestination(url.hostname, +url.port);
     },
-    proxy: async (/** @type {import("../..").HookAPI} */ {mock}) => {
+    proxy: async (/** @type {import("../..").HookAPI} */ { mock }) => {
       // should not be called at all
       return {};
     },
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should return a custom payload', async () => {
-        const {data} = getData(0);
+        const { data } = getData(0);
         expect(data.proxy).to.be.undefined;
-        expect(data.client.body).to.be.equal("alternativeResponse");
+        expect(data.client.body).to.be.equal('alternativeResponse');
       });
-    }
+    },
   },
 
   {
@@ -1003,44 +1082,44 @@ const useCases = [
     request: async () => {
       return {
         request: {
-          url: "http://www.example.org:8082/"
-        }
+          url: 'http://www.example.org:8082/',
+        },
       };
     },
-    proxy: async (/** @type {import("../..").HookAPI} */ {mock}) => {
+    proxy: async (/** @type {import("../..").HookAPI} */ { mock }) => {
       mock.setMode('local');
-      mock.setPayload(mock.createPayload({
-        body: "exampleResponse",
-        data: { headers: {"Access-Control-Allow-Origin": "*"} }
-      }));
+      mock.setPayload(
+        mock.createPayload({
+          body: 'exampleResponse',
+          data: { headers: { 'Access-Control-Allow-Origin': '*' } },
+        }),
+      );
       return {
         connections: mock.request.connectionsStack,
         protocol: mock.request.protocol,
         hostname: mock.request.hostname,
-        port: mock.request.port
+        port: mock.request.port,
       };
     },
-    defineAssertions: ({it, getData, expect}) => {
+    defineAssertions: ({ it, getData, expect }) => {
       it('should return a custom payload', async () => {
-        const {data} = getData(0);
-        expect(data.client.body).to.be.equal("exampleResponse");
-        expect(data.proxy.protocol).to.be.equal("http");
-        expect(data.proxy.hostname).to.be.equal("www.example.org");
-        expect(data.proxy.port).to.be.equal("8082");
+        const { data } = getData(0);
+        expect(data.client.body).to.be.equal('exampleResponse');
+        expect(data.proxy.protocol).to.be.equal('http');
+        expect(data.proxy.hostname).to.be.equal('www.example.org');
+        expect(data.proxy.port).to.be.equal('8082');
         expect(data.proxy.connections.length).to.be.equal(1);
-        expect(data.proxy.connections[0].protocol).to.be.equal("http");
-        expect(data.proxy.connections[0].hostname).to.include("127.0.0.1");
+        expect(data.proxy.connections[0].protocol).to.be.equal('http');
+        expect(data.proxy.connections[0].hostname).to.include('127.0.0.1');
       });
-    }
+    },
   },
 ];
 exports.useCases = useCases;
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Convenience
 ////////////////////////////////////////////////////////////////////////////////
 
-const useCasesMap = fromPairs(useCases.map(useCase => [useCase.name, useCase]));
+const useCasesMap = fromPairs(useCases.map((useCase) => [useCase.name, useCase]));
 exports.useCasesMap = useCasesMap;

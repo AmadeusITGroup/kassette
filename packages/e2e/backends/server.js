@@ -10,29 +10,27 @@ const KoaRouter = require('koa-router');
 
 // -------------------------------------------------------------------- internal
 
-const {KEY, CERTIFICATE} = require('./tls');
-
-
+const { KEY, CERTIFICATE } = require('./tls');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Generic
 ////////////////////////////////////////////////////////////////////////////////
 
 function readStream(stream) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     parts = [];
     stream.on('data', (part) => parts.push(part));
     stream.on('end', () => resolve(Buffer.concat(parts)));
   });
 }
 
-async function readBody({req, request}, next) {
+async function readBody({ req, request }, next) {
   request.body = (await readStream(req)).toString();
   return next();
 }
 exports.readBody = readBody;
 
-function createServer({registerRoutes, onStart, onExit, secure = false}) {
+function createServer({ registerRoutes, onStart, onExit, secure = false }) {
   const application = new Koa();
 
   application.use(readBody);
@@ -43,10 +41,12 @@ function createServer({registerRoutes, onStart, onExit, secure = false}) {
 
   const createServer = !secure
     ? http.createServer
-    : callback => https.createServer({cert: CERTIFICATE, key: KEY}, callback);
+    : (callback) => https.createServer({ cert: CERTIFICATE, key: KEY }, callback);
   const server = createServer(application.callback());
 
-  server.on('listening', function() { onStart({port: this.address().port}); });
+  server.on('listening', function () {
+    onStart({ port: this.address().port });
+  });
   server.listen(0);
 
   return function () {

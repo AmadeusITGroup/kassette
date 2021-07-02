@@ -12,7 +12,7 @@ describe('path', () => {
           input: ['a', '', 'b', '', 'c'],
           output: ['a', 'b', 'c'],
         },
-      ].forEach(({input, output}) => {
+      ].forEach(({ input, output }) => {
         expect(sanitizePath(input)).toEqual(output);
       });
     });
@@ -23,7 +23,7 @@ describe('path', () => {
           input: ['', 'root', 'folder', ''],
           output: ['', 'root', 'folder', ''],
         },
-      ].forEach(({input, output}) => {
+      ].forEach(({ input, output }) => {
         expect(sanitizePath(input)).toEqual(output);
       });
     });
@@ -36,7 +36,7 @@ describe('path', () => {
           input: ['a', '', 'b', '', 'c'],
           output: 'a/b/c',
         },
-      ].forEach(({input, output}) => {
+      ].forEach(({ input, output }) => {
         expect(joinPath(input)).toEqual(output);
       });
     });
@@ -47,7 +47,7 @@ describe('path', () => {
           input: ['', 'root', 'folder', ''],
           output: '/root/folder/',
         },
-      ].forEach(({input, output}) => {
+      ].forEach(({ input, output }) => {
         expect(joinPath(input)).toEqual(output);
       });
     });

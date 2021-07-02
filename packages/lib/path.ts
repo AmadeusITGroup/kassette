@@ -8,8 +8,12 @@ export function sanitizePath(value: any) {
 
   const final = cleaned.filter((part: string) => part.length > 0);
 
-  if (leading) { final.unshift(''); }
-  if (trailing) { final.push(''); }
+  if (leading) {
+    final.unshift('');
+  }
+  if (trailing) {
+    final.push('');
+  }
 
   return final;
 }
