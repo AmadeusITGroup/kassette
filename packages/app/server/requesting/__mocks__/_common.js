@@ -1,13 +1,8 @@
 function nextTick() {
-  return new Promise(resolve => setTimeout(resolve, 0));
+  return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
-exports.FakeResponse = function({
-  headers,
-  code,
-  message,
-  body,
-}) {
+exports.FakeResponse = function ({ headers, code, message, body }) {
   let onEnd = null;
   let dataAllPushed = false;
 
@@ -35,14 +30,14 @@ exports.FakeResponse = function({
   };
 };
 
-exports.FakeRequester = function(callback, buildResponse) {
+exports.FakeRequester = function (callback, buildResponse) {
   return {
     on: function (event, handler) {
       return this;
     },
-    end: async body => {
+    end: async (body) => {
       await nextTick();
-      callback(buildResponse({body}));
+      callback(buildResponse({ body }));
     },
-  }
-}
+  };
+};

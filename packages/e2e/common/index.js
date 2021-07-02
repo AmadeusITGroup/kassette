@@ -5,7 +5,7 @@
 let context;
 
 function setCurrentContext(useCase, iteration) {
-  context = {useCase, iteration, name: useCase.name};
+  context = { useCase, iteration, name: useCase.name };
 }
 exports.setCurrentContext = setCurrentContext;
 

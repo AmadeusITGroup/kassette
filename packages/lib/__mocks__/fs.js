@@ -1,4 +1,4 @@
-const {Volume, createFsFromVolume} = require('memfs');
+const { Volume, createFsFromVolume } = require('memfs');
 
 const volume = new Volume();
 const fs = createFsFromVolume(volume);

@@ -2,8 +2,6 @@ import { normalizeSpec, processSpec, processList, computeContent } from './impl'
 
 import { IMock } from '../model';
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -11,18 +9,18 @@ import { IMock } from '../model';
 describe('checksum', () => {
   describe('normalize spec', () => {
     it('should wrap booleans', () => {
-      expect(normalizeSpec(true)).toEqual({include: true});
-      expect(normalizeSpec(false)).toEqual({include: false});
+      expect(normalizeSpec(true)).toEqual({ include: true });
+      expect(normalizeSpec(false)).toEqual({ include: false });
     });
 
     it('should exclude or use default value if not spec is provided', () => {
-      expect(normalizeSpec(undefined)).toEqual({include: false});
-      expect(normalizeSpec(undefined, false)).toEqual({include: false});
-      expect(normalizeSpec(undefined, true)).toEqual({include: true});
+      expect(normalizeSpec(undefined)).toEqual({ include: false });
+      expect(normalizeSpec(undefined, false)).toEqual({ include: false });
+      expect(normalizeSpec(undefined, true)).toEqual({ include: true });
     });
 
     it('should include by default when a spec is provided', () => {
-      expect(normalizeSpec({})).toEqual({include: true});
+      expect(normalizeSpec({})).toEqual({ include: true });
     });
   });
 
@@ -42,63 +40,86 @@ describe('checksum', () => {
 
   describe('process list', () => {
     it('should use filter if provided', async () => {
-      const result = await processList({
-        filter: object => ({a: object.a}),
-        mode: 'whitelist',
-        keys: ['b'],
-      }, {a: '1', b: '2'}, true);
-      expect(JSON.parse(result)).toEqual({a: '1'});
+      const result = await processList(
+        {
+          filter: (object) => ({ a: object.a }),
+          mode: 'whitelist',
+          keys: ['b'],
+        },
+        { a: '1', b: '2' },
+        true,
+      );
+      expect(JSON.parse(result)).toEqual({ a: '1' });
     });
 
     it('should work in whitelist by default', async () => {
-      const result = await processList({
-        keys: ['b'],
-      }, {a: '1', b: '2'}, true);
-      expect(JSON.parse(result)).toEqual({b: '2'});
+      const result = await processList(
+        {
+          keys: ['b'],
+        },
+        { a: '1', b: '2' },
+        true,
+      );
+      expect(JSON.parse(result)).toEqual({ b: '2' });
     });
 
     it('should keep only whitelisted keys', async () => {
-      const result = await processList({
-        mode: 'whitelist',
-        keys: ['b'],
-      }, {a: '1', b: '2'}, true);
-      expect(JSON.parse(result)).toEqual({b: '2'});
+      const result = await processList(
+        {
+          mode: 'whitelist',
+          keys: ['b'],
+        },
+        { a: '1', b: '2' },
+        true,
+      );
+      expect(JSON.parse(result)).toEqual({ b: '2' });
     });
 
     it('should exclude blacklisted keys', async () => {
-      const result = await processList({
-        mode: 'blacklist',
-        keys: ['b'],
-      }, {a: '1', b: '2'}, true);
-      expect(JSON.parse(result)).toEqual({a: '1'});
+      const result = await processList(
+        {
+          mode: 'blacklist',
+          keys: ['b'],
+        },
+        { a: '1', b: '2' },
+        true,
+      );
+      expect(JSON.parse(result)).toEqual({ a: '1' });
     });
 
     it('should support case insensitive mode', async () => {
-      const result = await processList({
-        mode: 'blacklist',
-        keys: ['Content'],
-      }, {Lowered: '1', content: '2'}, false);
-      expect(JSON.parse(result)).toEqual({lowered: '1'});
+      const result = await processList(
+        {
+          mode: 'blacklist',
+          keys: ['Content'],
+        },
+        { Lowered: '1', content: '2' },
+        false,
+      );
+      expect(JSON.parse(result)).toEqual({ lowered: '1' });
     });
   });
 
   describe('compute content', () => {
     function FakeMock(data: any) {
-      const request = Object.assign({
-        method: 'GET',
-        pathname: '/default',
-        body: 'default',
-        queryParameters: {default: 'default'},
-        headers: {'x-default': 'default'},
-      }, data);
-      return {request} as IMock;
+      const request = Object.assign(
+        {
+          method: 'GET',
+          pathname: '/default',
+          body: 'default',
+          queryParameters: { default: 'default' },
+          headers: { 'x-default': 'default' },
+        },
+        data,
+      );
+      return { request } as IMock;
     }
 
     function clean(strings: TemplateStringsArray) {
       let lines = strings.join('').split('\n');
       if (lines[0] === '') lines.shift();
       const indentLength = /(\s*).*/.exec(lines[0])![1].length;
-      lines = lines.map(line => line.substring(indentLength));
+      lines = lines.map((line) => line.substring(indentLength));
       if (lines[lines.length - 1] === '') lines.pop();
       return lines.join('\n');
     }
@@ -110,7 +131,7 @@ describe('checksum', () => {
     const identity = (value: any) => value;
 
     describe('method', () => {
-      const mock = FakeMock({method: 'post'});
+      const mock = FakeMock({ method: 'post' });
       const expectedWhenIncluded = clean`
         method
         post
@@ -170,7 +191,7 @@ describe('checksum', () => {
 
       it('should include method when {include: true}', async () => {
         const result = await computeContent(mock, {
-          method: {include: true},
+          method: { include: true },
           query: false,
           body: false,
         });
@@ -179,7 +200,7 @@ describe('checksum', () => {
 
       it('should exclude method when {include: false}', async () => {
         const result = await computeContent(mock, {
-          method: {include: false},
+          method: { include: false },
           query: false,
           body: false,
         });
@@ -187,7 +208,7 @@ describe('checksum', () => {
       });
 
       it('should force method to lower case', async () => {
-        const result = await computeContent(FakeMock({method: 'POST'}), {
+        const result = await computeContent(FakeMock({ method: 'POST' }), {
           method: true,
           query: false,
           body: false,
@@ -197,7 +218,7 @@ describe('checksum', () => {
     });
 
     describe('pathname', () => {
-      const mock = FakeMock({pathname: '/hello/world'});
+      const mock = FakeMock({ pathname: '/hello/world' });
       const expectedWhenIncluded = clean`
         method
 
@@ -239,7 +260,7 @@ describe('checksum', () => {
 
       it('should include pathname when {include: true}', async () => {
         const result = await computeContent(mock, {
-          pathname: {include: true},
+          pathname: { include: true },
           query: false,
           body: false,
         });
@@ -257,7 +278,7 @@ describe('checksum', () => {
 
       it('should exclude pathname when {include: false}', async () => {
         const result = await computeContent(mock, {
-          pathname: {include: false},
+          pathname: { include: false },
           query: false,
           body: false,
         });
@@ -276,7 +297,7 @@ describe('checksum', () => {
         const result = await computeContent(mock, {
           pathname: {
             include: true,
-            filter: pathname => [''].concat(pathname.split('/').slice(2)).join('/'),
+            filter: (pathname) => [''].concat(pathname.split('/').slice(2)).join('/'),
           },
           query: false,
           body: false,
@@ -300,7 +321,7 @@ describe('checksum', () => {
 
       it('should include pathname by default when a filter is used', async () => {
         const result = await computeContent(mock, {
-          pathname: {filter: identity},
+          pathname: { filter: identity },
           query: false,
           body: false,
         });
@@ -309,7 +330,7 @@ describe('checksum', () => {
     });
 
     describe('body', () => {
-      const mock = FakeMock({body: Buffer.from('Hello world')});
+      const mock = FakeMock({ body: Buffer.from('Hello world') });
       const expectedWhenIncluded = clean`
         method
 
@@ -350,7 +371,7 @@ describe('checksum', () => {
 
       it('should include body when {include: true}', async () => {
         const result = await computeContent(mock, {
-          body: {include: true},
+          body: { include: true },
           query: false,
         });
         expect(result).toEqual(expectedWhenIncluded);
@@ -366,7 +387,7 @@ describe('checksum', () => {
 
       it('should exclude body when {include: false}', async () => {
         const result = await computeContent(mock, {
-          body: {include: false},
+          body: { include: false },
           query: false,
         });
         expect(result).toEqual(expectedWhenExcluded);
@@ -384,7 +405,7 @@ describe('checksum', () => {
           query: false,
           body: {
             include: true,
-            filter: body => body.toString().toUpperCase(),
+            filter: (body) => body.toString().toUpperCase(),
           },
         });
         expect(result).toEqual(clean`
@@ -406,7 +427,7 @@ describe('checksum', () => {
 
       it('should include body by default when a filter is used', async () => {
         const result = await computeContent(mock, {
-          body: {filter: identity},
+          body: { filter: identity },
           query: false,
         });
         expect(result).toEqual(expectedWhenIncluded);
@@ -414,10 +435,12 @@ describe('checksum', () => {
     });
 
     describe('query', () => {
-      const mock = FakeMock({queryParameters: {
-        foo: 'bar',
-        baz: 'qux',
-      }});
+      const mock = FakeMock({
+        queryParameters: {
+          foo: 'bar',
+          baz: 'qux',
+        },
+      });
 
       const expectedWhenIncluded = clean`
         method
@@ -462,7 +485,7 @@ describe('checksum', () => {
 
       it('should include query when {include: true}', async () => {
         const result = await computeContent(mock, {
-          query: {include: true},
+          query: { include: true },
           body: false,
         });
         expect(result).toEqual(expectedWhenIncluded);
@@ -478,7 +501,7 @@ describe('checksum', () => {
 
       it('should exclude query when {include: false}', async () => {
         const result = await computeContent(mock, {
-          query: {include: false},
+          query: { include: false },
           body: false,
         });
         expect(result).toEqual(expectedWhenExcluded);
@@ -642,17 +665,22 @@ describe('checksum', () => {
       });
 
       it('should support case insensitive mode', async () => {
-        const result = await computeContent(FakeMock({queryParameters: {
-          FOO: 'bar',
-          Baz: 'qux',
-        }}), {
-          query: {
-            mode: 'blacklist',
-            keys: ['Foo'],
-            caseSensitive: false,
+        const result = await computeContent(
+          FakeMock({
+            queryParameters: {
+              FOO: 'bar',
+              Baz: 'qux',
+            },
+          }),
+          {
+            query: {
+              mode: 'blacklist',
+              keys: ['Foo'],
+              caseSensitive: false,
+            },
+            body: false,
           },
-          body: false,
-        });
+        );
         expect(result).toEqual(clean`
           method
 
@@ -674,10 +702,12 @@ describe('checksum', () => {
     });
 
     describe('headers', () => {
-      const mock = FakeMock({headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': '56',
-      }});
+      const mock = FakeMock({
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': '56',
+        },
+      });
 
       const expectedWhenIncluded = clean`
         method
@@ -723,7 +753,7 @@ describe('checksum', () => {
 
       it('should include headers when {include: true}', async () => {
         const result = await computeContent(mock, {
-          headers: {include: true},
+          headers: { include: true },
           body: false,
           query: false,
         });
@@ -741,7 +771,7 @@ describe('checksum', () => {
 
       it('should exclude headers when {include: false}', async () => {
         const result = await computeContent(mock, {
-          headers: {include: false},
+          headers: { include: false },
           body: false,
           query: false,
         });

@@ -33,7 +33,7 @@ describe('object', () => {
 
   describe('copyDeep', () => {
     it('should handle simple object', () => {
-      const source = {property: 'value'};
+      const source = { property: 'value' };
       const copy = copyDeep(source);
 
       expect(copy).not.toBe(source);
@@ -41,7 +41,7 @@ describe('object', () => {
     });
 
     it('should not copy arrays', () => {
-      const source = {property: 'value', array: []};
+      const source = { property: 'value', array: [] };
       const copy = copyDeep(source);
 
       expect(copy).not.toBe(source);
@@ -50,7 +50,7 @@ describe('object', () => {
     });
 
     it('should copy nested objects, and still not copy arrays', () => {
-      const source = {property: 'value', nested: {array: []}};
+      const source = { property: 'value', nested: { array: [] } };
       const copy = copyDeep(source);
 
       expect(copy).not.toBe(source);
@@ -65,42 +65,42 @@ describe('object', () => {
 
   describe('mergeDeepLeft', () => {
     it('should keep left value when exists and cannot be merged', () => {
-      const left = {both: 'left'};
-      const right = {both: 'right'};
+      const left = { both: 'left' };
+      const right = { both: 'right' };
       const output = mergeDeepLeft(left, right);
 
-      expect(output).toEqual({both: 'left'});
+      expect(output).toEqual({ both: 'left' });
       expect(output).not.toBe(left);
       expect(output).not.toBe(right);
     });
 
     it('should write left value when it does not exist', () => {
-      const left = {left: 'left'};
-      const right = {right: 'right'};
+      const left = { left: 'left' };
+      const right = { right: 'right' };
       const output = mergeDeepLeft(left, right);
 
-      expect(output).toEqual({left: 'left', right: 'right'});
+      expect(output).toEqual({ left: 'left', right: 'right' });
       expect(output).not.toBe(left);
       expect(output).not.toBe(right);
     });
 
     it('should write left value with an object copy (left does not exist, right is object)', () => {
       const left = {};
-      const right = {nested: {property: 'value'}};
+      const right = { nested: { property: 'value' } };
       const output = mergeDeepLeft(left, right);
 
-      expect(output).toEqual({nested: {property: 'value'}});
+      expect(output).toEqual({ nested: { property: 'value' } });
       expect(output).not.toBe(left);
       expect(output).not.toBe(right);
       expect(output.nested).not.toBe(right.nested);
     });
 
     it('should recursively merge nested objects', () => {
-      const left = {nested: {left: 'left', both: 'left'}};
-      const right = {nested: {both: 'right', right: 'right'}};
+      const left = { nested: { left: 'left', both: 'left' } };
+      const right = { nested: { both: 'right', right: 'right' } };
       const output = mergeDeepLeft(left, right);
 
-      expect(output).toEqual({nested: {left: 'left', both: 'left', right: 'right'}});
+      expect(output).toEqual({ nested: { left: 'left', both: 'left', right: 'right' } });
       expect(output).not.toBe(left);
       expect(output).not.toBe(right);
       expect(output.nested).not.toBe(left.nested);
@@ -110,7 +110,12 @@ describe('object', () => {
 
   describe('fromPairs', () => {
     it('should convert pairs to an object', () => {
-      expect(fromPairs([['a', '1'], ['b', 'two']])).toEqual({a: '1', b: 'two'});
+      expect(
+        fromPairs([
+          ['a', '1'],
+          ['b', 'two'],
+        ]),
+      ).toEqual({ a: '1', b: 'two' });
     });
   });
 
@@ -124,7 +129,7 @@ describe('object', () => {
       const output = rejectVoid(input);
 
       expect(output).not.toBe(input);
-      expect(output).toEqual({three: '3'});
+      expect(output).toEqual({ three: '3' });
     });
   });
 });

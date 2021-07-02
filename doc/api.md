@@ -39,15 +39,14 @@
 
 <!-- /TOC -->
 
-
-
-
 <a id="markdown-mock-instance" name="mock-instance"></a>
+
 # Mock instance
 
 This is the instance passed to the `hook` function, under property `mock` of the single argument object — <code>hook: ({<b>mock</b>}) => {...}</code>.
 
 <a id="markdown-managing-paths" name="managing-paths"></a>
+
 ## Managing paths
 
 ### Mocks root path
@@ -76,7 +75,7 @@ You likely won't have to change that, since most of the time you will want to ke
 
 #### Introduction
 
-`checksum({type?, format?, method?, pathname?, body?, query?, headers?, customData?})`: __compute a checksum using content from the request__. See details below.
+`checksum({type?, format?, method?, pathname?, body?, query?, headers?, customData?})`: **compute a checksum using content from the request**. See details below.
 
 It is semantically equivalent to choosing what matters to differentiate a request to another. Thanks to the computed checksum, you will be able to add it to the path of the mock and that way use different mocks for semantically different requests.
 
@@ -141,16 +140,16 @@ Here are the options you can give:
     - `true` to include it, `false` to exclude it. Also, the `caseSensitive` option described below is used with its default value in this case.
     - an object with properties:
       - `include`: `true` or `false`, same meaning as above
-      - `filter(parameters: object) => object`: a function used to filter the query parameters. __Note that if filter is provided, the options following below are ignored__, that would be duplicate.
+      - `filter(parameters: object) => object`: a function used to filter the query parameters. **Note that if filter is provided, the options following below are ignored**, that would be duplicate.
       - `caseSensitive`: whether keys should be treated case sensitive or not. `true` by default. When set to `false`, output object contains lower cased keys.
       - whitelist/blacklist options:
         - `mode`: `'whitelist'` (default) or `'blacklist'`
         - `keys`: a list of keys to keep if in `whitelist` mode or to reject if in `blacklist` mode. If `caseSensitive` is `false`, comparison of keys is not case sensitive.
   - default is `true`, including all the query parameters
 - `headers`, same as for `query`, except:
-    - content:  HTTP headers
-    - default value: `false`, because otherwise it would include all headers, and some might be always different (like dates for instance)
-    - `caseSensitive` is `false` by default
+  - content: HTTP headers
+  - default value: `false`, because otherwise it would include all headers, and some might be always different (like dates for instance)
+  - `caseSensitive` is `false` by default
 - `customData`: any custom value which can be JSON stringified
 
 Note that all given filtering functions can be synchronous or asynchronous.
@@ -210,6 +209,7 @@ Note that we designed the API so that it is usually not needed to call the `chec
 Also, checksum data is persisted, so that you can debug more easily, especially by committing it into your SCM to analyze changes across versions of your code. File is along with the other files of the mock under file name `checksum`.
 
 <a id="markdown-managing-behavior" name="managing-behavior"></a>
+
 ## Managing behavior
 
 ### Delay
@@ -253,7 +253,7 @@ API:
 
 ### Remote backend
 
-The URL of the remote backend, from which only __protocol__, __hostname__ and __port__ are used.
+The URL of the remote backend, from which only **protocol**, **hostname** and **port** are used.
 
 Can be left `null`, in which case anything leading to sending the request to the remote backend will trigger an exception and stop the program.
 
@@ -265,6 +265,7 @@ API:
 - `setRemoteURL(url)`: set the remote URL, or pass `null` to unset it and use the default value
 
 <a id="markdown-the-payload-model" name="the-payload-model"></a>
+
 ## The Payload model
 
 The payload represents the content of a response from the backend, no matter if it actually comes from it or if it was created manually.
@@ -310,6 +311,7 @@ Most of the APIs accept and return a wrapped payload, which has the following pr
 - `sourcePayload`: as soon as response is filled with a payload, holds the reference to this payload's wrapper (wrapper is useful here to know where does the payload used for the response come from); before that it is `undefined`
 
 <a id="markdown-managing-local-files" name="managing-local-files"></a>
+
 ## Managing local files
 
 ### Existence
@@ -344,6 +346,7 @@ Forwarded request (from proxy to backend), for debug:
 Checksum: as described in dedicated section, if a checksum was computed, the content generated to compute it will be output in a file named `checkum`.
 
 <a id="markdown-processing" name="processing"></a>
+
 ## Processing
 
 ### Convenient methods
@@ -356,7 +359,7 @@ Checksum: as described in dedicated section, if a checksum was computed, the con
 
 ### Main processing
 
-__`process()` is automatically called AFTER the user hook function is executed__. See description to know how to prevent this.
+**`process()` is automatically called AFTER the user hook function is executed**. See description to know how to prevent this.
 
 - `async sendResponse()`: send the response back to the client, with the previously specified delay if payload is not remote
 - `async process()`: combine `getPayloadAndFillResponse()` and `sendResponse()`
@@ -364,6 +367,7 @@ __`process()` is automatically called AFTER the user hook function is executed__
   - it uses a private guard to make sure it is executed only once. Therefore, if you call it in the hook, the automatic call made for you after the hook execution will actually not do anything (same if you call it yourself multiple times).
 
 <a id="markdown-getting-request-information" name="getting-request-information"></a>
+
 ## Getting request information
 
 The mock instance contains a property `request`, with the API described below.
@@ -390,6 +394,7 @@ The mock instance contains a property `request`, with the API described below.
 - `connection`: a shortcut to the last item in `connectionsStack`
 
 <a id="markdown-setting-response-data" name="setting-response-data"></a>
+
 ## Setting response data
 
 The mock instance contains a property `response`, with the API described below.
@@ -424,6 +429,7 @@ The idea is to store the data, be able to alter it as much as wanted, without ne
 - `status`: an object `{code, message}`, where each property is optional. If `code` is never given, a default value of `200` is applied.
 
 <a id="markdown-accessing-global-configuration" name="accessing-global-configuration"></a>
+
 ## Accessing global configuration
 
 _DISCLAIMER: As a user, you are not likely to need using any of this here._
@@ -437,15 +443,13 @@ The mock instance contains a property `options`, with:
   - configuration properties are described in [configuration documentation](./configuration.md#configuration-properties)
 
 <a id="markdown-miscellaneous" name="miscellaneous"></a>
+
 ## Miscellaneous
 
 - `skipLogs`: if `true`, will simplify the logging output for this request handling iteration, logging only the one line when the request is received but nothing else afterwards
 
-
-
-
-
 <a id="markdown-launching-the-proxy" name="launching-the-proxy"></a>
+
 # Launching the proxy
 
 The package exports the following function to launch the proxy programatically:

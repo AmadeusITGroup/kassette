@@ -19,9 +19,7 @@ import {
   ConfigurationSpec,
   IConfigurationFile,
   GetConfigurationProps,
-
   IMergedConfiguration,
-
   ConfigurationPropertySpec,
   ConfigurationPropertySource,
 } from './model';
@@ -44,12 +42,15 @@ export async function getConfiguration({
 }: RunOptions): Promise<IMergedConfiguration> {
   let fileConfiguration: ConfigurationSpec | null = null;
   if (configurationPath != null) {
-    fileConfiguration = await getFileConfiguration(
-      nodePath.resolve(configurationPath),
-      {cliConfiguration, apiConfiguration, context: fileConfigurationContext},
-    );
+    fileConfiguration = await getFileConfiguration(nodePath.resolve(configurationPath), {
+      cliConfiguration,
+      apiConfiguration,
+      context: fileConfigurationContext,
+    });
   }
-  if (fileConfiguration == null) { fileConfiguration = {}; }
+  if (fileConfiguration == null) {
+    fileConfiguration = {};
+  }
 
   return {
     filePath: configurationPath == null ? null : configurationPath,
@@ -146,11 +147,14 @@ export async function getConfiguration({
  *
  * Throws an error if the path was specified but getting the configuration input failed.
  */
-export async function getFileConfiguration(path: string, arg: GetConfigurationProps): Promise<ConfigurationSpec> {
+export async function getFileConfiguration(
+  path: string,
+  arg: GetConfigurationProps,
+): Promise<ConfigurationSpec> {
   try {
-    const {loaded, module: configurationModule} = await load<IConfigurationFile>({path});
+    const { loaded, module: configurationModule } = await load<IConfigurationFile>({ path });
     if (!loaded) {
-      throw(new Error('Missing loader, please see https://github.com/gulpjs/interpret'));
+      throw new Error('Missing loader, please see https://github.com/gulpjs/interpret');
     }
     return await configurationModule!.getConfiguration(arg);
   } catch (exception) {
@@ -168,13 +172,13 @@ export function buildProperty<PropertyType>({
   value: PropertyType;
 } {
   if (cliValue != null) {
-    return {origin: 'cli', value: cliValue};
+    return { origin: 'cli', value: cliValue };
   }
   if (fileValue != null) {
-    return {origin: 'file', value: fileValue};
+    return { origin: 'file', value: fileValue };
   }
   if (apiValue != null) {
-    return {origin: 'api', value: apiValue};
+    return { origin: 'api', value: apiValue };
   }
-  return {origin: 'default', value: defaultValue};
+  return { origin: 'default', value: defaultValue };
 }

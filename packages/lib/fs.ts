@@ -2,10 +2,7 @@
 
 import * as nodePath from 'path';
 
-import {
-  promises as fs,
-  constants as fsConstants,
-} from 'fs';
+import { promises as fs, constants as fsConstants } from 'fs';
 
 // -------------------------------------------------------------------- internal
 
@@ -30,7 +27,7 @@ export async function exists(path: string): Promise<boolean> {
 
 /** creates the hierarchy of folders given by `path` */
 export async function ensurePath(path: string) {
-  await fs.mkdir(nodePath.parse(nodePath.resolve(path)).dir, {recursive: true});
+  await fs.mkdir(nodePath.parse(nodePath.resolve(path)).dir, { recursive: true });
 }
 
 /** writes `content` into the file at given `path` */
@@ -77,14 +74,22 @@ export class FileHandler implements IFileHandler {
 
   /** the root of the file */
   @CachedProperty()
-  private get _root(): string { return this._spec.root; }
+  private get _root(): string {
+    return this._spec.root;
+  }
 
   @CachedProperty()
-  get name(): string { return this._spec.name; }
+  get name(): string {
+    return this._spec.name;
+  }
 
   @CachedProperty()
-  get path(): string { return nodePath.join(this._root, this.name); }
-  async exists(): Promise<boolean> { return exists(this.path); }
+  get path(): string {
+    return nodePath.join(this._root, this.name);
+  }
+  async exists(): Promise<boolean> {
+    return exists(this.path);
+  }
 
   async read(): Promise<Buffer | null> {
     try {

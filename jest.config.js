@@ -1,10 +1,7 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   coverageDirectory: 'coverage',
-  collectCoverageFrom: [
-    "<rootDir>/packages/app/**/*.ts",
-    "<rootDir>/packages/lib/**/*.ts",
-  ],
+  collectCoverageFrom: ['<rootDir>/packages/app/**/*.ts', '<rootDir>/packages/lib/**/*.ts'],
   transform: {
     'packages[\\/\\\\].*\\.ts$': 'ts-jest',
   },
@@ -13,9 +10,6 @@ module.exports = {
       tsconfig: 'packages/tsconfig.json',
     },
   },
-  'testRegex': 'packages[\\/\\\\].*\\.spec\\.ts$',
-  'moduleFileExtensions': [
-    'ts',
-    'js',
-  ],
+  testRegex: 'packages[\\/\\\\].*\\.spec\\.ts$',
+  moduleFileExtensions: ['ts', 'js'],
 };

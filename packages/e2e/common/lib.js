@@ -3,8 +3,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 function createPromise() {
-  const output = {}
-  output.promise = new Promise((resolve, reject) => Object.assign(output, {resolve, reject}));
+  const output = {};
+  output.promise = new Promise((resolve, reject) => Object.assign(output, { resolve, reject }));
   return output;
 }
 exports.createPromise = createPromise;

@@ -11,4 +11,3 @@ export type ReadOnlyStringsMap = Readonly<StringsMap>;
 export type ImmutableFullyOptional<Original> = {
   +readonly [key in keyof Original]+?: Original[key] | null | undefined;
 };
-

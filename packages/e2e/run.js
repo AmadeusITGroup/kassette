@@ -1,9 +1,9 @@
-const {run} = require('./orchestrator');
-const {defineMochaTests} = require('./orchestrator/checker');
+const { run } = require('./orchestrator');
+const { defineMochaTests } = require('./orchestrator/checker');
 
 describe('kassette', () => {
   let result;
-  before(async function() {
+  before(async function () {
     this.timeout(0);
     result = await run();
   });

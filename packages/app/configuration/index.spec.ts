@@ -12,19 +12,19 @@ describe('configuration', () => {
       const defaultValue = 'default-value';
       let result;
 
-      result = buildProperty({cliValue: null, fileValue: null, apiValue: null, defaultValue});
+      result = buildProperty({ cliValue: null, fileValue: null, apiValue: null, defaultValue });
       expect(result.value).toEqual(defaultValue);
       expect(result.origin).toEqual('default');
 
-      result = buildProperty({cliValue: null, fileValue: null, apiValue, defaultValue});
+      result = buildProperty({ cliValue: null, fileValue: null, apiValue, defaultValue });
       expect(result.value).toEqual(apiValue);
       expect(result.origin).toEqual('api');
 
-      result = buildProperty({cliValue: null, fileValue, apiValue, defaultValue});
+      result = buildProperty({ cliValue: null, fileValue, apiValue, defaultValue });
       expect(result.value).toEqual(fileValue);
       expect(result.origin).toEqual('file');
 
-      result = buildProperty({cliValue, fileValue, apiValue, defaultValue});
+      result = buildProperty({ cliValue, fileValue, apiValue, defaultValue });
       expect(result.value).toEqual(cliValue);
       expect(result.origin).toEqual('cli');
     });
@@ -35,11 +35,14 @@ describe('configuration', () => {
       const port = 8080;
       const mode = 'remote';
       const delay = 'recorded';
-      const configuration = await getFileConfiguration(nodepath.join(__dirname, '__test__/dummy-config.ts'), {
-        apiConfiguration: {port},
-        cliConfiguration: {mode},
-        context: {delay},
-      });
+      const configuration = await getFileConfiguration(
+        nodepath.join(__dirname, '__test__/dummy-config.ts'),
+        {
+          apiConfiguration: { port },
+          cliConfiguration: { mode },
+          context: { delay },
+        },
+      );
 
       expect(configuration.remoteURL).toEqual('remoteURL');
       expect(configuration.port).toEqual(port);
@@ -48,19 +51,23 @@ describe('configuration', () => {
     });
 
     it('should throw if it cannot find the file', async () => {
-      expect(getFileConfiguration(nodepath.join(__dirname, '__test__/nonexistent-config.ts'), {
-        apiConfiguration: {},
-        cliConfiguration: {},
-        context: {},
-      })).rejects.toBeInstanceOf(FileConfigurationError);
+      expect(
+        getFileConfiguration(nodepath.join(__dirname, '__test__/nonexistent-config.ts'), {
+          apiConfiguration: {},
+          cliConfiguration: {},
+          context: {},
+        }),
+      ).rejects.toBeInstanceOf(FileConfigurationError);
     });
 
     it('should throw if it cannot load the file', async () => {
-      expect(getFileConfiguration(nodepath.join(__dirname, '__test__/non-loadable-config.xyz'), {
-        apiConfiguration: {},
-        cliConfiguration: {},
-        context: {},
-      })).rejects.toBeInstanceOf(FileConfigurationError);
+      expect(
+        getFileConfiguration(nodepath.join(__dirname, '__test__/non-loadable-config.xyz'), {
+          apiConfiguration: {},
+          cliConfiguration: {},
+          context: {},
+        }),
+      ).rejects.toBeInstanceOf(FileConfigurationError);
     });
   });
 
@@ -71,9 +78,9 @@ describe('configuration', () => {
       const delay = 'recorded';
       const configuration = await getConfiguration({
         configurationPath: nodepath.join(__dirname, '__test__/dummy-config.ts'),
-        apiConfiguration: {port},
-        cliConfiguration: {mode},
-        fileConfigurationContext: {delay},
+        apiConfiguration: { port },
+        cliConfiguration: { mode },
+        fileConfigurationContext: { delay },
       });
 
       expect(configuration.remoteURL.value).toEqual('remoteURL');
@@ -86,8 +93,8 @@ describe('configuration', () => {
       const port = 8080;
       const mode = 'remote';
       const configuration = await getConfiguration({
-        apiConfiguration: {port},
-        cliConfiguration: {mode},
+        apiConfiguration: { port },
+        cliConfiguration: { mode },
       });
 
       expect(configuration.port.value).toEqual(port);

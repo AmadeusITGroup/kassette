@@ -1,9 +1,6 @@
 // ------------------------------------------------------------------------- std
 
-import {
-  IncomingMessage,
-  IncomingHttpHeaders,
-} from 'http';
+import { IncomingMessage, IncomingHttpHeaders } from 'http';
 
 // -------------------------------------------------------------------- internal
 

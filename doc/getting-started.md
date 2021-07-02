@@ -1,6 +1,7 @@
 kassette is a customizable proxy server, focused on handling mocking and persistence of requests made to one or more backends.
 
 Table of contents:
+
 <!-- TOC -->
 
 - [Usage by examples](#usage-by-examples)
@@ -18,9 +19,11 @@ Table of contents:
 <!-- /TOC -->
 
 <a id="markdown-usage-by-examples" name="usage-by-examples"></a>
+
 # Usage by examples
 
 <a id="markdown-run-with-a-simple-configuration-file" name="run-with-a-simple-configuration-file"></a>
+
 ## Run with a simple configuration file
 
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
@@ -36,7 +39,7 @@ exports.getConfiguration = () => {
     remoteURL: 'http://127.0.0.1:3000',
     mode: 'local_or_download',
   };
-}
+};
 ```
 
 The option `-c` is used to specify the configuration file. The configuration file is an executable file which must export a `getConfiguration` function, which can be asynchronous if needed, and returns the configuration object.
@@ -52,6 +55,7 @@ Thanks to default behavior it will also:
 - use a local path built with the URL pathname followed by the HTTP method of the input request
 
 <a id="markdown-run-with-a-simple-hook" name="run-with-a-simple-hook"></a>
+
 ## Run with a simple hook
 
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
@@ -67,19 +71,16 @@ exports.getConfiguration = () => {
     remoteURL: 'http://127.0.0.1:3000',
     mode: 'local_or_download',
 
-    hook: async ({mock}) => {
+    hook: async ({ mock }) => {
       if (!mock.request.pathname.startsWith('/api/')) {
         mock.setMode('remote');
         return;
       }
 
-      mock.setLocalPath([
-        mock.request.pathname.split('/').slice(1),
-        mock.request.method,
-      ]);
-    }
+      mock.setLocalPath([mock.request.pathname.split('/').slice(1), mock.request.method]);
+    },
   };
-}
+};
 ```
 
 The `hook` property is the new thing here, and constitutes the core of the tool: it is called for every input request, and allows to handle it as well as its associated mock, by tweaking configuration for this instance and/or using APIs to interact with it and its data.
@@ -88,10 +89,11 @@ This will:
 
 - run the proxy on port `4200`
 - store local mock files under the tree `./mocks-folder`
-- __by default__ serve data persisted in the local files if present, otherwise will forward request to a backend accessible at `http://127.0.0.1:3000`, persist the response for next requests and serve it
-- __except for__ requests whose pathname starts with `/api/`, in which case the proxy acts a a pass-through
+- **by default** serve data persisted in the local files if present, otherwise will forward request to a backend accessible at `http://127.0.0.1:3000`, persist the response for next requests and serve it
+- **except for** requests whose pathname starts with `/api/`, in which case the proxy acts a a pass-through
 - use a mock local path built with the significant URL pathname (without the common leading `/api`) followed by the HTTP method of the input request
-<a id="markdown-run-with-an-advanced-hook" name="run-with-an-advanced-hook"></a>
+  <a id="markdown-run-with-an-advanced-hook" name="run-with-an-advanced-hook"></a>
+
 ## Run with an advanced hook
 
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
@@ -185,6 +187,7 @@ Besides the basic properties already explained for previous use cases, this will
 - replace any remote payload having a status code `404` by a custom empty payload (persisting it for subsequent requests and serving it)
 
 <a id="markdown-override-configuration-file-options-with-cli-options" name="override-configuration-file-options-with-cli-options"></a>
+
 ## Override configuration file options with CLI options
 
 Run `kassette -c kassette.config.js -p 8000 --folder ./snapshots` with `kassette.config.js` file:
@@ -201,13 +204,14 @@ exports.getConfiguration = async () => {
     mode: 'local_or_download',
     // mocksFolder not specified, since specified in command line
   };
-}
+};
 ```
 
 - `port` gets overridden by command line
 - `mocksFolder` gets specified by command line
 
 <a id="markdown-run-as-a-browser-proxy" name="run-as-a-browser-proxy"></a>
+
 ## Run as a browser proxy
 
 Run: `kassette -u '*' -m remote`
@@ -228,24 +232,25 @@ npx playwright cr --proxy-server=http://127.0.0.1:8080
 Or you can use the following script to start the browser with [playwright](https://playwright.dev) while ignoring https errors (because of the certificate used by kassette that is not recognized by the browser):
 
 ```js
-const { chromium } = require("playwright");
+const { chromium } = require('playwright');
 
 (async () => {
   const browser = await chromium.launch({
     headless: false,
     proxy: {
-      server: "http://127.0.0.1:8080"
-    }
+      server: 'http://127.0.0.1:8080',
+    },
   });
   const context = await browser.newContext({
-    ignoreHTTPSErrors: true
+    ignoreHTTPSErrors: true,
   });
   const page = await context.newPage();
-  await page.goto("https://github.com/AmadeusITGroup/kassette");
+  await page.goto('https://github.com/AmadeusITGroup/kassette');
 })();
 ```
 
 <a id="markdown-filter-tls-connections-to-intercept-as-a-browser-proxy" name="filter-tls-connections-to-intercept-as-a-browser-proxy"></a>
+
 ## Filter TLS connections to intercept as a browser proxy
 
 Run `kassette -c kassette.config.js` with `kassette.config.js` file:
@@ -273,7 +278,7 @@ exports.getConfiguration = () => {
       // so they will not pass through the hook method
     },
 
-    hook: async ({mock}) => {
+    hook: async ({ mock }) => {
       mock.setLocalPath([
         // include the protocol, hostname and port in the local path
         mock.request.protocol,
@@ -282,12 +287,13 @@ exports.getConfiguration = () => {
         mock.request.pathname.split('/'),
         mock.request.method,
       ]);
-    }
+    },
   };
-}
+};
 ```
 
 <a id="markdown-get-help-in-the-terminal" name="get-help-in-the-terminal"></a>
+
 ## Get help in the terminal
 
 Run `kassette -h` or `kassette --help` to get help in the terminal.
@@ -318,6 +324,7 @@ Please visit repository for more information: https://github.com/AmadeusITGroup/
 ```
 
 <a id="markdown-run-with-no-option" name="run-with-no-option"></a>
+
 ## Run with no option
 
 It is also possible to run `kassette` with no option, but besides checking that the product properly runs, this won't be useful for real usage.
@@ -325,11 +332,13 @@ It is also possible to run `kassette` with no option, but besides checking that 
 We are trying to set sensible and consistent default options, but the goal of the tool is also to work in different modes for different development stages, so at some point you will be setting specific options.
 
 <a id="markdown-configuration" name="configuration"></a>
+
 # Configuration
 
 The central piece of customization is a [configuration system](./configuration.md), and its most important element is the `hook` function, which is called upon incoming requests, and is controlling the behavior of the proxy to react to each request.
 
 <a id="markdown-learn-more" name="learn-more"></a>
+
 # Learn more
 
 - [configuration](./configuration.md): to learn about the customization

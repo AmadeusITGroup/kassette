@@ -1,4 +1,4 @@
-const {Launcher} = require('./backend');
+const { Launcher } = require('./backend');
 
 exports.launchBackend = Launcher({
   processName: 'backend',

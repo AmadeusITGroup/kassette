@@ -76,7 +76,10 @@ export class TLSManager {
     return res;
   }
 
-  public async process(socket: Socket, hostname = getSocketConnection(socket).hostname): Promise<Socket> {
+  public async process(
+    socket: Socket,
+    hostname = getSocketConnection(socket).hostname,
+  ): Promise<Socket> {
     const secureContext = await this._getSecureContext(hostname);
     const SNICallback = async (
       sni: string,

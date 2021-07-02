@@ -4,11 +4,7 @@ import { NonSanitizedArray } from '../../lib/array';
 
 // ------------------------------------------------------------------------- app
 
-import {
-  IMergedConfiguration,
-  Mode,
-  Delay,
-} from '../configuration';
+import { IMergedConfiguration, Mode, Delay } from '../configuration';
 
 import {
   ReadOnlyHeaders,
@@ -19,8 +15,6 @@ import {
 } from '../server/model';
 
 import { Console } from '../logger/model';
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -99,9 +93,9 @@ export interface IMock {
 ////////////////////////////////////////////////////////////////////////////////
 
 export interface MockingOptions {
-   /** The root folder from which to resolve given relative paths */
+  /** The root folder from which to resolve given relative paths */
   readonly root: string;
-   /** The user configuration */
+  /** The user configuration */
   readonly userConfiguration: IMergedConfiguration;
 }
 
@@ -122,11 +116,11 @@ export type PersistedStatus = Readonly<Status>;
 
 /** The data representing the mock, which is persisted and used for serving the mock */
 export interface MockData {
-   /** Recorded headers to be served back, without the ignored ones */
+  /** Recorded headers to be served back, without the ignored ones */
   readonly headers: ReadOnlyHeaders;
-   /** Ignored headers */
+  /** Ignored headers */
   readonly ignoredHeaders: ReadOnlyHeaders;
-   /** The name of the local file containing the body content (needed since the name is dynamic) */
+  /** The name of the local file containing the body content (needed since the name is dynamic) */
   readonly bodyFileName: string;
   readonly status: PersistedStatus;
   readonly time: number;

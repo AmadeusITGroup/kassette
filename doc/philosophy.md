@@ -13,9 +13,8 @@ Table of contents:
 
 <!-- /TOC -->
 
-
-
 <a id="markdown-properties" name="properties"></a>
+
 # Properties
 
 They follow this design:
@@ -30,11 +29,8 @@ They follow this design:
 - some properties can be updated as long as the process didn't reach a certain state, after which their value is frozen
   - example: setting the path used to store the local mock can't be changed after it has been accessed or updated
 
-
-
-
-
 <a id="markdown-methods" name="methods"></a>
+
 # Methods
 
 Methods allow to apply processing, and follow this design:

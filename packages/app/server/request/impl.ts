@@ -1,9 +1,6 @@
 // ------------------------------------------------------------------------- std
 
-import {
-  IncomingMessage,
-  IncomingHttpHeaders,
-} from 'http';
+import { IncomingMessage, IncomingHttpHeaders } from 'http';
 
 import { URL } from 'url';
 
@@ -29,10 +26,7 @@ import { connectionToURL, getSocketConnections } from '../connection';
  * @param body The body of the request
  */
 export class Request implements IFetchedRequest {
-  constructor(
-    public readonly original: IncomingMessage,
-    public readonly body: Buffer,
-  ) {}
+  constructor(public readonly original: IncomingMessage, public readonly body: Buffer) {}
 
   @CachedProperty()
   get connectionsStack() {

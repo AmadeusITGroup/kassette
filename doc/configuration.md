@@ -15,11 +15,8 @@
 
 <!-- /TOC -->
 
-
-
-
-
 <a id="markdown-introduction" name="introduction"></a>
+
 # Introduction
 
 The configuration is the central piece of the tool: run alone, it can work but will likely not match your requirements.
@@ -35,14 +32,12 @@ A configuration system will rarely cover all the use cases a user has in mind. H
 
 The `hook` function, if provided, is called upon every request, passing an API object (see [API documentation](./api.md#mock-instance)), before the `mock.process()` function is called.
 
-
-
-
-
 <a id="markdown-how-to-provide-the-configuration" name="how-to-provide-the-configuration"></a>
+
 # How to provide the configuration
 
 <a id="markdown-precedence" name="precedence"></a>
+
 ## Precedence
 
 As said in introduction, there are multiple ways to pass configuration properties and some combinations are possible, such as passing through the CLI and the configuration file for instance.
@@ -55,6 +50,7 @@ Here is the configuration sources precedence when a same configuration property 
 4. default value
 
 <a id="markdown-from-cli" name="from-cli"></a>
+
 ## From CLI
 
 Check available options using `kassette --help` or `kassette -h`. To summarize, here are the possible options:
@@ -72,6 +68,7 @@ Check available options using `kassette --help` or `kassette -h`. To summarize, 
 All values which must be defined at runtime cannot be defined through the CLI — basically functions, or objects containing runtime values.
 
 <a id="markdown-from-file" name="from-file"></a>
+
 ## From file
 
 Pass the configuration file path using the CLI option `-c` • `--conf` • `--config` • `--configuration`. If relative, it is resolved against the current working directory.
@@ -88,28 +85,29 @@ The file must export a single asynchronous function named `getConfiguration`, wh
 The returned configuration object can define all configuration values described below.
 
 <a id="markdown-from-api" name="from-api"></a>
+
 ## From API
 
 Pass them to `runFromAPI(options)`, using property `apiConfiguration` of `options`.
 
 The passed configuration object can define all configuration values described below.
 
-
-
-
-
 <a id="markdown-configuration-properties" name="configuration-properties"></a>
+
 # Configuration properties
 
-__All properties are optional__, not only because most of them have __suitable default values__ to make the proxy work properly already, but also because part of them are just default values for the mock instance used in the hook, so __any potentially missing and required values can be specified inside the hook__.
+**All properties are optional**, not only because most of them have **suitable default values** to make the proxy work properly already, but also because part of them are just default values for the mock instance used in the hook, so **any potentially missing and required values can be specified inside the hook**.
 
 <a id="markdown-server" name="server"></a>
+
 ## Server
 
 - `hostname`: the hostname on which the proxy should listen. Uses `127.0.0.1` by default, which only allows local connections. To allow remote connections, use the ip address of the specific network interface that should be allowed to connect or the unspecified IPv4 (`0.0.0.0`) or IPv6 (`::`) address.
 
   **Note that kassette has not been reviewed for security issues. It is intended to be used in a safe local/testing environment. Binding it to an open connection can result in compromising your computer or your network.**
+
 - `port`: the port on which the proxy should listen
+
   - if the port is not available, it will fail and stop the program; try again with another, available port
   - if `port` is set to `0`, the proxy will listen on a random port (actually depends on the OS implementation): use the callback `onListen` to catch its value
 
@@ -120,6 +118,7 @@ __All properties are optional__, not only because most of them have __suitable d
 - `tlsCAKeyPath`: path to a [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail)-encoded CA (Certificate Authority) certificate and key file, created if it does not exist. If not provided, the certificate and key are generated but only kept in memory. You can optionally import in the browser the TLS certificate from this file in order to remove the warning when connecting to HTTPS websites through kassette. This certificate and key are used as needed to sign certificates generated on the fly for any HTTPS connection intercepted by kassette.
 
 <a id="markdown-global-mock-defaults" name="global-mock-defaults"></a>
+
 ## Global mock defaults
 
 The properties here are just used as default values if the user does not specify them explicitly on the mock instance in the hook (and not through the CLI either).
@@ -135,6 +134,7 @@ Here is the list:
 - `skipLogs`
 
 <a id="markdown-hook" name="hook"></a>
+
 ## Hook
 
 Specified through `hook`.
@@ -145,6 +145,7 @@ It is an asynchronous function returning a `Promise` and receives a single objec
 - `console`: the console object as specified in the configuration (see below), otherwise it is the global console object (usually the one of the platform)
 
 <a id="markdown-on-proxy-connect" name="on-proxy-connect"></a>
+
 ## `onProxyConnect` and `proxyConnectMode`
 
 The `onProxyConnect` callback method is called when kassette receives a request with the HTTP [`CONNECT`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT) method, which usually happens when kassette is used as a browser proxy and the browser is trying to connect to a secure web site with the https protocol.
@@ -172,12 +173,13 @@ Here is the list of properties and methods available on the `request` object pas
 - `process()`: processes the socket according to the mode stored in `mode`. This method is called automatically when the `onProxyConnect` function finishes, but it can also be called manually before.
 
 <a id="markdown-others" name="others"></a>
+
 ## Others
 
 - `console`: a `console`-like object, with methods `log` and `error`, each receiving one single argument of any type. Useful to capture the logs of the application.
 
 <br/>
 
-----
+---
 
 1. <a id="footnote-1" name="footnote-1"></a>but you can access the API configuration inside the configuration file, so you can choose yourself the precedence by applying there the API configuration or not <a href="#footnote-source-1">↩︎</a>

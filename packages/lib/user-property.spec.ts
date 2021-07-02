@@ -5,7 +5,7 @@ describe('user property', () => {
     it('should return no input when not fed and no default', () => {
       const property = new UserProperty();
 
-      const {input, inputOrigin} = property.inputAndOrigin;
+      const { input, inputOrigin } = property.inputAndOrigin;
       expect(input).toBeUndefined();
       expect(inputOrigin).toEqual('none');
       expect(property.input).toBeUndefined();
@@ -22,7 +22,7 @@ describe('user property', () => {
       const property = new UserProperty();
       property.set(value);
 
-      const {input, inputOrigin} = property.inputAndOrigin;
+      const { input, inputOrigin } = property.inputAndOrigin;
       expect(input).toEqual(value);
       expect(inputOrigin).toEqual('user');
       expect(property.input).toEqual(value);
@@ -40,7 +40,7 @@ describe('user property', () => {
       property.set(value);
       property.unset();
 
-      const {input, inputOrigin} = property.inputAndOrigin;
+      const { input, inputOrigin } = property.inputAndOrigin;
       expect(input).toBeUndefined();
       expect(inputOrigin).toEqual('none');
       expect(property.input).toBeUndefined();
@@ -54,7 +54,7 @@ describe('user property', () => {
 
     it('should return default input when not fed and has a default value handler', () => {
       const defaultValue = 'hello';
-      const property = new UserProperty({getDefaultInput: () => defaultValue});
+      const property = new UserProperty({ getDefaultInput: () => defaultValue });
 
       expect(property.inputAndOrigin.input).toEqual(defaultValue);
       expect(property.inputAndOrigin.inputOrigin).toEqual('default');
@@ -95,7 +95,7 @@ describe('user property', () => {
 
     it('should use the transformation when provided', () => {
       const property = new UserProperty({
-        transform: ({input}) => '' + input,
+        transform: ({ input }) => '' + input,
       });
 
       expect(property.output).toBe('undefined');
@@ -108,7 +108,7 @@ describe('user property', () => {
     it('should use default input if needed for transformation', () => {
       const property = new UserProperty({
         getDefaultInput: () => true,
-        transform: ({input}) => !input,
+        transform: ({ input }) => !input,
       });
 
       expect(property.output).toBe(false);
@@ -119,20 +119,17 @@ describe('user property', () => {
     });
   });
 
-
-
-
-
-
   describe('cache', () => {
     it('should cache input value', () => {
       let callCount = 0;
 
       const defaultValue = 'hello';
-      const property = new UserProperty({getDefaultInput: () => {
-        callCount++;
-        return defaultValue;
-      }});
+      const property = new UserProperty({
+        getDefaultInput: () => {
+          callCount++;
+          return defaultValue;
+        },
+      });
 
       expect(callCount).toBe(0);
       expect(property.input).toEqual(defaultValue);
@@ -157,10 +154,12 @@ describe('user property', () => {
     it('should cache output value', () => {
       let callCount = 0;
 
-      const property = new UserProperty({transform: ({input}) => {
-        callCount++;
-        return '' + input;
-      }});
+      const property = new UserProperty({
+        transform: ({ input }) => {
+          callCount++;
+          return '' + input;
+        },
+      });
 
       expect(callCount).toBe(0);
       expect(property.output).toEqual('undefined');

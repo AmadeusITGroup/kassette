@@ -51,8 +51,7 @@ export const forwardSocketConnections = (parentSocket: Socket, childSocket: Sock
   socketConnectionsMap.set(childSocket, socketInfo);
 };
 
-export const getSocketConnections: (
-  socket: Socket,
-) => readonly Readonly<Connection>[] = _getSocketConnections;
+export const getSocketConnections: (socket: Socket) => readonly Readonly<Connection>[] =
+  _getSocketConnections;
 
 export const getSocketConnection: (socket: Socket) => Readonly<Connection> = _getSocketConnection;

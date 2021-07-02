@@ -52,7 +52,7 @@ export async function createCertificate(hostNames: string[], issuer?: pki.Certif
     },
     {
       name: 'subjectAltName',
-      altNames: hostNames.map(name => ({
+      altNames: hostNames.map((name) => ({
         type: 2, // DNS name
         value: name,
       })),

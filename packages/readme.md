@@ -5,10 +5,6 @@
 - [`bin/`](./bin/): executable installed by package manager
 - [`lib/`](./lib/): shared code
 
-
-
-
-
 # Module structure convention
 
 - `impl.ts`: the pure implementation, with actual running code

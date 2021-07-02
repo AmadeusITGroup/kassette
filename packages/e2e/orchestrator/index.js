@@ -1,7 +1,7 @@
 // ------------------------------------------------------------------------- std
 
 const util = require('util');
-const {promises:fs} = require('fs');
+const { promises: fs } = require('fs');
 
 // ------------------------------------------------------------------------- 3rd
 
@@ -10,16 +10,14 @@ const chalk = require('chalk');
 
 // -------------------------------------------------------------------- internal
 
-const {getCurrentContext} = require('../common');
-const {ResultsHandler} = require('../common/results');
-const {PATHS} = require('../common/paths');
-const {createLogger} = require('../common/logger');
+const { getCurrentContext } = require('../common');
+const { ResultsHandler } = require('../common/results');
+const { PATHS } = require('../common/paths');
+const { createLogger } = require('../common/logger');
 
 const backendsHandler = require('../backends');
 const proxyHandler = require('../proxy');
 const clientHandler = require('../client');
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Console logging
@@ -31,15 +29,21 @@ function logWithIndent(message, indent = 0) {
 
 function Logger() {
   let indent = 0;
-  function log(message) { logWithIndent(message, indent); };
+  function log(message) {
+    logWithIndent(message, indent);
+  }
   function groupStart(label) {
     log(label);
     indent++;
   }
-  function groupEnd() { indent--; }
-  function resetIndent() { indent = 0; }
+  function groupEnd() {
+    indent--;
+  }
+  function resetIndent() {
+    indent = 0;
+  }
 
-  return {log, groupStart, groupEnd, resetIndent};
+  return { log, groupStart, groupEnd, resetIndent };
 }
 
 function highlight(string, color = 'green') {
@@ -50,22 +54,20 @@ function highlightEntity(string) {
   return highlight(string, 'magenta');
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Workspace reset
 ////////////////////////////////////////////////////////////////////////////////
 
 const rmrf = util.promisify(rimraf);
-async function mkdir(path) { return fs.mkdir(path, {recursive: true}); }
+async function mkdir(path) {
+  return fs.mkdir(path, { recursive: true });
+}
 
 async function resetWorkspace() {
   await rmrf(PATHS.workspace);
   await mkdir(PATHS.outputs);
   await mkdir(PATHS.resultsFolder);
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -82,8 +84,6 @@ function ensureSIGINT() {
 }
 exports.ensureSIGINT = ensureSIGINT;
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 ////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ async function run() {
 
   ensureSIGINT();
 
-  const {log, groupStart, groupEnd, resetIndent} = Logger();
+  const { log, groupStart, groupEnd, resetIndent } = Logger();
 
   await resetWorkspace();
 
@@ -104,9 +104,7 @@ async function run() {
 
   groupStart('executing use cases');
 
-  const orchestratorLogger = await createLogger({processName: 'orchestrator'});
-
-
+  const orchestratorLogger = await createLogger({ processName: 'orchestrator' });
 
   //////////////////////////////////////////////////////////////////////////////
   // Backend launch
@@ -121,8 +119,6 @@ async function run() {
   log(`backend started and ready, listening on port ${highlight(backend.port)}`);
   groupEnd();
 
-
-
   //////////////////////////////////////////////////////////////////////////////
   // Alternative backend launch
   //////////////////////////////////////////////////////////////////////////////
@@ -133,10 +129,12 @@ async function run() {
     pushResult: results.pusher('alternativeBackend'),
   });
 
-  log(`alternative backend started and ready, listening on port ${highlight(alternativeBackend.port)}`);
+  log(
+    `alternative backend started and ready, listening on port ${highlight(
+      alternativeBackend.port,
+    )}`,
+  );
   groupEnd();
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Proxy launch
@@ -154,8 +152,6 @@ async function run() {
   log(`proxy started and ready, listening on port ${highlight(proxy.port)}`);
   groupEnd();
 
-
-
   //////////////////////////////////////////////////////////////////////////////
   // Client launch
   //////////////////////////////////////////////////////////////////////////////
@@ -169,22 +165,26 @@ async function run() {
   async function pushClientResult(payload) {
     await _pushClientResult(payload);
 
-    const {useCase, name, iteration} = getCurrentContext();
+    const { useCase, name, iteration } = getCurrentContext();
 
     let postProcessingResult;
     if (useCase.postProcess != null) {
-      orchestratorLogger.console.log(`Post processing use case "${highlight(name)}", iteration ${highlight(iteration)}`);
+      orchestratorLogger.console.log(
+        `Post processing use case "${highlight(name)}", iteration ${highlight(iteration)}`,
+      );
       const data = results.results[name].iterations[iteration];
       postProcessingResult = await useCase.postProcess({
         data,
         console: orchestratorLogger.console,
-        useCase, name, iteration,
+        useCase,
+        name,
+        iteration,
       });
     }
-    await pushPostProcessingResult({useCase: name, iteration, data: postProcessingResult});
+    await pushPostProcessingResult({ useCase: name, iteration, data: postProcessingResult });
   }
 
-  const clientLogger = await createLogger({processName: 'client'});
+  const clientLogger = await createLogger({ processName: 'client' });
 
   groupStart(`launching ${highlightEntity('client')}`);
   const client = await clientHandler.create({
@@ -194,7 +194,7 @@ async function run() {
     pushClientResult,
 
     console: clientLogger.console,
-    onStartUseCase({name}) {
+    onStartUseCase({ name }) {
       groupStart(`use case ${highlight(name)}`);
     },
     onStartIteration(iteration) {
@@ -202,12 +202,10 @@ async function run() {
     },
     onEndUseCase() {
       groupEnd();
-    }
+    },
   });
-  log('client launched')
+  log('client launched');
   groupEnd();
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Tests execution
@@ -216,8 +214,6 @@ async function run() {
   groupStart('executing tests');
   await client.run();
   groupStart('tests done, shutting down processes');
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Tear down
@@ -245,8 +241,6 @@ async function run() {
   log('proxy server stopped');
   groupEnd();
 
-
-
   //////////////////////////////////////////////////////////////////////////////
   // Finalization
   //////////////////////////////////////////////////////////////////////////////
@@ -256,7 +250,7 @@ async function run() {
   resetIndent();
   groupStart('checking results');
 
-  const checkerLogger = await createLogger({processName: 'checker'});
+  const checkerLogger = await createLogger({ processName: 'checker' });
 
   const testPayload = {
     results: await results.getResults(),
@@ -270,6 +264,6 @@ async function run() {
     setTimeout(() => process.exit(0), 2000);
   }
 
-  return {testPayload, finalize};
+  return { testPayload, finalize };
 }
 exports.run = run;
