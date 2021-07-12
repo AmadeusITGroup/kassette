@@ -37,7 +37,7 @@
     "@commitlint/config-conventional": "^12.1.4",
     "@types/jest": "^26.0.23",
     "@types/koa": "^2.13.4",
-    "@types/koa-router": "^7.4.2",
+    "@types/koa-router": "^7.4.4",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^15.14.0",
     "@types/node-forge": "^0.10.0",
