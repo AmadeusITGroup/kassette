@@ -10,7 +10,7 @@ import { readAll } from '../../lib/stream';
 
 // ------------------------------------------------------------------------- app
 
-import { createGlobalLogger, logInfo, logSeparator, getConsole } from '../logger';
+import { createGlobalLogger, logInfo, logSeparator, getConsole, logError } from '../logger';
 
 import { IMergedConfiguration } from '../configuration';
 
@@ -90,6 +90,7 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
       server.emit('connection', socket);
       socket.resume();
     });
+    socket.on('error', (exception) => logError({ message: CONF.messages.socketError, exception }));
   };
 
   server.on('connect', async (request: IncomingMessage, socket: Socket, data: Buffer) => {

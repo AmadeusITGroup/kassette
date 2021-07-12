@@ -310,7 +310,7 @@ export class Mock implements IMock {
     try {
       await this.getPayloadAndFillResponse();
     } catch (exception) {
-      logError({ message: exception.message, exception: exception.original! });
+      logError({ message: CONF.messages.requestFailed, exception });
       await this.fillResponseFromPayload({
         origin: 'proxy',
         payload: {

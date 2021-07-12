@@ -4,5 +4,6 @@ export default {
     listening: 'Listening on port',
     sendingRequest: 'Sending request to',
     requestComplete: 'Request complete',
+    socketError: 'Socket error',
   },
 };
