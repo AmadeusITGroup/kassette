@@ -46,5 +46,7 @@ export default {
 
     alreadyExistingMock: 'Mock exists already, serving it',
     fetchingMock: 'Mock does not exist yet, recording it and serving it',
+
+    requestFailed: 'Request failed',
   },
 };
