@@ -137,7 +137,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: { 'x-original': 'original' },
+          headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
       });
 
@@ -185,7 +185,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: { 'x-original': 'original' },
+          headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
       });
 
@@ -216,7 +216,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: { 'x-original': 'original' },
+          headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
       });
 
@@ -234,7 +234,7 @@ describe('requesting', () => {
           } as URL,
           method: 'post',
           body: 'Original',
-          headers: { 'x-original': 'original' },
+          headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
       });
 
