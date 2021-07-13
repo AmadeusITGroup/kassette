@@ -130,6 +130,7 @@ export async function sendRequest({
       'accept-encoding': 'identity',
     }),
   };
+  delete requestOptions.headers.host;
 
   const { duration: time, output: response } = await measure(() => request(requestOptions));
 
