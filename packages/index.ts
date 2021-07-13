@@ -1,0 +1,75 @@
+/**
+ * kassette is a development server, used mainly for testing, which proxies requests and is able to easily manage local mocks.
+ *
+ * @packageDocumentation
+ */
+
+export {
+  APIOptions,
+  BaseCLIConfigurationSpec,
+  BaseConfigurationSpec,
+  BaseSpec,
+  Body,
+  BodySpec,
+  ChecksumArgs,
+  CLIConfigurationSpec, // internal
+  CLIOptions, // internal
+  ConfigurationPropertySource,
+  ConfigurationSpec,
+  Connection,
+  Console,
+  Delay,
+  FilterSpec,
+  Headers,
+  HeadersSpec,
+  HookAPI,
+  HookFunction,
+  HostnameSpec,
+  IBaseRequest,
+  IConfigurationProperty,
+  IFetchedRequest,
+  IMergedConfiguration,
+  IMock,
+  Include,
+  IProxyConnectAPI,
+  IResponse,
+  ListMode,
+  ListOrFilter,
+  ListSpec,
+  LocalPayload,
+  MapSpec,
+  MaybeAsync,
+  MethodSpec,
+  MockBody,
+  MockData,
+  MockingOptions,
+  Mode,
+  ObjectMap,
+  OnExitFunction,
+  OnListenFunction,
+  OnListenProps,
+  OnProxyConnectFunction,
+  PathnameSpec,
+  Payload,
+  PayloadOrigin,
+  PayloadWithOrigin,
+  PersistedStatus,
+  PortSpec,
+  ProtocolSpec,
+  ProxyConnectMode,
+  QuerySpec,
+  RawBody,
+  ReadOnlyHeaders,
+  RemotePayload,
+  RequestPayload,
+  ResponseStatus,
+  runFromAPI,
+  runFromCLI, // internal
+  RunResult,
+  Spec,
+  Status,
+  UserPayload,
+} from './app';
+export { JSONData } from './lib/json';
+export { NonSanitizedArray, RecursiveArray } from './lib/array';
+export { ReadOnlyStringsMap, ImmutableFullyOptional, StringsMap } from './lib/interfaces';

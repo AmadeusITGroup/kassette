@@ -4,7 +4,7 @@ import * as yargs from 'yargs';
 
 // ------------------------------------------------------------------------- app
 
-import { runFromCLI, Mode, ProxyConnectMode } from '../app';
+import { runFromCLI, Mode, ProxyConnectMode } from '..';
 
 ////////////////////////////////////////////////////////////////////////////////
 // XXX 2019-01-09T16:24:12+01:00 IMPORTANT

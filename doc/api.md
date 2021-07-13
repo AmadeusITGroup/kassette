@@ -452,7 +452,7 @@ The mock instance contains a property `options`, with:
 
 # Launching the proxy
 
-The package exports the following function to launch the proxy programatically:
+The package exports the following function to launch the proxy programmatically:
 
 - `async runFromAPI(options)`
   - `options`:

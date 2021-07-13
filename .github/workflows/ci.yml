@@ -2,9 +2,9 @@ name: Continuous Integration
 
 on:
   push:
-    branches: master
+    branches: [master]
   pull_request:
-    branches: master
+    branches: [master]
 
 jobs:
   tests:
@@ -39,3 +39,24 @@ jobs:
 
       - name: Run end to end tests
         run: npm run e2e
+
+      - name: Build API documentation
+        run: npm run apidoc
+
+      - name: Fetching gh-pages branch
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: build/gh-pages
+      - name: Updating API documentation in gh-pages branch
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          rm -rf *
+          cp -a ../apidoc/output/* .
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit --allow-empty -a -m "Updating from ${{ github.sha }}"
+          git push origin gh-pages
+        working-directory: ./build/gh-pages

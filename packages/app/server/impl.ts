@@ -18,7 +18,7 @@ import { Mock } from '../mocking';
 
 // -------------------------------------------------------------------- internal
 
-import { CLIOptions, APIOptions, RunOptions, RunResult, ApplicationData } from './model';
+import { CLIOptions, APIOptions, RunResult, ApplicationData } from './model';
 
 import { Request } from './request';
 import { Response } from './response';
@@ -150,14 +150,20 @@ export async function _run(configuration: IMergedConfiguration | null): Promise<
   return output;
 }
 
-export async function run(options: Partial<RunOptions>): Promise<RunResult> {
-  return _run(await buildConfiguration(options));
-}
-
+/**
+ * Launch the proxy programmatically.
+ *
+ * @returns a callback that can be used to shutdown the proxy, calling the `onExit` callback defined in configuration (if provided).
+ *
+ * @public
+ */
 export async function runFromAPI(options: APIOptions): Promise<RunResult> {
   return _run(await buildConfiguration(options));
 }
 
+/**
+ * @internal
+ */
 export async function runFromCLI(options: CLIOptions): Promise<RunResult> {
   return _run(await buildConfiguration(options));
 }

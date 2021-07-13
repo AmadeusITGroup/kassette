@@ -4,6 +4,8 @@
 
 /**
  * A single value or a virtually unlimitedly nested array of this type of value
+ *
+ * @public
  */
 export type RecursiveArray<T> = T | Array<RecursiveArray<T>>;
 
@@ -24,6 +26,8 @@ export const flatten = <T>(input: RecursiveArray<T>): T[] => {
 
 /**
  * A virtually unlimitedly nested array of values, including void and non-void ones
+ *
+ * @public
  */
 export type NonSanitizedArray<T = any> = RecursiveArray<T | null | undefined>;
 /**

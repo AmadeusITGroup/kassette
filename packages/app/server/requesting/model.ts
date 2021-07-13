@@ -11,6 +11,9 @@ import { IFetchedRequest } from '../request/model';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export interface RequestPayload {
   url: string;
   method: string;

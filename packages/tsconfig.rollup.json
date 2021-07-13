@@ -2,8 +2,7 @@
   "extends": "./tsconfig.json",
   "exclude": ["**/*.spec.ts", "**/__test__"],
   "compilerOptions": {
-    "outDir": "../dist",
-    "declaration": true,
+    "module": "esnext",
     "sourceMap": false
   }
 }

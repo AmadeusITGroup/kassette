@@ -3,7 +3,11 @@ import { Socket } from 'net';
 import { ProxyConnectMode } from '../../configuration';
 import { Connection } from '../request';
 
-/** A handier wrapper around a CONNECT request */
+/**
+ * A handier wrapper around a CONNECT request
+ *
+ * @public
+ */
 export interface IProxyConnectAPI {
   /** The original Node.js object representing the request */
   readonly request: IncomingMessage;
@@ -23,19 +27,22 @@ export interface IProxyConnectAPI {
   readonly destinationPort: number;
   /**
    * Sets the destination hostname and port that will be used when the process method is called. Also changes the mode to 'forward'.
-   * @param hostname Destination hostname
-   * @param port Destination port
+   * @param hostname - Destination hostname
+   * @param port - Destination port
    */
   setDestination(hostname: string, port: number): void;
   /** The currently selected mode. Can be changed with setMode. */
   readonly mode: ProxyConnectMode;
   /**
    * Changes the mode that will be used when the process method is called.
-   * @param mode
+   * @param mode - mode to set
    */
   setMode(mode: ProxyConnectMode): void;
   /** Processes the socket according to the mode stored in mode. This method is called automatically when the onProxyConnect function finishes, but it can also be called manually before. */
   process(): void;
 }
 
+/**
+ * @public
+ */
 export type OnProxyConnectFunction = (parameters: IProxyConnectAPI) => void | Promise<void>;

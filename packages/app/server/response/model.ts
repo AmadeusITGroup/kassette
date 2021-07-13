@@ -14,12 +14,24 @@ import { Status, ReadOnlyHeaders } from '../model';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export type RawBody = string | Buffer;
+/**
+ * @public
+ */
 export type Body = RawBody | JSONData;
-
+/**
+ * @public
+ */
 export type ResponseStatus = Partial<Readonly<Status>> | null;
 
-/** A handier wrapper around a server response */
+/**
+ * A handier wrapper around a server response
+ *
+ * @public
+ */
 export interface IResponse {
   /** The original Node.js object representing the response */
   readonly original: ServerResponse;

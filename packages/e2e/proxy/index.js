@@ -26,7 +26,7 @@ async function launch({ backendPort, alternativeBackendPort, pushResult }) {
   return launchServer({
     name: 'proxy',
     run: async function ({ onStart, onExit, console }) {
-      return require(PATHS.projectRoot).run({
+      return require(PATHS.projectRoot).runFromAPI({
         configurationPath: localPath('conf.js'),
         fileConfigurationContext: {
           pushResult,

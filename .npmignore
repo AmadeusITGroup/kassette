@@ -14,6 +14,8 @@
 
 /packages
 
+/build
+
 tsconfig*.json
 tslint.json
 *.spec.ts

@@ -4,5 +4,6 @@
 
 export * from './impl';
 export * from './model';
+export * from './checksum';
 import _CONF from './conf';
 export const MOCKING_CONF = _CONF;
