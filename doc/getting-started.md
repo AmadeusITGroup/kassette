@@ -222,31 +222,11 @@ The `-u '*'` argument means that kassette will read from each request which remo
 
 The `-m remote` argument means kassette will transfer the requests to the remote server and will not store anything locally.
 
-Once kassette is started, you have to configure your browser to use kassette as its proxy. For example, if you use [playwright](https://playwright.dev), you can run start it with the `--proxy-server` argument:
+Once kassette is started, you have to configure your browser to use kassette as its proxy. For example, if you use [playwright](https://playwright.dev), you can run start it with the `--proxy-server` argument, and also with the `--ignore-https-errors` argument to allow kassette to intercept https communications with its own self-signed root certificate without warnings from the browser:
 
 ```sh
 # you can also use ff (Firefox) or wk (WebKit) instead of cr (Chromium) below:
-npx playwright cr --proxy-server=http://127.0.0.1:8080
-```
-
-Or you can use the following script to start the browser with [playwright](https://playwright.dev) while ignoring https errors (because of the certificate used by kassette that is not recognized by the browser):
-
-```js
-const { chromium } = require('playwright');
-
-(async () => {
-  const browser = await chromium.launch({
-    headless: false,
-    proxy: {
-      server: 'http://127.0.0.1:8080',
-    },
-  });
-  const context = await browser.newContext({
-    ignoreHTTPSErrors: true,
-  });
-  const page = await context.newPage();
-  await page.goto('https://github.com/AmadeusITGroup/kassette');
-})();
+npx playwright cr --proxy-server=http://127.0.0.1:8080 --ignore-https-errors
 ```
 
 <a id="markdown-filter-tls-connections-to-intercept-as-a-browser-proxy" name="filter-tls-connections-to-intercept-as-a-browser-proxy"></a>
