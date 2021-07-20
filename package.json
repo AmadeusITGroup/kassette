@@ -63,7 +63,7 @@
     "interpret": "^2.2.0",
     "mime-types": "^2.1.21",
     "node-forge": "^0.10.0",
-    "rechoir": "^0.7.0",
+    "rechoir": "^0.7.1",
     "yargs": "^17.0.1"
   }
 }
