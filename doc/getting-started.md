@@ -222,7 +222,7 @@ The `-u '*'` argument means that kassette will read from each request which remo
 
 The `-m remote` argument means kassette will transfer the requests to the remote server and will not store anything locally.
 
-Once kassette is started, you have to configure your browser to use kassette as its proxy. For example, if you use [playwright](https://playwright.dev), you can run start it with the `--proxy-server` argument, and also with the `--ignore-https-errors` argument to allow kassette to intercept https communications with its own self-signed root certificate without warnings from the browser:
+Once kassette is started, you have to configure your browser to use kassette as its proxy. For example, if you use [playwright](https://playwright.dev), you can start it with the `--proxy-server` argument, and also with the `--ignore-https-errors` argument to allow kassette to intercept https communications with its own self-signed root certificate without warnings from the browser:
 
 ```sh
 # you can also use ff (Firefox) or wk (WebKit) instead of cr (Chromium) below:
