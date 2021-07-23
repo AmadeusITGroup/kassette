@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.1",
-    "date-fns": "^2.22.1",
+    "date-fns": "^2.23.0",
     "interpret": "^2.2.0",
     "mime-types": "^2.1.21",
     "node-forge": "^0.10.0",
