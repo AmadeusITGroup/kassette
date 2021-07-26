@@ -6,6 +6,7 @@ import { ServerResponse } from 'http';
 
 import { stringifyPretty, JSONData } from '../../../lib/json';
 import { UserProperty } from '../../../lib/user-property';
+import { logError } from '../../logger';
 
 // -------------------------------------------------------------------- internal
 
@@ -105,7 +106,16 @@ export class Response implements IResponse {
     Object.entries(headers)
       .map(([key, value]) => ({ key, value }))
       .filter((header) => header.value != null)
-      .forEach((header) => response.setHeader(header.key, header.value!));
+      .forEach((header) => {
+        try {
+          response.setHeader(header.key, header.value!);
+        } catch (exception) {
+          logError({
+            message: `${CONF.messages.setHeaderError}\n${header.key}: ${header.value}`,
+            exception,
+          });
+        }
+      });
     response.writeHead(code, message);
   }
 
