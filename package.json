@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky install && npm run build",
     "lint": "tslint -c packages/tslint.json \"packages/**/*.ts\"",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
