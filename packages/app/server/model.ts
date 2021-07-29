@@ -16,11 +16,22 @@ export * from './proxy/model';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export type Headers = { [key in string]: string | string[] | number | null };
-/** A map from strings to strings or array of strings */
+/**
+ * A map from strings to strings or array of strings
+ *
+ * @public
+ */
 export type ReadOnlyHeaders = Readonly<Headers>;
 
-/** The response status */
+/**
+ * The response status
+ *
+ * @public
+ */
 export interface Status {
   /** The status code */
   code: number;
@@ -39,6 +50,9 @@ export interface ApplicationData {
   readonly root: string;
 }
 
+/**
+ * @internal
+ */
 export interface CLIOptions {
   /** The configuration input from the CLI */
   readonly cliConfiguration: CLIConfigurationSpec;
@@ -46,6 +60,9 @@ export interface CLIOptions {
   readonly configurationPath?: string;
 }
 
+/**
+ * @public
+ */
 export interface APIOptions {
   readonly apiConfiguration: ConfigurationSpec;
   readonly configurationPath?: string;
@@ -60,15 +77,26 @@ export interface RunOptions {
   readonly fileConfigurationContext?: any;
 }
 
+/**
+ * @public
+ */
 export type RunResult = () => void;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export interface OnListenProps {
   port: number;
 }
+/**
+ * @public
+ */
 export type OnListenFunction = (parameters: OnListenProps) => void;
-
+/**
+ * @public
+ */
 export type OnExitFunction = () => void;

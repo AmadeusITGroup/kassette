@@ -14,7 +14,11 @@ import { Console } from '../logger';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-/** The main working mode of the proxy */
+/**
+ * The main working mode of the proxy
+ *
+ * @public
+ */
 export type Mode =
   | 'local'
   | 'remote'
@@ -22,15 +26,22 @@ export type Mode =
   | 'local_or_remote'
   | 'local_or_download'
   | 'manual';
+/**
+ * @public
+ */
 export type Delay = 'recorded' | number;
-
+/**
+ * @public
+ */
 export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
 
 /**
  * The set of possible properties defined through the CLI
  * (it is reduced since it can't contain runtime values)
+ *
+ * @public
  */
-interface BaseCLIConfigurationSpec {
+export interface BaseCLIConfigurationSpec {
   skipLog: boolean;
   port: number;
   hostname: string;
@@ -45,6 +56,8 @@ interface BaseCLIConfigurationSpec {
 /**
  * Augments the CLI spec to add all pure runtime properties,
  * that can be defined through the configuration file only
+ *
+ * @public
  */
 export interface BaseConfigurationSpec extends BaseCLIConfigurationSpec {
   readonly hook?: HookFunction | null | undefined;
@@ -54,7 +67,14 @@ export interface BaseConfigurationSpec extends BaseCLIConfigurationSpec {
   readonly console?: Console | null | undefined;
 }
 
+/**
+ * @internal
+ */
 export type CLIConfigurationSpec = ImmutableFullyOptional<BaseCLIConfigurationSpec>;
+
+/**
+ * @public
+ */
 export type ConfigurationSpec = ImmutableFullyOptional<BaseConfigurationSpec>;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,9 +87,14 @@ export type ConfigurationSpec = ImmutableFullyOptional<BaseConfigurationSpec>;
  * - `cli`: the CLI input
  * - `file`: the file configuration input
  * - `default`: the default value
+ *
+ * @public
  */
 export type ConfigurationPropertySource = 'cli' | 'file' | 'api' | 'default';
 
+/**
+ * @public
+ */
 export interface IConfigurationProperty<PropertyType> {
   /** The resolved value of the property */
   readonly value: PropertyType;
@@ -90,6 +115,8 @@ export interface ConfigurationPropertySpec<PropertyType> {
 
 /**
  * The merged configuration, containing wrapped configuration properties
+ *
+ * @public
  */
 export interface IMergedConfiguration {
   /**

@@ -2,6 +2,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export interface Console {
   log: (message: any) => void;
   error: (message: any) => void;

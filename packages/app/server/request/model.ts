@@ -12,7 +12,11 @@ import { ReadOnlyStringsMap } from '../../../lib/interfaces';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-/** A handier wrapper around a request */
+/**
+ * A handier wrapper around a request
+ *
+ * @public
+ */
 export interface IBaseRequest {
   /** The original Node.js object representing the request */
   readonly original: IncomingMessage;
@@ -43,12 +47,19 @@ export interface IRequest extends IBaseRequest {
   body(): Promise<Buffer>;
 }
 
+/**
+ * @public
+ */
 export interface IFetchedRequest extends IBaseRequest {
   /** The body content */
   readonly body: Buffer;
 }
 
-/** A connection intercepted by kassette */
+/**
+ * A connection intercepted by kassette
+ *
+ * @public
+ */
 export interface Connection {
   /** protocol such as `http` or `https`, without the trailing `:` */
   protocol: string;

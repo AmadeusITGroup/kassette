@@ -217,7 +217,7 @@ export class Mock implements IMock {
   }
 
   public checksumContent: string | null = null;
-  public async checksum(spec: ChecksumArgs) {
+  public async checksum(spec: ChecksumArgs): Promise<string> {
     const { checksum, content } = await computeChecksum(this, spec);
     this.checksumContent = content;
     return checksum;

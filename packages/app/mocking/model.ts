@@ -15,23 +15,36 @@ import {
 } from '../server/model';
 
 import { Console } from '../logger/model';
+import { ChecksumArgs } from './checksum/model';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export interface HookAPI {
   mock: IMock;
   console: Console;
 }
 
+/**
+ * @public
+ */
 export type HookFunction = (parameters: HookAPI) => void | Promise<void>;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-/** The public interface exposed to the end user to handle a given request and the associated mock and response */
+/**
+ * The public interface exposed to the end user to handle a given request and the associated mock and response.
+ *
+ * An object implementing this interface is passed to the {@link BaseConfigurationSpec.hook|hook} function, under property `mock` of the single argument object.
+ *
+ * @public
+ */
 export interface IMock {
   /** The wrapper around the input request (see `Request`) */
   readonly request: IFetchedRequest;
@@ -58,6 +71,9 @@ export interface IMock {
 
   /** The hash of the mock (TBD) */
   readonly hash: string;
+
+  readonly checksumContent: string | null;
+  checksum(spec: ChecksumArgs): Promise<string>;
 
   /** Sets the local path of the mock */
   setLocalPath: (
@@ -92,6 +108,9 @@ export interface IMock {
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export interface MockingOptions {
   /** The root folder from which to resolve given relative paths */
   readonly root: string;
@@ -112,9 +131,16 @@ export interface MockSpec {
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export type PersistedStatus = Readonly<Status>;
 
-/** The data representing the mock, which is persisted and used for serving the mock */
+/**
+ * The data representing the mock, which is persisted and used for serving the mock
+ *
+ * @public
+ */
 export interface MockData {
   /** Recorded headers to be served back, without the ignored ones */
   readonly headers: ReadOnlyHeaders;
@@ -127,27 +153,48 @@ export interface MockData {
   readonly creationDateTime: Date;
 }
 
-/** The type representing the body content */
+/**
+ * The type representing the body content
+ *
+ * @public
+ */
 export type MockBody = Buffer | string | null;
 
+/**
+ * @public
+ */
 export interface Payload {
   data: MockData;
   body: MockBody;
 }
 
+/**
+ * @public
+ */
 export type PayloadOrigin = 'local' | 'proxy' | 'remote' | 'user';
 
-export interface PayloadWithOrigin<Origin = PayloadOrigin> {
+/**
+ * @public
+ */
+export interface PayloadWithOrigin<Origin extends PayloadOrigin = PayloadOrigin> {
   origin: Origin;
   payload: Payload;
 }
 
+/**
+ * @public
+ */
 export type LocalPayload = PayloadWithOrigin<'local'>;
 export type NotFoundPayload = PayloadWithOrigin<'proxy'>;
-export type DefaultPayload = PayloadWithOrigin<'default'>;
+/**
+ * @public
+ */
 export interface RemotePayload extends PayloadWithOrigin<'remote'> {
   requestOptions: RequestPayload;
 }
+/**
+ * @public
+ */
 export type UserPayload = PayloadWithOrigin<'user'>;
 
 export type MockDataPatch = {
