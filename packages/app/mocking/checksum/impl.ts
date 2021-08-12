@@ -8,21 +8,12 @@ import { IMock } from '../model';
 import {
   ChecksumArgs,
   ChecksumReturn,
-  Spec,
   DefaultInclude,
-  BaseSpec,
-  MaybeAsync,
-  MethodSpec,
-  PathnameSpec,
-  BodySpec,
-  QuerySpec,
+  IncludableSpec,
   isFilter,
   isListing,
   ListOrFilter,
-  HeadersSpec,
-  ProtocolSpec,
-  HostnameSpec,
-  PortSpec,
+  FilterableSpec,
 } from './model';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +45,7 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'protocol',
-    await processSpec<ProtocolSpec>(spec.protocol, false, () => {
+    await processSpec<IncludableSpec>(spec.protocol, false, () => {
       return mock.request.protocol.toLowerCase();
     }),
     false,
@@ -62,7 +53,7 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'hostname',
-    await processSpec<HostnameSpec>(spec.hostname, false, async (spec) => {
+    await processSpec<FilterableSpec<string>>(spec.hostname, false, async (spec) => {
       const filter = spec.filter ?? identity;
       return await filter(mock.request.hostname.toLowerCase());
     }),
@@ -71,7 +62,7 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'port',
-    await processSpec<PortSpec>(spec.port, false, () => {
+    await processSpec<IncludableSpec>(spec.port, false, () => {
       return mock.request.port;
     }),
     false,
@@ -79,14 +70,14 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'method',
-    await processSpec<MethodSpec>(spec.method, false, () => {
+    await processSpec<IncludableSpec>(spec.method, false, () => {
       return mock.request.method.toLowerCase();
     }),
   );
 
   push(
     'pathname',
-    await processSpec<PathnameSpec>(spec.pathname, false, async (spec) => {
+    await processSpec<FilterableSpec<string>>(spec.pathname, false, async (spec) => {
       const filter = spec.filter ?? identity;
       return await filter(mock.request.pathname);
     }),
@@ -94,7 +85,7 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'body',
-    await processSpec<BodySpec>(spec.body, true, async (spec) => {
+    await processSpec<FilterableSpec<Buffer, Buffer | string>>(spec.body, true, async (spec) => {
       const filter = spec.filter ?? identity;
       return (await filter(mock.request.body)).toString();
     }),
@@ -102,14 +93,14 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'query',
-    await processSpec<QuerySpec>(spec.query, true, async (spec) => {
+    await processSpec<ListOrFilter>(spec.query, true, async (spec) => {
       return await processList(spec, mock.request.queryParameters, true);
     }),
   );
 
   push(
     'headers',
-    await processSpec<HeadersSpec>(spec.headers, false, async (spec) => {
+    await processSpec<ListOrFilter>(spec.headers, false, async (spec) => {
       return await processList(spec, mock.request.headers, false);
     }),
   );
@@ -127,7 +118,7 @@ export async function processList(
   let output;
 
   if (isFilter(spec)) {
-    output = await spec.filter(input);
+    output = await spec.filter!(input);
   } else {
     const caseSensitive = spec.caseSensitive ?? defaultCaseSensitive;
     let properties;
@@ -168,17 +159,17 @@ export async function processList(
 ////////////////////////////////////////////////////////////////////////////////
 
 export async function processSpec<SpecType>(
-  spec: Spec<SpecType>,
+  spec: SpecType | boolean | undefined,
   includedByDefault: DefaultInclude,
-  process: (spec: SpecType) => MaybeAsync<string>,
+  process: (spec: SpecType) => string | Promise<string>,
 ): Promise<string | null> {
   const newSpec = normalizeSpec(spec, includedByDefault);
   if (!newSpec.include) return null;
   return await process(newSpec);
 }
 
-export function normalizeSpec<SpecType extends BaseSpec>(
-  spec: Spec<SpecType>,
+export function normalizeSpec<SpecType extends IncludableSpec>(
+  spec: SpecType | boolean | undefined,
   defaultValue?: DefaultInclude,
 ): any {
   if (spec === true) return { include: true };

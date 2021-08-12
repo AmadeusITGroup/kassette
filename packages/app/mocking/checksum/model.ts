@@ -4,121 +4,40 @@ import * as crypto from 'crypto';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @public
- */
-export type MaybeAsync<Type> = Type | Promise<Type>;
-
-////////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @public
- */
-export type Include = boolean | undefined;
-
 export type DefaultInclude = boolean | null | undefined;
 
 /**
  * @public
  */
-export interface BaseSpec {
-  include?: Include;
+export interface IncludableSpec {
+  include?: boolean;
 }
 
 /**
  * @public
  */
-export type Spec<Specific> = Include | Specific;
-
-////////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @public
- */
-export type ProtocolSpec = BaseSpec;
-
-/**
- * @public
- */
-export interface HostnameSpec extends BaseSpec {
-  filter?(hostname: string): MaybeAsync<string>;
+export interface FilterableSpec<I, O = I> extends IncludableSpec {
+  filter?(input: I): O | Promise<O>;
 }
 
 /**
  * @public
  */
-export type PortSpec = BaseSpec;
+export type ListOrFilter =
+  | FilterableSpec<Record<string, any>, any>
+  | (IncludableSpec & { caseSensitive?: boolean } & (
+        | {}
+        | {
+            mode?: 'whitelist' | 'blacklist';
+            keys: string[];
+          }
+      ));
 
-/**
- * @public
- */
-export type MethodSpec = BaseSpec;
-
-/**
- * @public
- */
-export interface PathnameSpec extends BaseSpec {
-  filter?(pathname: string): MaybeAsync<string>;
-}
-
-/**
- * @public
- */
-export interface BodySpec extends BaseSpec {
-  filter?(body: Buffer): MaybeAsync<Buffer | string>;
-}
-
-/**
- * @public
- */
-export type ListMode = 'whitelist' | 'blacklist';
-
-/**
- * @public
- */
-export interface MapSpec extends BaseSpec {
-  caseSensitive?: boolean;
-}
-
-/**
- * @public
- */
-export interface ListSpec extends MapSpec {
-  mode?: ListMode;
-  keys: string[];
-}
-
-/**
- * @public
- */
-export interface FilterSpec extends BaseSpec {
-  filter(values: Record<string, any>): Record<string, any>;
-}
-
-/**
- * @public
- */
-export type ListOrFilter = FilterSpec | MapSpec | ListSpec;
-
-/**
- * @public
- */
-export type QuerySpec = ListOrFilter;
-
-/**
- * @public
- */
-export type HeadersSpec = ListOrFilter;
-
-export function isFilter(value: any): value is FilterSpec {
+export function isFilter(value: any): value is FilterableSpec<any> {
   return value.filter != null;
 }
 
-export function isListing(value: any): value is ListSpec {
+export function isListing(value: any): value is ListOrFilter & { keys: string[] } {
   return value.keys != null;
 }
 
@@ -133,14 +52,14 @@ export interface ChecksumArgs {
   type?: string;
   format?: crypto.BinaryToTextEncoding;
 
-  protocol?: Spec<ProtocolSpec>;
-  hostname?: Spec<HostnameSpec>;
-  port?: Spec<PortSpec>;
-  method?: Spec<MethodSpec>;
-  pathname?: Spec<PathnameSpec>;
-  body?: Spec<BodySpec>;
-  query?: Spec<QuerySpec>;
-  headers?: Spec<HeadersSpec>;
+  protocol?: IncludableSpec | boolean;
+  hostname?: FilterableSpec<string> | boolean;
+  port?: IncludableSpec | boolean;
+  method?: IncludableSpec | boolean;
+  pathname?: FilterableSpec<string> | boolean;
+  body?: FilterableSpec<Buffer, Buffer | string> | boolean;
+  query?: ListOrFilter | boolean;
+  headers?: ListOrFilter | boolean;
 
   customData?: any | null;
 }
