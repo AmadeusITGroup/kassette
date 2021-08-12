@@ -17,15 +17,11 @@ export * from './proxy/model';
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @public
- */
-export type Headers = { [key in string]: string | string[] | number | null };
-/**
  * A map from strings to strings or array of strings
  *
  * @public
  */
-export type ReadOnlyHeaders = Readonly<Headers>;
+export type Headers = Record<string, string | string[] | number | null>;
 
 /**
  * The response status
