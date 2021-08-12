@@ -53,14 +53,14 @@ export interface IMock {
   readonly options: MockingOptions;
 
   readonly mode: Mode;
-  setMode: (mode: Mode | null) => void;
+  setMode(mode: Mode | null): void;
   readonly remoteURL: string | null;
-  setRemoteURL: (url: string | null) => void;
+  setRemoteURL(url: string | null): void;
   readonly delay: number;
-  setDelay: (delay: Delay | null) => void;
+  setDelay(delay: Delay | null): void;
   /** The root folder of all mocks, from which specific mocks paths will be resolved (resolved against `options.root`) */
   readonly mocksFolder: string;
-  setMocksFolder: (value: NonSanitizedArray<string> | null) => void;
+  setMocksFolder(value: NonSanitizedArray<string> | null): void;
 
   /** The local path — relative to `mocksFolder` — of the mock, which is either the one set by the user through `setLocalPath` or the `defaultLocalPath` */
   readonly localPath: string;
@@ -76,32 +76,32 @@ export interface IMock {
   checksum(spec: ChecksumArgs): Promise<string>;
 
   /** Sets the local path of the mock */
-  setLocalPath: (
+  setLocalPath(
     /** Any combination of values and array of values, which will eventually all be flattened, converted to strings and joined to build a path */
     pathParts: NonSanitizedArray<string>,
-  ) => void;
+  ): void;
   /** Tells if the mock exists locally or not */
-  hasLocalFiles: () => Promise<boolean>;
-  hasNoLocalFiles: () => Promise<boolean>;
+  hasLocalFiles(): Promise<boolean>;
+  hasNoLocalFiles(): Promise<boolean>;
 
-  readLocalPayload: () => Promise<LocalPayload | UserPayload | undefined>;
-  persistPayload: (payload: PayloadWithOrigin) => Promise<void>;
-  fetchPayload: () => Promise<RemotePayload>;
-  createPayload: (payload: Payload) => UserPayload;
-  setPayload: (payload: LocalPayload | UserPayload) => void;
+  readLocalPayload(): Promise<LocalPayload | UserPayload | undefined>;
+  persistPayload(payload: PayloadWithOrigin): Promise<void>;
+  fetchPayload(): Promise<RemotePayload>;
+  createPayload(payload: Payload): UserPayload;
+  setPayload(payload: LocalPayload | UserPayload): void;
 
-  downloadPayload: () => Promise<RemotePayload>;
-  readOrDownloadPayload: () => Promise<LocalPayload | UserPayload | RemotePayload>;
-  readOrFetchPayload: () => Promise<LocalPayload | UserPayload | RemotePayload>;
+  downloadPayload(): Promise<RemotePayload>;
+  readOrDownloadPayload(): Promise<LocalPayload | UserPayload | RemotePayload>;
+  readOrFetchPayload(): Promise<LocalPayload | UserPayload | RemotePayload>;
 
   sourcePayload: PayloadWithOrigin | undefined;
-  fillResponseFromPayload: (payload: PayloadWithOrigin) => void;
-  getPayloadAndFillResponse: () => Promise<void>;
-  readLocalPayloadAndFillResponse: () => Promise<boolean>;
+  fillResponseFromPayload(payload: PayloadWithOrigin): void;
+  getPayloadAndFillResponse(): Promise<void>;
+  readLocalPayloadAndFillResponse(): Promise<boolean>;
 
-  sendResponse: () => Promise<void>;
+  sendResponse(): Promise<void>;
   /** Processes the input request to manage the mock and fill in the response, using user configuration */
-  process: () => Promise<void>;
+  process(): Promise<void>;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

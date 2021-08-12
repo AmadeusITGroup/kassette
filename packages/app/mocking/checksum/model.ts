@@ -45,7 +45,7 @@ export type ProtocolSpec = BaseSpec;
  * @public
  */
 export interface HostnameSpec extends BaseSpec {
-  filter?: (hostname: string) => MaybeAsync<string>;
+  filter?(hostname: string): MaybeAsync<string>;
 }
 
 /**
@@ -62,14 +62,14 @@ export type MethodSpec = BaseSpec;
  * @public
  */
 export interface PathnameSpec extends BaseSpec {
-  filter?: (pathname: string) => MaybeAsync<string>;
+  filter?(pathname: string): MaybeAsync<string>;
 }
 
 /**
  * @public
  */
 export interface BodySpec extends BaseSpec {
-  filter?: (body: Buffer) => MaybeAsync<Buffer | string>;
+  filter?(body: Buffer): MaybeAsync<Buffer | string>;
 }
 
 /**
@@ -103,7 +103,7 @@ export type ObjectMap = {
  * @public
  */
 export interface FilterSpec extends BaseSpec {
-  filter: (values: ObjectMap) => ObjectMap;
+  filter(values: ObjectMap): ObjectMap;
 }
 
 /**
