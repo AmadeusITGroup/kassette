@@ -14,7 +14,7 @@ import {
   RequestPayload,
 } from '../server/model';
 
-import { Console } from '../logger/model';
+import { ConsoleSpec } from '../logger/model';
 import { ChecksumArgs } from './checksum/model';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ import { ChecksumArgs } from './checksum/model';
  */
 export interface HookAPI {
   mock: IMock;
-  console: Console;
+  console: ConsoleSpec;
 }
 
 /**

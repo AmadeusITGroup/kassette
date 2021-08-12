@@ -5,7 +5,7 @@
 /**
  * @public
  */
-export interface Console {
+export interface ConsoleSpec {
   log(message: any): void;
   error(message: any): void;
 }

@@ -9,7 +9,7 @@ import { safeBuildString } from '../../lib/string';
 
 // -------------------------------------------------------------------- internal
 
-import { Console, LogPayload, ErrorLogPayload, StringChunk } from './model';
+import { ConsoleSpec, LogPayload, ErrorLogPayload, StringChunk } from './model';
 
 // ------------------------------------------------------------------------ conf
 
@@ -19,12 +19,12 @@ import CONF from './conf';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-let userConsole: Console | null = null;
-export function getConsole(): Console {
+let userConsole: ConsoleSpec | null = null;
+export function getConsole(): ConsoleSpec {
   return userConsole != null ? userConsole : console;
 }
 
-export function createGlobalLogger(console: Console) {
+export function createGlobalLogger(console: ConsoleSpec) {
   userConsole = console;
 }
 
