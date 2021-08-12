@@ -1,7 +1,3 @@
-// ---------------------------------------------------------------------- common
-
-import { ImmutableFullyOptional } from '../../lib/interfaces';
-
 // ------------------------------------------------------------------------- app
 
 import { HookFunction } from '../mocking';
@@ -70,12 +66,12 @@ export interface BaseConfigurationSpec extends BaseCLIConfigurationSpec {
 /**
  * @internal
  */
-export type CLIConfigurationSpec = ImmutableFullyOptional<BaseCLIConfigurationSpec>;
+export type CLIConfigurationSpec = Readonly<Partial<BaseCLIConfigurationSpec>>;
 
 /**
  * @public
  */
-export type ConfigurationSpec = ImmutableFullyOptional<BaseConfigurationSpec>;
+export type ConfigurationSpec = Readonly<Partial<BaseConfigurationSpec>>;
 
 ////////////////////////////////////////////////////////////////////////////////
 //

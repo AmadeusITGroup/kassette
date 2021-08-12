@@ -72,4 +72,3 @@ export {
 } from './app';
 export { JSONData } from './lib/json';
 export { NonSanitizedArray, RecursiveArray } from './lib/array';
-export { ReadOnlyStringsMap, ImmutableFullyOptional, StringsMap } from './lib/interfaces';

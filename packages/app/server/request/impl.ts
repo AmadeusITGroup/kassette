@@ -6,7 +6,6 @@ import { URL } from 'url';
 
 // ---------------------------------------------------------------------- common
 
-import { ReadOnlyStringsMap } from '../../../lib/interfaces';
 import { CachedProperty } from '../../../lib/oop';
 import { fromPairs } from '../../../lib/object';
 
@@ -60,7 +59,7 @@ export class Request implements IFetchedRequest {
   }
 
   @CachedProperty()
-  get queryParameters(): ReadOnlyStringsMap {
+  get queryParameters(): Readonly<Record<string, string>> {
     return fromPairs(Array.from(this.url.searchParams.entries()));
   }
 
