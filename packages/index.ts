@@ -15,7 +15,7 @@ export {
   ConfigurationPropertySource,
   ConfigurationSpec,
   Connection,
-  Console,
+  ConsoleSpec,
   Delay,
   FilterSpec,
   Headers,

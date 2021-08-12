@@ -4,7 +4,7 @@ import { HookFunction } from '../mocking';
 import { OnProxyConnectFunction } from '../server/proxy';
 import { OnListenFunction, OnExitFunction } from '../server';
 
-import { Console } from '../logger';
+import { ConsoleSpec } from '../logger';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -60,7 +60,7 @@ export interface ConfigurationSpec extends CLIConfigurationSpec {
   readonly onProxyConnect?: OnProxyConnectFunction | null;
   readonly onListen?: OnListenFunction | null;
   readonly onExit?: OnExitFunction | null;
-  readonly console?: Console | null;
+  readonly console?: ConsoleSpec | null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ export interface IMergedConfiguration {
   readonly onListen: IConfigurationProperty<OnListenFunction>;
   readonly onProxyConnect: IConfigurationProperty<OnProxyConnectFunction>;
   readonly onExit: IConfigurationProperty<OnExitFunction>;
-  readonly console: IConfigurationProperty<Console>;
+  readonly console: IConfigurationProperty<ConsoleSpec>;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
