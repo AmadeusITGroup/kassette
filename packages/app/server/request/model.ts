@@ -4,10 +4,6 @@ import { IncomingMessage, IncomingHttpHeaders } from 'http';
 
 import { URL } from 'url';
 
-// ------------------------------------------------------------------------- app
-
-import { ReadOnlyStringsMap } from '../../../lib/interfaces';
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +25,7 @@ export interface IBaseRequest {
   /** The headers */
   readonly headers: IncomingHttpHeaders;
   /** The query parameters taken from the URL, as a read-only map of strings */
-  readonly queryParameters: ReadOnlyStringsMap;
+  readonly queryParameters: Readonly<Record<string, string>>;
   /** The protocol part of the URL, without the trailing `:` */
   readonly protocol: string;
   /** The hostname part of the URL */
