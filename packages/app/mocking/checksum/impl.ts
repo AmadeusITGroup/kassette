@@ -20,7 +20,6 @@ import {
   isListing,
   ListOrFilter,
   HeadersSpec,
-  ObjectMap,
   ProtocolSpec,
   HostnameSpec,
   PortSpec,
@@ -122,7 +121,7 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
 export async function processList(
   spec: ListOrFilter,
-  input: ObjectMap,
+  input: Record<string, any>,
   defaultCaseSensitive: boolean,
 ): Promise<string> {
   let output;
