@@ -6,13 +6,7 @@ import { NonSanitizedArray } from '../../lib/array';
 
 import { IMergedConfiguration, Mode, Delay } from '../configuration';
 
-import {
-  ReadOnlyHeaders,
-  Status,
-  IFetchedRequest,
-  IResponse,
-  RequestPayload,
-} from '../server/model';
+import { Headers, Status, IFetchedRequest, IResponse, RequestPayload } from '../server/model';
 
 import { ConsoleSpec } from '../logger/model';
 import { ChecksumArgs } from './checksum/model';
@@ -132,23 +126,18 @@ export interface MockSpec {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @public
- */
-export type PersistedStatus = Readonly<Status>;
-
-/**
  * The data representing the mock, which is persisted and used for serving the mock
  *
  * @public
  */
 export interface MockData {
   /** Recorded headers to be served back, without the ignored ones */
-  readonly headers: ReadOnlyHeaders;
+  readonly headers: Readonly<Headers>;
   /** Ignored headers */
-  readonly ignoredHeaders: ReadOnlyHeaders;
+  readonly ignoredHeaders: Readonly<Headers>;
   /** The name of the local file containing the body content (needed since the name is dynamic) */
   readonly bodyFileName: string;
-  readonly status: PersistedStatus;
+  readonly status: Readonly<Status>;
   readonly time: number;
   readonly creationDateTime: Date;
 }

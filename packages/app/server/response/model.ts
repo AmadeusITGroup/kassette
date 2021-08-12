@@ -8,7 +8,7 @@ import { JSONData } from '../../../lib/json';
 
 // -------------------------------------------------------------------- internal
 
-import { Status, ReadOnlyHeaders } from '../model';
+import { Status, Headers } from '../model';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -42,8 +42,8 @@ export interface IResponse {
   body: Body | null;
   setData(data: JSONData): void;
 
-  readonly headers: ReadOnlyHeaders;
-  setHeaders(headers: ReadOnlyHeaders): ReadOnlyHeaders;
+  readonly headers: Readonly<Headers>;
+  setHeaders(headers: Readonly<Headers>): Readonly<Headers>;
 
   /** Sends the response, applying some data previously specified but not set yet */
   send(): Promise<void>;

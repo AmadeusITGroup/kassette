@@ -10,7 +10,7 @@ import { logError } from '../../logger';
 
 // -------------------------------------------------------------------- internal
 
-import { ReadOnlyHeaders, Headers } from '../model';
+import { Headers } from '../model';
 
 import { IResponse, ResponseStatus, Body } from './model';
 
@@ -61,10 +61,10 @@ export class Response implements IResponse {
     this.body = data;
   }
 
-  get headers(): ReadOnlyHeaders {
+  get headers(): Readonly<Headers> {
     return this._headers;
   }
-  public setHeaders(headers: ReadOnlyHeaders): ReadOnlyHeaders {
+  public setHeaders(headers: Readonly<Headers>): Readonly<Headers> {
     return Object.assign(this._headers, headers);
   }
 
