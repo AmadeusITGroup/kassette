@@ -143,18 +143,11 @@ export interface MockData {
 }
 
 /**
- * The type representing the body content
- *
- * @public
- */
-export type MockBody = Buffer | string | null;
-
-/**
  * @public
  */
 export interface Payload {
   data: MockData;
-  body: MockBody;
+  body: Buffer | string | null;
 }
 
 /**
@@ -191,6 +184,6 @@ export type MockDataPatch = {
 };
 
 export interface PayloadPatch {
-  body?: MockBody;
+  body?: Buffer | string | null;
   data?: MockDataPatch;
 }
