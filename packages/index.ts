@@ -42,7 +42,6 @@ export {
   MockData,
   MockingOptions,
   Mode,
-  ObjectMap,
   OnExitFunction,
   OnListenFunction,
   OnListenProps,

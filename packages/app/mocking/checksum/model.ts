@@ -95,15 +95,8 @@ export interface ListSpec extends MapSpec {
 /**
  * @public
  */
-export type ObjectMap = {
-  [key in string]: any;
-};
-
-/**
- * @public
- */
 export interface FilterSpec extends BaseSpec {
-  filter(values: ObjectMap): ObjectMap;
+  filter(values: Record<string, any>): Record<string, any>;
 }
 
 /**
