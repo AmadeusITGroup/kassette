@@ -40,11 +40,11 @@ export interface IResponse {
 
   json: boolean;
   body: Body | null;
-  setData: (data: JSONData) => void;
+  setData(data: JSONData): void;
 
   readonly headers: ReadOnlyHeaders;
-  setHeaders: (headers: ReadOnlyHeaders) => ReadOnlyHeaders;
+  setHeaders(headers: ReadOnlyHeaders): ReadOnlyHeaders;
 
   /** Sends the response, applying some data previously specified but not set yet */
-  send: () => Promise<void>;
+  send(): Promise<void>;
 }
