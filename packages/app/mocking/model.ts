@@ -78,15 +78,15 @@ export interface IMock {
   hasLocalFiles(): Promise<boolean>;
   hasNoLocalFiles(): Promise<boolean>;
 
-  readLocalPayload(): Promise<LocalPayload | UserPayload | undefined>;
+  readLocalPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | undefined>;
   persistPayload(payload: PayloadWithOrigin): Promise<void>;
   fetchPayload(): Promise<RemotePayload>;
-  createPayload(payload: Payload): UserPayload;
-  setPayload(payload: LocalPayload | UserPayload): void;
+  createPayload(payload: Payload): PayloadWithOrigin<'user'>;
+  setPayload(payload: PayloadWithOrigin<'local' | 'user'>): void;
 
   downloadPayload(): Promise<RemotePayload>;
-  readOrDownloadPayload(): Promise<LocalPayload | UserPayload | RemotePayload>;
-  readOrFetchPayload(): Promise<LocalPayload | UserPayload | RemotePayload>;
+  readOrDownloadPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | RemotePayload>;
+  readOrFetchPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | RemotePayload>;
 
   sourcePayload: PayloadWithOrigin | undefined;
   fillResponseFromPayload(payload: PayloadWithOrigin): void;
@@ -166,18 +166,9 @@ export interface PayloadWithOrigin<Origin extends PayloadOrigin = PayloadOrigin>
 /**
  * @public
  */
-export type LocalPayload = PayloadWithOrigin<'local'>;
-export type NotFoundPayload = PayloadWithOrigin<'proxy'>;
-/**
- * @public
- */
 export interface RemotePayload extends PayloadWithOrigin<'remote'> {
   requestOptions: RequestPayload;
 }
-/**
- * @public
- */
-export type UserPayload = PayloadWithOrigin<'user'>;
 
 export type MockDataPatch = {
   -readonly [key in keyof MockData]+?: MockData[key];

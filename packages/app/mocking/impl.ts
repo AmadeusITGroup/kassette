@@ -38,10 +38,7 @@ import {
   MockData,
   PayloadWithOrigin,
   Payload,
-  LocalPayload,
-  NotFoundPayload,
   RemotePayload,
-  UserPayload,
 } from './model';
 
 import { computeChecksum } from './checksum/impl';
@@ -102,11 +99,11 @@ export class Mock implements IMock {
 
   public sourcePayload: PayloadWithOrigin | undefined;
 
-  private __localPayload: LocalPayload | UserPayload | undefined;
-  private get _localPayload(): LocalPayload | UserPayload | undefined {
+  private __localPayload: PayloadWithOrigin<'local' | 'user'> | undefined;
+  private get _localPayload(): PayloadWithOrigin<'local' | 'user'> | undefined {
     return this.__localPayload;
   }
-  private set _localPayload(payload: LocalPayload | UserPayload | undefined) {
+  private set _localPayload(payload: PayloadWithOrigin<'local' | 'user'> | undefined) {
     this.__localPayload = payload;
     this._delay.resetOutputCache();
   }
@@ -446,11 +443,11 @@ export class Mock implements IMock {
     };
   }
 
-  public createPayload(payload: Payload): UserPayload {
+  public createPayload(payload: Payload): PayloadWithOrigin<'user'> {
     return { origin: 'user', payload };
   }
 
-  public async readLocalPayload(): Promise<LocalPayload | UserPayload | undefined> {
+  public async readLocalPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | undefined> {
     if (this._localPayload != null) {
       return this._localPayload;
     }
@@ -485,7 +482,7 @@ export class Mock implements IMock {
     });
   }
 
-  private async _getLocalPayload(): Promise<LocalPayload | UserPayload | NotFoundPayload> {
+  private async _getLocalPayload(): Promise<PayloadWithOrigin<'local' | 'user' | 'proxy'>> {
     this.logInfo({ message: CONF.messages.servingMockDirectly });
 
     if (this._localPayload != null) {
@@ -547,7 +544,9 @@ export class Mock implements IMock {
     return remotePayload;
   }
 
-  public async readOrDownloadPayload(): Promise<LocalPayload | UserPayload | RemotePayload> {
+  public async readOrDownloadPayload(): Promise<
+    PayloadWithOrigin<'local' | 'user'> | RemotePayload
+  > {
     const localPayload = await this.readLocalPayload();
     if (localPayload != null) {
       this.logInfo({ message: CONF.messages.alreadyExistingMock });
@@ -558,7 +557,7 @@ export class Mock implements IMock {
     return this.downloadPayload();
   }
 
-  public async readOrFetchPayload(): Promise<LocalPayload | UserPayload | RemotePayload> {
+  public async readOrFetchPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | RemotePayload> {
     const localPayload = await this.readLocalPayload();
     if (localPayload != null) {
       this.logInfo({ message: CONF.messages.alreadyExistingMock });
@@ -569,7 +568,7 @@ export class Mock implements IMock {
     return this.fetchPayload();
   }
 
-  public setPayload(payload: LocalPayload | UserPayload) {
+  public setPayload(payload: PayloadWithOrigin<'local' | 'user'>) {
     this._localPayload = payload;
   }
 

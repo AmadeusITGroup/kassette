@@ -28,7 +28,6 @@ export {
   IProxyConnectAPI,
   IResponse,
   ListOrFilter,
-  LocalPayload,
   MockData,
   MockingOptions,
   Mode,
@@ -48,7 +47,6 @@ export {
   runFromCLI, // internal
   RunResult,
   Status,
-  UserPayload,
 } from './app';
 export { JSONData } from './lib/json';
 export { NonSanitizedArray, RecursiveArray } from './lib/array';
