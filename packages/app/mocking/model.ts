@@ -41,7 +41,7 @@ export type HookFunction = (parameters: HookAPI) => void | Promise<void>;
 /**
  * The public interface exposed to the end user to handle a given request and the associated mock and response.
  *
- * An object implementing this interface is passed to the {@link BaseConfigurationSpec.hook|hook} function, under property `mock` of the single argument object.
+ * An object implementing this interface is passed to the {@link ConfigurationSpec.hook|hook} function, under property `mock` of the single argument object.
  *
  * @public
  */

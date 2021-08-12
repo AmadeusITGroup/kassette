@@ -6,13 +6,11 @@
 
 export {
   APIOptions,
-  BaseCLIConfigurationSpec,
-  BaseConfigurationSpec,
   BaseSpec,
   Body,
   BodySpec,
   ChecksumArgs,
-  CLIConfigurationSpec, // internal
+  CLIConfigurationSpec,
   CLIOptions, // internal
   ConfigurationPropertySource,
   ConfigurationSpec,
