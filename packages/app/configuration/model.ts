@@ -37,16 +37,16 @@ export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
  *
  * @public
  */
-export interface BaseCLIConfigurationSpec {
-  skipLog: boolean;
-  port: number;
-  hostname: string;
-  mode: Mode;
-  delay: Delay;
-  mocksFolder: string;
-  remoteURL: string;
-  proxyConnectMode: ProxyConnectMode;
-  tlsCAKeyPath: string;
+export interface CLIConfigurationSpec {
+  readonly skipLog?: boolean | null;
+  readonly port?: number | null;
+  readonly hostname?: string | null;
+  readonly mode?: Mode | null;
+  readonly delay?: Delay | null;
+  readonly mocksFolder?: string | null;
+  readonly remoteURL?: string | null;
+  readonly proxyConnectMode?: ProxyConnectMode | null;
+  readonly tlsCAKeyPath?: string | null;
 }
 
 /**
@@ -55,23 +55,13 @@ export interface BaseCLIConfigurationSpec {
  *
  * @public
  */
-export interface BaseConfigurationSpec extends BaseCLIConfigurationSpec {
-  readonly hook?: HookFunction | null | undefined;
-  readonly onProxyConnect?: OnProxyConnectFunction | null | undefined;
-  readonly onListen?: OnListenFunction | null | undefined;
-  readonly onExit?: OnExitFunction | null | undefined;
-  readonly console?: Console | null | undefined;
+export interface ConfigurationSpec extends CLIConfigurationSpec {
+  readonly hook?: HookFunction | null;
+  readonly onProxyConnect?: OnProxyConnectFunction | null;
+  readonly onListen?: OnListenFunction | null;
+  readonly onExit?: OnExitFunction | null;
+  readonly console?: Console | null;
 }
-
-/**
- * @internal
- */
-export type CLIConfigurationSpec = Readonly<Partial<BaseCLIConfigurationSpec>>;
-
-/**
- * @public
- */
-export type ConfigurationSpec = Readonly<Partial<BaseConfigurationSpec>>;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
