@@ -19,7 +19,6 @@ export {
   Headers,
   HookAPI,
   HookFunction,
-  IBaseRequest,
   IConfigurationProperty,
   IFetchedRequest,
   IMergedConfiguration,

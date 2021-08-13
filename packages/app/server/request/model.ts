@@ -13,7 +13,7 @@ import { URL } from 'url';
  *
  * @public
  */
-export interface IBaseRequest {
+export interface IFetchedRequest {
   /** The original Node.js object representing the request */
   readonly original: IncomingMessage;
   /** The connections stack */
@@ -36,17 +36,6 @@ export interface IBaseRequest {
   readonly method: string;
   /** The path part of the URL */
   readonly pathname: string;
-}
-
-export interface IRequest extends IBaseRequest {
-  /** Returns the body content */
-  body(): Promise<Buffer>;
-}
-
-/**
- * @public
- */
-export interface IFetchedRequest extends IBaseRequest {
   /** The body content */
   readonly body: Buffer;
 }
