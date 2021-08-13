@@ -80,7 +80,7 @@ If you want to install it locally though, you need to add one more step. You won
 
 ## User documentation
 
-It is advised to start with the [_Getting started_](./doc/getting-started.md) article which describes a few practical usage examples, then check the reference for the [configuration](./doc/configuration.md) and the [API](./doc/api.md).
+It is advised to start with the [_Getting started_](./doc/getting-started.md) article which describes a few practical usage examples, then check the [configuration guide](./doc/configuration.md) and the [API guide](./doc/api.md). The [API reference](https://amadeusitgroup.github.io/kassette/kassette.html) is also available.
 
 ## Developing / Contributing
 
