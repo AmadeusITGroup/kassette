@@ -114,7 +114,7 @@ The passed configuration object can define all configuration values described be
   Note that kassette accepts both `http` and `https` connections on this port.
 
 - `onListen`: callback called when the proxy is started and listening. Receives an object `{port}`, containing the port on which the proxy is listening.
-- `onExit`: callback called when the proxy is programatically closed, using the callback returned from `runFromAPI`
+- `onExit`: callback called when the proxy is programmatically closed, using the callback returned from `runFromAPI`
 - `tlsCAKeyPath`: path to a [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail)-encoded CA (Certificate Authority) certificate and key file, created if it does not exist. If not provided, the certificate and key are generated but only kept in memory. You can optionally import in the browser the TLS certificate from this file in order to remove the warning when connecting to HTTPS websites through kassette. This certificate and key are used as needed to sign certificates generated on the fly for any HTTPS connection intercepted by kassette.
 
 <a id="markdown-global-mock-defaults" name="global-mock-defaults"></a>

@@ -295,8 +295,8 @@ Most of the APIs accept and return a wrapped payload, which has the following pr
 - `origin`: the source of the payload, which can have these values:
   - `'local'`: if the payload was read from local mock
   - `'remote'`: if the payload was fetched from the remote backend by forwarding the request
-  - `'default'`: if the payload has been created from the default/empty payload, notably used in `'local'` mode
   - `'user'`: if the payload has been created from the user, manually using `createPayload(payload)`
+  - `'proxy'`: if the payload has been created from kassette itself, especially for `404 Not found` errors (in `'local'` mode) and `502 Bad Gateway` errors (when kassette cannot reach the remote server)
 
 ### Creating payloads
 

@@ -3,10 +3,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Console with logging methods.
  * @public
  */
 export interface ConsoleSpec {
+  /**
+   * Logs a message.
+   * @param message - message to log
+   */
   log(message: any): void;
+
+  /**
+   * Logs an error message.
+   * @param message - error message to log
+   */
   error(message: any): void;
 }
 

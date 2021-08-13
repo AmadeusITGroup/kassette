@@ -153,7 +153,8 @@ export async function _run(configuration: IMergedConfiguration | null): Promise<
 /**
  * Launch the proxy programmatically.
  *
- * @returns a callback that can be used to shutdown the proxy, calling the `onExit` callback defined in configuration (if provided).
+ * @param options - kassette configuration options
+ * @returns a callback that can be used to shutdown the proxy, calling the {@link ConfigurationSpec.onExit|onExit} callback defined in configuration (if provided).
  *
  * @public
  */

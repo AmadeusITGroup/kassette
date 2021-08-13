@@ -57,11 +57,33 @@ export interface CLIOptions {
 }
 
 /**
+ * Specifies the argument expected to start kassette programmatically with {@link runFromAPI}.
+ *
  * @public
  */
 export interface APIOptions {
+  /**
+   * kassette configuration passed through the API.
+   *
+   * @remarks
+   *
+   * If {@link APIOptions.configurationPath|configurationPath} is also specified, both configurations are merged,
+   * but `apiConfiguration` has the least precedence.
+   * However, this object is also forwarded to the configuration file's {@link IConfigurationFile.getConfiguration|getConfiguration}
+   * method, as {@link GetConfigurationProps.apiConfiguration|apiConfiguration}, so you can apply your own logic to determine what configuration
+   * to actually use.
+   */
   readonly apiConfiguration: ConfigurationSpec;
+
+  /**
+   * Path to a configuration file, if the configuration should be loaded from a configuration file.
+   */
   readonly configurationPath?: string;
+
+  /**
+   * Specifies the context argument passed to the {@link IConfigurationFile.getConfiguration|getConfiguration} function defined in the
+   * configuration file (only used if {@link APIOptions.configurationPath|configurationPath} is specified).
+   */
   readonly fileConfigurationContext?: any;
 }
 
