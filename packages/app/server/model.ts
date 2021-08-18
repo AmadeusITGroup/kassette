@@ -81,18 +81,3 @@ export type RunResult = () => void;
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @public
- */
-export interface OnListenProps {
-  port: number;
-}
-/**
- * @public
- */
-export type OnListenFunction = (parameters: OnListenProps) => void;
-/**
- * @public
- */
-export type OnExitFunction = () => void;

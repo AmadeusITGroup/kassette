@@ -41,8 +41,3 @@ export interface IProxyConnectAPI {
   /** Processes the socket according to the mode stored in mode. This method is called automatically when the onProxyConnect function finishes, but it can also be called manually before. */
   process(): void;
 }
-
-/**
- * @public
- */
-export type OnProxyConnectFunction = (parameters: IProxyConnectAPI) => void | Promise<void>;
