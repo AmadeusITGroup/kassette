@@ -1,8 +1,7 @@
 // ------------------------------------------------------------------------- app
 
-import { HookFunction } from '../mocking';
-import { OnProxyConnectFunction } from '../server/proxy';
-import { OnListenFunction, OnExitFunction } from '../server';
+import { HookAPI } from '../mocking';
+import { IProxyConnectAPI } from '../server/proxy';
 
 import { ConsoleSpec } from '../logger';
 
@@ -38,14 +37,14 @@ export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
  * @public
  */
 export interface CLIConfigurationSpec {
-  readonly skipLog?: boolean | null;
-  readonly port?: number | null;
-  readonly hostname?: string | null;
-  readonly mode?: Mode | null;
-  readonly delay?: Delay | null;
-  readonly mocksFolder?: string | null;
+  readonly skipLog?: boolean;
+  readonly port?: number;
+  readonly hostname?: string;
+  readonly mode?: Mode;
+  readonly delay?: Delay;
+  readonly mocksFolder?: string;
   readonly remoteURL?: string | null;
-  readonly proxyConnectMode?: ProxyConnectMode | null;
+  readonly proxyConnectMode?: ProxyConnectMode;
   readonly tlsCAKeyPath?: string | null;
 }
 
@@ -56,11 +55,11 @@ export interface CLIConfigurationSpec {
  * @public
  */
 export interface ConfigurationSpec extends CLIConfigurationSpec {
-  readonly hook?: HookFunction | null;
-  readonly onProxyConnect?: OnProxyConnectFunction | null;
-  readonly onListen?: OnListenFunction | null;
-  readonly onExit?: OnExitFunction | null;
-  readonly console?: ConsoleSpec | null;
+  hook?(parameters: HookAPI): void | Promise<void>;
+  onProxyConnect?(parameters: IProxyConnectAPI): void | Promise<void>;
+  onListen?(parameters: { port: number }): void;
+  onExit?(): void;
+  readonly console?: ConsoleSpec;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -104,27 +103,14 @@ export interface ConfigurationPropertySpec<PropertyType> {
  *
  * @public
  */
-export interface IMergedConfiguration {
+export type IMergedConfiguration = {
   /**
    * The path of the configuration file
    */
   readonly filePath: string | null;
-
-  readonly skipLog: IConfigurationProperty<boolean>;
-  readonly hostname: IConfigurationProperty<string>;
-  readonly port: IConfigurationProperty<number>;
-  readonly mode: IConfigurationProperty<Mode>;
-  readonly proxyConnectMode: IConfigurationProperty<ProxyConnectMode>;
-  readonly delay: IConfigurationProperty<Delay>;
-  readonly mocksFolder: IConfigurationProperty<string>;
-  readonly remoteURL: IConfigurationProperty<string | null>;
-  readonly tlsCAKeyPath: IConfigurationProperty<string | null>;
-  readonly hook: IConfigurationProperty<HookFunction>;
-  readonly onListen: IConfigurationProperty<OnListenFunction>;
-  readonly onProxyConnect: IConfigurationProperty<OnProxyConnectFunction>;
-  readonly onExit: IConfigurationProperty<OnExitFunction>;
-  readonly console: IConfigurationProperty<ConsoleSpec>;
-}
+} & {
+  readonly [k in keyof ConfigurationSpec]-?: IConfigurationProperty<Required<ConfigurationSpec>[k]>;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
