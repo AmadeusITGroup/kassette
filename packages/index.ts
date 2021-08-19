@@ -39,7 +39,6 @@ export {
   ResponseStatus,
   runFromAPI,
   runFromCLI, // internal
-  RunResult,
   Status,
 } from './app';
 export { JSONData } from './lib/json';
