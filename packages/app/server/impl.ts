@@ -18,7 +18,7 @@ import { Mock } from '../mocking';
 
 // -------------------------------------------------------------------- internal
 
-import { CLIOptions, APIOptions, RunResult, ApplicationData } from './model';
+import { CLIOptions, APIOptions, ApplicationData } from './model';
 
 import { Request } from './request';
 import { Response } from './response';
@@ -127,7 +127,7 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
 // Execution
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function _run(configuration: IMergedConfiguration | null): Promise<RunResult> {
+export async function _run(configuration: IMergedConfiguration | null): Promise<() => void> {
   if (configuration == null) {
     return () => {};
   }
@@ -157,13 +157,13 @@ export async function _run(configuration: IMergedConfiguration | null): Promise<
  *
  * @public
  */
-export async function runFromAPI(options: APIOptions): Promise<RunResult> {
+export async function runFromAPI(options: APIOptions): Promise<() => void> {
   return _run(await buildConfiguration(options));
 }
 
 /**
  * @internal
  */
-export async function runFromCLI(options: CLIOptions): Promise<RunResult> {
+export async function runFromCLI(options: CLIOptions): Promise<() => void> {
   return _run(await buildConfiguration(options));
 }
