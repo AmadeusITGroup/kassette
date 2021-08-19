@@ -116,12 +116,18 @@ export type IMergedConfiguration = {
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @public
+ */
 export interface GetConfigurationProps {
   cliConfiguration: CLIConfigurationSpec;
   apiConfiguration: ConfigurationSpec;
   context: any;
 }
 
+/**
+ * @public
+ */
 export interface IConfigurationFile {
   getConfiguration(arg: GetConfigurationProps): Promise<ConfigurationSpec>;
 }
