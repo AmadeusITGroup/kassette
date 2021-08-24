@@ -40,4 +40,4 @@ export {
   runFromCLI, // internal
   Status,
 } from './app';
-export { NonSanitizedArray, RecursiveArray } from './lib/array';
+export { RecursiveArray } from './lib/array';

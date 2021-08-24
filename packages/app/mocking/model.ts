@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------- common
 
-import { NonSanitizedArray } from '../../lib/array';
+import { RecursiveArray } from '../../lib/array';
 
 // ------------------------------------------------------------------------- app
 
@@ -45,7 +45,7 @@ export interface IMock {
   setDelay(delay: Delay | null): void;
   /** The root folder of all mocks, from which specific mocks paths will be resolved (resolved against `options.root`) */
   readonly mocksFolder: string;
-  setMocksFolder(value: NonSanitizedArray<string> | null): void;
+  setMocksFolder(value: RecursiveArray<string | null | undefined> | null): void;
 
   /** The local path — relative to `mocksFolder` — of the mock, which is either the one set by the user through `setLocalPath` or the `defaultLocalPath` */
   readonly localPath: string;
@@ -63,7 +63,7 @@ export interface IMock {
   /** Sets the local path of the mock */
   setLocalPath(
     /** Any combination of values and array of values, which will eventually all be flattened, converted to strings and joined to build a path */
-    pathParts: NonSanitizedArray<string>,
+    pathParts: RecursiveArray<string | null | undefined>,
   ): void;
   /** Tells if the mock exists locally or not */
   hasLocalFiles(): Promise<boolean>;
