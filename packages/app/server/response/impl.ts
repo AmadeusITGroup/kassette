@@ -4,15 +4,15 @@ import { ServerResponse } from 'http';
 
 // ---------------------------------------------------------------------- common
 
-import { stringifyPretty, JSONData } from '../../../lib/json';
+import { stringifyPretty } from '../../../lib/json';
 import { UserProperty } from '../../../lib/user-property';
 import { logError } from '../../logger';
 
 // -------------------------------------------------------------------- internal
 
-import { Headers } from '../model';
+import { Headers, Status } from '../model';
 
-import { IResponse, ResponseStatus, Body } from './model';
+import { IResponse } from './model';
 
 // ------------------------------------------------------------------------ conf
 
@@ -28,24 +28,24 @@ import CONF from './conf';
  * @param original The original response object (that can be retrieved through `original`)
  */
 export class Response implements IResponse {
-  private _body: Body | null;
+  private _body: any;
   private _json = new UserProperty({
     getDefaultInput: () => {
       const { body } = this;
       return body != null && typeof body !== 'string' && !Buffer.isBuffer(body);
     },
   });
-  public status: ResponseStatus = null;
+  public status: Partial<Readonly<Status>> | null = null;
 
   private _headers: Headers = {};
 
   constructor(public readonly original: ServerResponse) {}
 
-  set body(value: Body | null) {
+  set body(value: any) {
     this._body = value;
     this._json.resetInputCache();
   }
-  get body(): Body | null {
+  get body(): any {
     return this._body;
   }
 
@@ -56,7 +56,7 @@ export class Response implements IResponse {
     this._json.set(value);
   }
 
-  public setData(data: JSONData) {
+  public setData(data: any) {
     this.json = true;
     this.body = data;
   }

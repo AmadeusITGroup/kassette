@@ -2,10 +2,6 @@
 
 import { ServerResponse } from 'http';
 
-// ---------------------------------------------------------------------- common
-
-import { JSONData } from '../../../lib/json';
-
 // -------------------------------------------------------------------- internal
 
 import { Status, Headers } from '../model';
@@ -13,19 +9,6 @@ import { Status, Headers } from '../model';
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @public
- */
-export type RawBody = string | Buffer;
-/**
- * @public
- */
-export type Body = RawBody | JSONData;
-/**
- * @public
- */
-export type ResponseStatus = Partial<Readonly<Status>> | null;
 
 /**
  * A handier wrapper around a server response
@@ -36,11 +19,11 @@ export interface IResponse {
   /** The original Node.js object representing the response */
   readonly original: ServerResponse;
 
-  status: ResponseStatus;
+  status: Partial<Readonly<Status>> | null;
 
   json: boolean;
-  body: Body | null;
-  setData(data: JSONData): void;
+  body: any;
+  setData(data: any): void;
 
   readonly headers: Readonly<Headers>;
   setHeaders(headers: Readonly<Headers>): Readonly<Headers>;
