@@ -6,7 +6,6 @@
 
 export {
   APIOptions,
-  Body,
   ChecksumArgs,
   CLIConfigurationSpec,
   CLIOptions, // internal
@@ -35,13 +34,10 @@ export {
   PayloadOrigin,
   PayloadWithOrigin,
   ProxyConnectMode,
-  RawBody,
   RemotePayload,
   RequestPayload,
-  ResponseStatus,
   runFromAPI,
   runFromCLI, // internal
   Status,
 } from './app';
-export { JSONData } from './lib/json';
 export { NonSanitizedArray, RecursiveArray } from './lib/array';
