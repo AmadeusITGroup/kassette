@@ -49,7 +49,7 @@
     "@types/node-forge": "^0.10.3",
     "@types/yargs": "^17.0.2",
     "chai": "^4.2.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.2",
     "jest": "^27.0.6",
     "koa": "^2.6.2",
     "koa-router": "^10.1.1",
