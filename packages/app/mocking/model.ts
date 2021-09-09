@@ -54,9 +54,6 @@ export interface IMock {
   /** The full path of the mock */
   readonly mockFolderFullPath: string;
 
-  /** The hash of the mock (TBD) */
-  readonly hash: string;
-
   readonly checksumContent: string | null;
   checksum(spec: ChecksumArgs): Promise<string>;
 
