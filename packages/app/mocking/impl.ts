@@ -202,10 +202,6 @@ export class Mock implements IMock {
     return nodePath.join(this.mocksFolder, this.localPath);
   }
 
-  get hash(): string {
-    return getURLPathParts(this.request.url).join('/');
-  }
-
   public async hasLocalFiles(): Promise<boolean> {
     return this.dataFile.exists();
   }
