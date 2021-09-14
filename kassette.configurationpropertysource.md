@@ -4,9 +4,7 @@
 
 ## ConfigurationPropertySource type
 
-The id of the source of the resolved value, currently:
-
-- `cli`<!-- -->: the CLI input - `file`<!-- -->: the file configuration input - `default`<!-- -->: the default value
+The id of the source of the resolved value.
 
 <b>Signature:</b>
 

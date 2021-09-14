@@ -2,10 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [readLocalPayload](./kassette.imock.readlocalpayload.md)
 
-## IMock.readLocalPayload property
+## IMock.readLocalPayload() method
+
+Returns a wrapped payload built from data persisted in local files. If no local file is present, returns `undefined`<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
-readLocalPayload: () => Promise<LocalPayload | UserPayload | undefined>;
+readLocalPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | undefined>;
 ```
+<b>Returns:</b>
+
+Promise&lt;[PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'local' \| 'user'&gt; \| undefined&gt;
+

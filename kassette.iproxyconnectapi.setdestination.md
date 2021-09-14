@@ -4,7 +4,7 @@
 
 ## IProxyConnectAPI.setDestination() method
 
-Sets the destination hostname and port that will be used when the process method is called. Also changes the mode to 'forward'.
+Sets the destination [hostname](./kassette.iproxyconnectapi.destinationhostname.md) and [port](./kassette.iproxyconnectapi.destinationport.md) that will be used when the [process](./kassette.iproxyconnectapi.process.md) method is called. Also changes the [mode](./kassette.iproxyconnectapi.mode.md) to `forward`<!-- -->.
 
 <b>Signature:</b>
 

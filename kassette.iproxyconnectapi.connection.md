@@ -4,7 +4,7 @@
 
 ## IProxyConnectAPI.connection property
 
-The last connection in connectionsStack
+The last connection in [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md)
 
 <b>Signature:</b>
 

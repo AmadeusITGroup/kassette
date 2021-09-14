@@ -4,8 +4,10 @@
 
 ## Payload.body property
 
+Body of the HTTP response.
+
 <b>Signature:</b>
 
 ```typescript
-body: MockBody;
+body: Buffer | string | null;
 ```

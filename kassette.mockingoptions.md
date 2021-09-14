@@ -4,6 +4,7 @@
 
 ## MockingOptions interface
 
+Configuration options, including the root folder used to resolve relative paths and the current global configuration.
 
 <b>Signature:</b>
 
@@ -16,5 +17,5 @@ export interface MockingOptions
 |  Property | Type | Description |
 |  --- | --- | --- |
 |  [root](./kassette.mockingoptions.root.md) | string | The root folder from which to resolve given relative paths |
-|  [userConfiguration](./kassette.mockingoptions.userconfiguration.md) | [IMergedConfiguration](./kassette.imergedconfiguration.md) | The user configuration |
+|  [userConfiguration](./kassette.mockingoptions.userconfiguration.md) | [IMergedConfiguration](./kassette.imergedconfiguration.md) | The current global user configuration |
 

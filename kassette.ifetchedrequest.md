@@ -4,17 +4,28 @@
 
 ## IFetchedRequest interface
 
+A handier wrapper around a request
 
 <b>Signature:</b>
 
 ```typescript
-export interface IFetchedRequest extends IBaseRequest 
+export interface IFetchedRequest 
 ```
-<b>Extends:</b> [IBaseRequest](./kassette.ibaserequest.md)
 
 ## Properties
 
 |  Property | Type | Description |
 |  --- | --- | --- |
 |  [body](./kassette.ifetchedrequest.body.md) | Buffer | The body content |
+|  [connection](./kassette.ifetchedrequest.connection.md) | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in connectionsStack |
+|  [connectionsStack](./kassette.ifetchedrequest.connectionsstack.md) | readonly Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt;\[\] | The connections stack |
+|  [headers](./kassette.ifetchedrequest.headers.md) | IncomingHttpHeaders | The headers |
+|  [hostname](./kassette.ifetchedrequest.hostname.md) | string | The hostname part of the URL |
+|  [method](./kassette.ifetchedrequest.method.md) | string | The HTTP method |
+|  [original](./kassette.ifetchedrequest.original.md) | IncomingMessage | The original Node.js object representing the request |
+|  [pathname](./kassette.ifetchedrequest.pathname.md) | string | The path part of the URL |
+|  [port](./kassette.ifetchedrequest.port.md) | string | The port part of the URL |
+|  [protocol](./kassette.ifetchedrequest.protocol.md) | string | The protocol part of the URL, without the trailing <code>:</code> |
+|  [queryParameters](./kassette.ifetchedrequest.queryparameters.md) | Readonly&lt;Record&lt;string, string&gt;&gt; | The query parameters taken from the URL, as a read-only map of strings |
+|  [url](./kassette.ifetchedrequest.url.md) | URL | The URL |
 

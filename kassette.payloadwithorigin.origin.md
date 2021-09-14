@@ -4,6 +4,8 @@
 
 ## PayloadWithOrigin.origin property
 
+Origin of the payload.
+
 <b>Signature:</b>
 
 ```typescript

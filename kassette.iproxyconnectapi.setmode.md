@@ -4,7 +4,7 @@
 
 ## IProxyConnectAPI.setMode() method
 
-Changes the mode that will be used when the process method is called.
+Changes the [mode](./kassette.iproxyconnectapi.mode.md) that will be used when the [process](./kassette.iproxyconnectapi.process.md) method is called.
 
 <b>Signature:</b>
 

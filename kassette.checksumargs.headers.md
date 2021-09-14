@@ -4,8 +4,10 @@
 
 ## ChecksumArgs.headers property
 
+Specifies whether and how to include the headers in the hash. The default value is `false`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript
-headers?: Spec<HeadersSpec>;
+headers?: ListOrFilter | boolean;
 ```

@@ -4,10 +4,27 @@
 
 ## Mode type
 
-The main working mode of the proxy
+The main working mode of the proxy. It can be defined globally through the [mode](./kassette.cliconfigurationspec.mode.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMode](./kassette.imock.setmode.md)<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
 export declare type Mode = 'local' | 'remote' | 'download' | 'local_or_remote' | 'local_or_download' | 'manual';
 ```
+
+## Remarks
+
+The mode drives how [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md) and [process](./kassette.imock.process.md) will behave. Here are the possible modes:
+
+- `manual`<!-- -->: don't do anything, leaving the responsibility to the user to call proper APIs to manage local files and/or backend querying, and response filling
+
+- `remote`<!-- -->: forward the request to the remote backend and never touch the local mock
+
+- `download`<!-- -->: get payload from remote backend by forwarding request, create the local mock from this payload, and fill the response with it
+
+- `local_or_remote`<!-- -->: if local mock exists, read it and fill the response with it, if local mock doesn't exist, do as for `remote` mode
+
+- `local_or_download`<!-- -->: if local mock exists, read it and fill the response with it, if local mock doesn't exist, do as for `download` mode
+
+- `local`<!-- -->: if local mock exists, read it and fill the response with it, if local mock doesn't exist, create a minimal payload with a 404 status code, do not persist it and fill the response with it
+

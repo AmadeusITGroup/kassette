@@ -2,10 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [sendResponse](./kassette.imock.sendresponse.md)
 
-## IMock.sendResponse property
+## IMock.sendResponse() method
+
+Sends the response back to the client, with the previously specified delay if the payload origin is not `remote`<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
-sendResponse: () => Promise<void>;
+sendResponse(): Promise<void>;
 ```
+<b>Returns:</b>
+
+Promise&lt;void&gt;
+

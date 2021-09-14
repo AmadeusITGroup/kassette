@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [persistPayload](./kassette.imock.persistpayload.md)
 
-## IMock.persistPayload property
+## IMock.persistPayload() method
+
+Take the given wrapped payload and persist it in local files.
 
 <b>Signature:</b>
 
 ```typescript
-persistPayload: (payload: PayloadWithOrigin) => Promise<void>;
+persistPayload(payload: PayloadWithOrigin): Promise<void>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  payload | [PayloadWithOrigin](./kassette.payloadwithorigin.md) | payload to persist in local files |
+
+<b>Returns:</b>
+
+Promise&lt;void&gt;
+

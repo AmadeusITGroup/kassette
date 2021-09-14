@@ -4,7 +4,7 @@
 
 ## IMock.mockFolderFullPath property
 
-The full path of the mock
+The full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute.
 
 <b>Signature:</b>
 

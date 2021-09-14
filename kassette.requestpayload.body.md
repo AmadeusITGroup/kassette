@@ -4,6 +4,8 @@
 
 ## RequestPayload.body property
 
+HTTP request body
+
 <b>Signature:</b>
 
 ```typescript

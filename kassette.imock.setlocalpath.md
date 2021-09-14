@@ -2,13 +2,39 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [setLocalPath](./kassette.imock.setlocalpath.md)
 
-## IMock.setLocalPath property
+## IMock.setLocalPath() method
 
-Sets the local path of the mock
+Sets the [localPath](./kassette.imock.localpath.md) value.
 
 <b>Signature:</b>
 
 ```typescript
-setLocalPath: (
-    pathParts: NonSanitizedArray<string>) => void;
+setLocalPath(pathParts: RecursiveArray<string | null | undefined>): void;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  pathParts | [RecursiveArray](./kassette.recursivearray.md)<!-- -->&lt;string \| null \| undefined&gt; | Any combination of values and array of values, which will eventually all be flattened, converted to strings and joined to build a path. |
+
+<b>Returns:</b>
+
+void
+
+## Example 1
+
+The following example will use the HTTP method followed by the URL pathname:
+
+```
+mock.setLocalPath([mock.request.method, mock.request.pathname])
+```
+
+## Example 2
+
+The following example will concatenate `prefix`<!-- -->, all portions of the URL pathname except the first one (also excluding the very first one which is empty since [IFetchedRequest.pathname](./kassette.ifetchedrequest.pathname.md) has a leading slash) and optionally a suffix sequence depending on a boolean.
+
+```
+mock.setLocalPath([prefix, mock.request.pathname.split('/').slice(2), addSuffix ? [suffix, '-static-suffix'] : null])
+```
+

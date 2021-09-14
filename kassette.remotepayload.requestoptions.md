@@ -4,6 +4,8 @@
 
 ## RemotePayload.requestOptions property
 
+Request used to get this remote payload.
+
 <b>Signature:</b>
 
 ```typescript

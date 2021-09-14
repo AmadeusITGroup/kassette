@@ -4,8 +4,10 @@
 
 ## ChecksumArgs.method property
 
+Specifies whether to include the method in the hash. The default value is `false`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript
-method?: Spec<MethodSpec>;
+method?: IncludableSpec | boolean;
 ```

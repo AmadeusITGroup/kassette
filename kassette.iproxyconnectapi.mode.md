@@ -4,7 +4,7 @@
 
 ## IProxyConnectAPI.mode property
 
-The currently selected mode. Can be changed with setMode.
+The currently selected mode, configured either by a call to [setMode](./kassette.iproxyconnectapi.setmode.md) or by [the global setting](./kassette.cliconfigurationspec.proxyconnectmode.md)
 
 <b>Signature:</b>
 

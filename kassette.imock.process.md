@@ -2,12 +2,20 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [process](./kassette.imock.process.md)
 
-## IMock.process property
+## IMock.process() method
 
-Processes the input request to manage the mock and fill in the response, using user configuration
+Combines [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md) and [sendResponse](./kassette.imock.sendresponse.md)<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
-process: () => Promise<void>;
+process(): Promise<void>;
 ```
+<b>Returns:</b>
+
+Promise&lt;void&gt;
+
+## Remarks
+
+If [mode](./kassette.imock.mode.md) is `manual`<!-- -->, this method does nothing. It also uses a private guard to make sure it is executed only once. Therefore, if you call it from the [hook](./kassette.configurationspec.hook.md) method, the automatic call made for you after the hook execution will actually not do anything (and the same if you call it yourself multiple times).
+

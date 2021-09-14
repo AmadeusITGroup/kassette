@@ -4,8 +4,10 @@
 
 ## ChecksumArgs.body property
 
+Specifies whether and how to include the body of the request in the hash. The default value is `true`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript
-body?: Spec<BodySpec>;
+body?: FilterableSpec<Buffer, Buffer | string> | boolean;
 ```

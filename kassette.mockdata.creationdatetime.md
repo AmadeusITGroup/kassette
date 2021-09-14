@@ -4,6 +4,8 @@
 
 ## MockData.creationDateTime property
 
+Timestamp when the payload was created.
+
 <b>Signature:</b>
 
 ```typescript

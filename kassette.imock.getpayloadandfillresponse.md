@@ -2,10 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md)
 
-## IMock.getPayloadAndFillResponse property
+## IMock.getPayloadAndFillResponse() method
+
+Depending on the [mode](./kassette.imock.mode.md)<!-- -->, gets the payload (remote / local / default) and uses [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) with that payload. If [mode](./kassette.imock.mode.md) is `manual`<!-- -->, does nothing.
 
 <b>Signature:</b>
 
 ```typescript
-getPayloadAndFillResponse: () => Promise<void>;
+getPayloadAndFillResponse(): Promise<void>;
 ```
+<b>Returns:</b>
+
+Promise&lt;void&gt;
+

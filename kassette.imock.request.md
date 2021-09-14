@@ -4,7 +4,7 @@
 
 ## IMock.request property
 
-The wrapper around the input request (see `Request`<!-- -->)
+The wrapper around the input request
 
 <b>Signature:</b>
 

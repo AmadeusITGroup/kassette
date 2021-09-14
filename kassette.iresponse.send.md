@@ -2,12 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IResponse](./kassette.iresponse.md) &gt; [send](./kassette.iresponse.send.md)
 
-## IResponse.send property
+## IResponse.send() method
 
 Sends the response, applying some data previously specified but not set yet
 
 <b>Signature:</b>
 
 ```typescript
-send: () => Promise<void>;
+send(): Promise<void>;
 ```
+<b>Returns:</b>
+
+Promise&lt;void&gt;
+

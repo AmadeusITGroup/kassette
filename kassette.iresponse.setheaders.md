@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IResponse](./kassette.iresponse.md) &gt; [setHeaders](./kassette.iresponse.setheaders.md)
 
-## IResponse.setHeaders property
+## IResponse.setHeaders() method
+
+Merge given `headers` map with the previously set headers (initial set is an empty map).
 
 <b>Signature:</b>
 
 ```typescript
-setHeaders: (headers: ReadOnlyHeaders) => ReadOnlyHeaders;
+setHeaders(headers: Readonly<Headers>): Readonly<Headers>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  headers | Readonly&lt;[Headers](./kassette.headers.md)<!-- -->&gt; | Headers to set. Each header value can be a number, a string, or an array of strings. Put a <code>null</code> value to suppress a header |
+
+<b>Returns:</b>
+
+Readonly&lt;[Headers](./kassette.headers.md)<!-- -->&gt;
+

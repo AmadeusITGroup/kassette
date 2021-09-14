@@ -4,6 +4,7 @@
 
 ## RequestPayload interface
 
+Content of an HTTP request.
 
 <b>Signature:</b>
 
@@ -15,8 +16,8 @@ export interface RequestPayload
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [body](./kassette.requestpayload.body.md) | string \| Buffer |  |
-|  [headers](./kassette.requestpayload.headers.md) | IncomingHttpHeaders |  |
-|  [method](./kassette.requestpayload.method.md) | string |  |
-|  [url](./kassette.requestpayload.url.md) | string |  |
+|  [body](./kassette.requestpayload.body.md) | string \| Buffer | HTTP request body |
+|  [headers](./kassette.requestpayload.headers.md) | IncomingHttpHeaders | HTTP headers |
+|  [method](./kassette.requestpayload.method.md) | string | HTTP method |
+|  [url](./kassette.requestpayload.url.md) | string | HTTP url |
 

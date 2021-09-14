@@ -4,8 +4,15 @@
 
 ## APIOptions.apiConfiguration property
 
+kassette configuration passed through the API.
+
 <b>Signature:</b>
 
 ```typescript
 readonly apiConfiguration: ConfigurationSpec;
 ```
+
+## Remarks
+
+If [configurationPath](./kassette.apioptions.configurationpath.md) is also specified, both configurations are merged, but `apiConfiguration` has the least precedence. However, this object is also forwarded to the configuration file's [getConfiguration](./kassette.iconfigurationfile.getconfiguration.md) method, as [apiConfiguration](./kassette.getconfigurationprops.apiconfiguration.md)<!-- -->, so you can apply your own logic to determine what configuration to actually use.
+

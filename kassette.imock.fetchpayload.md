@@ -2,10 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [fetchPayload](./kassette.imock.fetchpayload.md)
 
-## IMock.fetchPayload property
+## IMock.fetchPayload() method
+
+Forward the client request to the remote backend and get a wrapped payload from the response in output.
 
 <b>Signature:</b>
 
 ```typescript
-fetchPayload: () => Promise<RemotePayload>;
+fetchPayload(): Promise<RemotePayload>;
 ```
+<b>Returns:</b>
+
+Promise&lt;[RemotePayload](./kassette.remotepayload.md)<!-- -->&gt;
+

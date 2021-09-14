@@ -4,11 +4,31 @@
 
 ## ListOrFilter type
 
+Type used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that has a map structure, such as the query and headers, to specify if and how they are included in the hash computed by the [checksum](./kassette.imock.checksum.md) method.
 
 <b>Signature:</b>
 
 ```typescript
-export declare type ListOrFilter = FilterSpec | MapSpec | ListSpec;
+export declare type ListOrFilter = FilterableSpec<Record<string, any>, any> | (IncludableSpec & {
+    caseSensitive?: boolean;
+} & ({} | {
+    mode?: 'whitelist' | 'blacklist';
+    keys: string[];
+}));
 ```
-<b>References:</b> [FilterSpec](./kassette.filterspec.md)<!-- -->, [MapSpec](./kassette.mapspec.md)<!-- -->, [ListSpec](./kassette.listspec.md)
+<b>References:</b> [FilterableSpec](./kassette.filterablespec.md)<!-- -->, [IncludableSpec](./kassette.includablespec.md)
+
+## Remarks
+
+This can be an object with the following properties:
+
+- `include`<!-- -->: `true` or `false` as defined in [IncludableSpec](./kassette.includablespec.include.md)
+
+- `filter`<!-- -->: a function as defined in [FilterableSpec](./kassette.filterablespec.filter.md)<!-- -->. Note that if filter is provided, the other options below are ignored.
+
+- `caseSensitive`<!-- -->: whether keys should be treated case sensitive or not. `true` by default. When set to `false`<!-- -->, the output object contains lower cased keys.
+
+- `keys`<!-- -->: a list of keys to keep if in `whitelist` mode or to reject if in `blacklist` mode. If `caseSensitive` is `false`<!-- -->, comparison of keys is not case sensitive. If `keys` is not specified, all keys are included by default.
+
+- `mode`<!-- -->: `whitelist` (default) or `blacklist`
 

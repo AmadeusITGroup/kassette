@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [setMode](./kassette.imock.setmode.md)
 
-## IMock.setMode property
+## IMock.setMode() method
+
+Sets the [mode](./kassette.imock.mode.md) for the current request.
 
 <b>Signature:</b>
 
 ```typescript
-setMode: (mode: Mode | null) => void;
+setMode(mode: Mode | null): void;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  mode | [Mode](./kassette.mode.md) \| null | mode to set, or null to use the default value from [the global setting](./kassette.cliconfigurationspec.mode.md) |
+
+<b>Returns:</b>
+
+void
+

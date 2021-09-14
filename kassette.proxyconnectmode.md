@@ -4,9 +4,23 @@
 
 ## ProxyConnectMode type
 
+The mode describing how to process `CONNECT` requests. It can be defined globally through the [proxyConnectMode](./kassette.cliconfigurationspec.proxyconnectmode.md) setting or per-request from the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) method through [setMode](./kassette.iproxyconnectapi.setmode.md)<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
 export declare type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
 ```
+
+## Remarks
+
+Here are the possible modes for `CONNECT` requests:
+
+- `intercept`<!-- -->: kassette answers with `HTTP/1.1 200 Connection established` and pretends to be the target server. If the browser then makes http or https requests on the socket after this `CONNECT` request, they will be processed by kassette and pass through the [hook](./kassette.configurationspec.hook.md) method (if any). That's the default mode.
+
+- `forward`<!-- -->: kassette blindly connects to the remote destination [hostname](./kassette.iproxyconnectapi.hostname.md) and [port](./kassette.iproxyconnectapi.port.md) specified in the `CONNECT` request and forwards all data in both directions. This is what a normal proxy server is supposed to do. The destination hostname and port can optionally be modified in the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) method through the [setDestination](./kassette.iproxyconnectapi.setdestination.md) method.
+
+- `close`<!-- -->: kassette simply closes the underlying socket. This is what servers which do not support the `CONNECT` method do.
+
+- `manual`<!-- -->: kassette does nothing special with the socket, leaving it in its current state. This setting allows to use any custom logic in the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) callback. It only makes sense if the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) callback is implemented, otherwise the browser will wait indefinitely for an answer.
+

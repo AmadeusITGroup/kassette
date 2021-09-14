@@ -4,6 +4,8 @@
 
 ## APIOptions.fileConfigurationContext property
 
+Specifies the context argument passed to the [getConfiguration](./kassette.iconfigurationfile.getconfiguration.md) function defined in the configuration file (only used if [configurationPath](./kassette.apioptions.configurationpath.md) is specified).
+
 <b>Signature:</b>
 
 ```typescript

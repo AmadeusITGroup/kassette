@@ -2,10 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [downloadPayload](./kassette.imock.downloadpayload.md)
 
-## IMock.downloadPayload property
+## IMock.downloadPayload() method
+
+Combines [fetchPayload](./kassette.imock.fetchpayload.md) and [persistPayload](./kassette.imock.persistpayload.md) and returns the wrapped payload.
 
 <b>Signature:</b>
 
 ```typescript
-downloadPayload: () => Promise<RemotePayload>;
+downloadPayload(): Promise<RemotePayload>;
 ```
+<b>Returns:</b>
+
+Promise&lt;[RemotePayload](./kassette.remotepayload.md)<!-- -->&gt;
+

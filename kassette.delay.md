@@ -4,9 +4,15 @@
 
 ## Delay type
 
+Delay that will be used to send the response to the client when the data is taken from the local mock.
 
 <b>Signature:</b>
 
 ```typescript
 export declare type Delay = 'recorded' | number;
 ```
+
+## Remarks
+
+It can be expressed either as a direct value (in milliseconds) or as the `'recorded'` string, which means to use the delay recorded in the local mock (in the [time](./kassette.mockdata.time.md) field).
+

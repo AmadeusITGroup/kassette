@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [createPayload](./kassette.imock.createpayload.md)
 
-## IMock.createPayload property
+## IMock.createPayload() method
+
+Create a wrapped payload (with `user` origin) from the given payload data.
 
 <b>Signature:</b>
 
 ```typescript
-createPayload: (payload: Payload) => UserPayload;
+createPayload(payload: Payload): PayloadWithOrigin<'user'>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  payload | [Payload](./kassette.payload.md) | payload data |
+
+<b>Returns:</b>
+
+[PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'user'&gt;
+

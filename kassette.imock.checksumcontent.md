@@ -4,6 +4,8 @@
 
 ## IMock.checksumContent property
 
+Content produced by the last call to the [checksum](./kassette.imock.checksum.md) method, as it was passed to the hash algorithm.
+
 <b>Signature:</b>
 
 ```typescript

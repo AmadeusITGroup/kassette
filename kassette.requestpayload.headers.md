@@ -4,6 +4,8 @@
 
 ## RequestPayload.headers property
 
+HTTP headers
+
 <b>Signature:</b>
 
 ```typescript

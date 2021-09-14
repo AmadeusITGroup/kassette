@@ -4,7 +4,7 @@
 
 ## IMock.response property
 
-The wrapper around the output response (see `Response`<!-- -->)
+The wrapper around the output response
 
 <b>Signature:</b>
 

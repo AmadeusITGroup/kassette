@@ -4,7 +4,7 @@
 
 ## IMock.localPath property
 
-The local path — relative to `mocksFolder` — of the mock, which is either the one set by the user through `setLocalPath` or the `defaultLocalPath`
+The local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->.
 
 <b>Signature:</b>
 

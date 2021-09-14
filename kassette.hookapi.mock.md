@@ -4,6 +4,8 @@
 
 ## HookAPI.mock property
 
+Provides the API to specify how to handle the HTTP request.
+
 <b>Signature:</b>
 
 ```typescript

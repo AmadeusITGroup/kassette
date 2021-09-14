@@ -4,8 +4,10 @@
 
 ## MockData.status property
 
+HTTP status.
+
 <b>Signature:</b>
 
 ```typescript
-readonly status: PersistedStatus;
+readonly status: Readonly<Status>;
 ```

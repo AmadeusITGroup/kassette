@@ -4,8 +4,10 @@
 
 ## IResponse.headers property
 
+The currently set headers. Use [setHeaders](./kassette.iresponse.setheaders.md) to change them.
+
 <b>Signature:</b>
 
 ```typescript
-readonly headers: ReadOnlyHeaders;
+readonly headers: Readonly<Headers>;
 ```

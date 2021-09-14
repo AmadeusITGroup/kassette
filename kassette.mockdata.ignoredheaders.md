@@ -4,10 +4,10 @@
 
 ## MockData.ignoredHeaders property
 
-Ignored headers
+Ignored headers, which are recorded headers that should not be served back. In practice, this is mainly the `content-length` header (because the `content-length` header that is actually served back is computed based on the actual data to send).
 
 <b>Signature:</b>
 
 ```typescript
-readonly ignoredHeaders: ReadOnlyHeaders;
+readonly ignoredHeaders: Readonly<Headers>;
 ```

@@ -4,9 +4,23 @@
 
 ## PayloadOrigin type
 
+Origin of the payload.
 
 <b>Signature:</b>
 
 ```typescript
 export declare type PayloadOrigin = 'local' | 'proxy' | 'remote' | 'user';
 ```
+
+## Remarks
+
+Here are the possible values:
+
+- `local`<!-- -->: if the payload was read from local mock
+
+- `remote`<!-- -->: if the payload was fetched from the remote backend by forwarding the request
+
+- `user`<!-- -->: if the payload has been created from the user, manually using [createPayload](./kassette.imock.createpayload.md)
+
+- `proxy`<!-- -->: if the payload has been created from kassette itself, especially for `404 Not found` errors (in `local` mode) and `502 Bad Gateway` errors (when kassette cannot reach the remote server)
+

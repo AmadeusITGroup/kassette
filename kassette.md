@@ -16,75 +16,41 @@ kassette is a development server, used mainly for testing, which proxies request
 
 |  Interface | Description |
 |  --- | --- |
-|  [APIOptions](./kassette.apioptions.md) |  |
-|  [BaseCLIConfigurationSpec](./kassette.basecliconfigurationspec.md) | The set of possible properties defined through the CLI (it is reduced since it can't contain runtime values) |
-|  [BaseConfigurationSpec](./kassette.baseconfigurationspec.md) | Augments the CLI spec to add all pure runtime properties, that can be defined through the configuration file only |
-|  [BaseSpec](./kassette.basespec.md) |  |
-|  [BodySpec](./kassette.bodyspec.md) |  |
-|  [ChecksumArgs](./kassette.checksumargs.md) |  |
+|  [APIOptions](./kassette.apioptions.md) | Specifies the argument expected to start kassette programmatically with [runFromAPI()](./kassette.runfromapi.md)<!-- -->. |
+|  [ChecksumArgs](./kassette.checksumargs.md) | Type of the argument expected by [checksum](./kassette.imock.checksum.md)<!-- -->. It specifies which data from the request to include in the checksum. |
+|  [CLIConfigurationSpec](./kassette.cliconfigurationspec.md) | The set of possible properties defined through the CLI (it is reduced since it can't contain runtime values) |
+|  [ConfigurationSpec](./kassette.configurationspec.md) | Augments the CLI spec to add all pure runtime properties, that can be defined through the configuration file only |
 |  [Connection](./kassette.connection.md) | A connection intercepted by kassette |
-|  [Console\_2](./kassette.console_2.md) |  |
-|  [FilterSpec](./kassette.filterspec.md) |  |
-|  [HookAPI](./kassette.hookapi.md) |  |
-|  [HostnameSpec](./kassette.hostnamespec.md) |  |
-|  [IBaseRequest](./kassette.ibaserequest.md) | A handier wrapper around a request |
-|  [IConfigurationProperty](./kassette.iconfigurationproperty.md) |  |
-|  [IFetchedRequest](./kassette.ifetchedrequest.md) |  |
-|  [IMergedConfiguration](./kassette.imergedconfiguration.md) | The merged configuration, containing wrapped configuration properties |
-|  [IMock](./kassette.imock.md) | The public interface exposed to the end user to handle a given request and the associated mock and response.<!-- -->An object implementing this interface is passed to the [hook](./kassette.baseconfigurationspec.hook.md) function, under property <code>mock</code> of the single argument object. |
+|  [ConsoleSpec](./kassette.consolespec.md) | Console with logging methods. |
+|  [FilterableSpec](./kassette.filterablespec.md) | Interface used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that can be filtered (i.e. modified) before it is included in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
+|  [GetConfigurationProps](./kassette.getconfigurationprops.md) | Parameter of the [getConfiguration](./kassette.iconfigurationfile.getconfiguration.md) function (which a kassette configuration file is supposed to export). |
+|  [HookAPI](./kassette.hookapi.md) | Parameter of the [hook](./kassette.configurationspec.hook.md) callback, that is called for every HTTP request that kassette receives. |
+|  [IConfigurationFile](./kassette.iconfigurationfile.md) | Interface that a kassette configuration file should export. |
+|  [IConfigurationProperty](./kassette.iconfigurationproperty.md) | Contains the value and origin of a configuration property. |
+|  [IFetchedRequest](./kassette.ifetchedrequest.md) | A handier wrapper around a request |
+|  [IMock](./kassette.imock.md) | The public interface exposed to the end user to handle a given request and the associated mock and response.<!-- -->An object implementing this interface is passed to the [hook](./kassette.configurationspec.hook.md) function, under property <code>mock</code> of the single argument object. |
+|  [IncludableSpec](./kassette.includablespec.md) | Base interface used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that can be included or not in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
 |  [IProxyConnectAPI](./kassette.iproxyconnectapi.md) | A handier wrapper around a CONNECT request |
 |  [IResponse](./kassette.iresponse.md) | A handier wrapper around a server response |
-|  [ListSpec](./kassette.listspec.md) |  |
-|  [MapSpec](./kassette.mapspec.md) |  |
 |  [MockData](./kassette.mockdata.md) | The data representing the mock, which is persisted and used for serving the mock |
-|  [MockingOptions](./kassette.mockingoptions.md) |  |
-|  [OnListenProps](./kassette.onlistenprops.md) |  |
-|  [PathnameSpec](./kassette.pathnamespec.md) |  |
-|  [Payload](./kassette.payload.md) |  |
-|  [PayloadWithOrigin](./kassette.payloadwithorigin.md) |  |
-|  [RemotePayload](./kassette.remotepayload.md) |  |
-|  [RequestPayload](./kassette.requestpayload.md) |  |
+|  [MockingOptions](./kassette.mockingoptions.md) | Configuration options, including the root folder used to resolve relative paths and the current global configuration. |
+|  [Payload](./kassette.payload.md) | The payload represents the content of an HTTP response from the backend, no matter if it actually comes from it or if it was created manually. |
+|  [PayloadWithOrigin](./kassette.payloadwithorigin.md) | Contains the payload along with its origin. |
+|  [RemotePayload](./kassette.remotepayload.md) | Remote payload and the request that was made to get it. |
+|  [RequestPayload](./kassette.requestpayload.md) | Content of an HTTP request. |
 |  [Status](./kassette.status.md) | The response status |
 
 ## Type Aliases
 
 |  Type Alias | Description |
 |  --- | --- |
-|  [Body](./kassette.body.md) |  |
-|  [ConfigurationPropertySource](./kassette.configurationpropertysource.md) | The id of the source of the resolved value, currently:<!-- -->- <code>cli</code>: the CLI input - <code>file</code>: the file configuration input - <code>default</code>: the default value |
-|  [ConfigurationSpec](./kassette.configurationspec.md) |  |
-|  [Delay](./kassette.delay.md) |  |
-|  [Headers](./kassette.headers.md) |  |
-|  [HeadersSpec](./kassette.headersspec.md) |  |
-|  [HookFunction](./kassette.hookfunction.md) |  |
-|  [ImmutableFullyOptional](./kassette.immutablefullyoptional.md) |  |
-|  [Include](./kassette.include.md) |  |
-|  [JSONData](./kassette.jsondata.md) |  |
-|  [ListMode](./kassette.listmode.md) |  |
-|  [ListOrFilter](./kassette.listorfilter.md) |  |
-|  [LocalPayload](./kassette.localpayload.md) |  |
-|  [MaybeAsync](./kassette.maybeasync.md) |  |
-|  [MethodSpec](./kassette.methodspec.md) |  |
-|  [MockBody](./kassette.mockbody.md) | The type representing the body content |
-|  [Mode](./kassette.mode.md) | The main working mode of the proxy |
-|  [NonSanitizedArray](./kassette.nonsanitizedarray.md) | A virtually unlimitedly nested array of values, including void and non-void ones |
-|  [ObjectMap](./kassette.objectmap.md) |  |
-|  [OnExitFunction](./kassette.onexitfunction.md) |  |
-|  [OnListenFunction](./kassette.onlistenfunction.md) |  |
-|  [OnProxyConnectFunction](./kassette.onproxyconnectfunction.md) |  |
-|  [PayloadOrigin](./kassette.payloadorigin.md) |  |
-|  [PersistedStatus](./kassette.persistedstatus.md) |  |
-|  [PortSpec](./kassette.portspec.md) |  |
-|  [ProtocolSpec](./kassette.protocolspec.md) |  |
-|  [ProxyConnectMode](./kassette.proxyconnectmode.md) |  |
-|  [QuerySpec](./kassette.queryspec.md) |  |
-|  [RawBody](./kassette.rawbody.md) |  |
-|  [ReadOnlyHeaders](./kassette.readonlyheaders.md) | A map from strings to strings or array of strings |
-|  [ReadOnlyStringsMap](./kassette.readonlystringsmap.md) | Like <code>StringsMap</code> but read-only |
+|  [ConfigurationPropertySource](./kassette.configurationpropertysource.md) | The id of the source of the resolved value. |
+|  [Delay](./kassette.delay.md) | Delay that will be used to send the response to the client when the data is taken from the local mock. |
+|  [Headers](./kassette.headers.md) | A map from strings to strings or array of strings |
+|  [IMergedConfiguration](./kassette.imergedconfiguration.md) | The resulting configuration that was merged from its different [sources](./kassette.configurationpropertysource.md)<!-- -->. |
+|  [ListOrFilter](./kassette.listorfilter.md) | Type used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that has a map structure, such as the query and headers, to specify if and how they are included in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
+|  [Mode](./kassette.mode.md) | The main working mode of the proxy. It can be defined globally through the [mode](./kassette.cliconfigurationspec.mode.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMode](./kassette.imock.setmode.md)<!-- -->. |
+|  [PayloadOrigin](./kassette.payloadorigin.md) | Origin of the payload. |
+|  [ProxyConnectMode](./kassette.proxyconnectmode.md) | The mode describing how to process <code>CONNECT</code> requests. It can be defined globally through the [proxyConnectMode](./kassette.cliconfigurationspec.proxyconnectmode.md) setting or per-request from the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) method through [setMode](./kassette.iproxyconnectapi.setmode.md)<!-- -->. |
 |  [RecursiveArray](./kassette.recursivearray.md) | A single value or a virtually unlimitedly nested array of this type of value |
-|  [ResponseStatus](./kassette.responsestatus.md) |  |
-|  [RunResult](./kassette.runresult.md) |  |
-|  [Spec](./kassette.spec.md) |  |
-|  [StringsMap](./kassette.stringsmap.md) | An object mapping string keys to string values |
-|  [UserPayload](./kassette.userpayload.md) |  |
 

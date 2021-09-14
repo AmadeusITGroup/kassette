@@ -2,10 +2,16 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [readOrFetchPayload](./kassette.imock.readorfetchpayload.md)
 
-## IMock.readOrFetchPayload property
+## IMock.readOrFetchPayload() method
+
+Returns the wrapped local payload using [readLocalPayload](./kassette.imock.readlocalpayload.md) if it exists, otherwise use [fetchPayload](./kassette.imock.fetchpayload.md) and returns this wrapped payload.
 
 <b>Signature:</b>
 
 ```typescript
-readOrFetchPayload: () => Promise<LocalPayload | UserPayload | RemotePayload>;
+readOrFetchPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | RemotePayload>;
 ```
+<b>Returns:</b>
+
+Promise&lt;[PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'local' \| 'user'&gt; \| [RemotePayload](./kassette.remotepayload.md)<!-- -->&gt;
+

@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [setRemoteURL](./kassette.imock.setremoteurl.md)
 
-## IMock.setRemoteURL property
+## IMock.setRemoteURL() method
+
+Sets the [remote URL](./kassette.imock.remoteurl.md) for the current request.
 
 <b>Signature:</b>
 
 ```typescript
-setRemoteURL: (url: string | null) => void;
+setRemoteURL(url: string | null): void;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  url | string \| null | the URL to set, or null to use the default value from [the global setting](./kassette.cliconfigurationspec.remoteurl.md) |
+
+<b>Returns:</b>
+
+void
+

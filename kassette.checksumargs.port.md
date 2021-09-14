@@ -4,8 +4,10 @@
 
 ## ChecksumArgs.port property
 
+Specifies whether to include the port in the hash. The default value is `false`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript
-port?: Spec<PortSpec>;
+port?: IncludableSpec | boolean;
 ```

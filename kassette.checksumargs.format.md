@@ -4,6 +4,8 @@
 
 ## ChecksumArgs.format property
 
+Specifies the output format. Default value is `hex`<!-- -->. Check Node.js API for more information: [hash.digest(format)](https://nodejs.org/api/crypto.html#crypto_hash_digest_encoding)<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript

@@ -2,33 +2,22 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMergedConfiguration](./kassette.imergedconfiguration.md)
 
-## IMergedConfiguration interface
+## IMergedConfiguration type
 
-The merged configuration, containing wrapped configuration properties
+The resulting configuration that was merged from its different [sources](./kassette.configurationpropertysource.md)<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
-export interface IMergedConfiguration 
+export declare type IMergedConfiguration = {
+    readonly filePath: string | null;
+} & {
+    readonly [k in keyof ConfigurationSpec]-?: IConfigurationProperty<Required<ConfigurationSpec>[k]>;
+};
 ```
+<b>References:</b> [ConfigurationSpec](./kassette.configurationspec.md)<!-- -->, [IConfigurationProperty](./kassette.iconfigurationproperty.md)
 
-## Properties
+## Remarks
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [console](./kassette.imergedconfiguration.console.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;Console&gt; |  |
-|  [delay](./kassette.imergedconfiguration.delay.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[Delay](./kassette.delay.md)<!-- -->&gt; |  |
-|  [filePath](./kassette.imergedconfiguration.filepath.md) | string \| null | The path of the configuration file |
-|  [hook](./kassette.imergedconfiguration.hook.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[HookFunction](./kassette.hookfunction.md)<!-- -->&gt; |  |
-|  [hostname](./kassette.imergedconfiguration.hostname.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;string&gt; |  |
-|  [mocksFolder](./kassette.imergedconfiguration.mocksfolder.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;string&gt; |  |
-|  [mode](./kassette.imergedconfiguration.mode.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[Mode](./kassette.mode.md)<!-- -->&gt; |  |
-|  [onExit](./kassette.imergedconfiguration.onexit.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[OnExitFunction](./kassette.onexitfunction.md)<!-- -->&gt; |  |
-|  [onListen](./kassette.imergedconfiguration.onlisten.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[OnListenFunction](./kassette.onlistenfunction.md)<!-- -->&gt; |  |
-|  [onProxyConnect](./kassette.imergedconfiguration.onproxyconnect.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[OnProxyConnectFunction](./kassette.onproxyconnectfunction.md)<!-- -->&gt; |  |
-|  [port](./kassette.imergedconfiguration.port.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;number&gt; |  |
-|  [proxyConnectMode](./kassette.imergedconfiguration.proxyconnectmode.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;[ProxyConnectMode](./kassette.proxyconnectmode.md)<!-- -->&gt; |  |
-|  [remoteURL](./kassette.imergedconfiguration.remoteurl.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;string \| null&gt; |  |
-|  [skipLog](./kassette.imergedconfiguration.skiplog.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;boolean&gt; |  |
-|  [tlsCAKeyPath](./kassette.imergedconfiguration.tlscakeypath.md) | [IConfigurationProperty](./kassette.iconfigurationproperty.md)<!-- -->&lt;string \| null&gt; |  |
+It contains the path to the configuration file in `filePath`<!-- -->, and also for each property defined in [ConfigurationSpec](./kassette.configurationspec.md)<!-- -->, there is an [IConfigurationProperty](./kassette.iconfigurationproperty.md) object describing the [origin](./kassette.iconfigurationproperty.origin.md) of the property and its [value](./kassette.iconfigurationproperty.value.md)<!-- -->.
 

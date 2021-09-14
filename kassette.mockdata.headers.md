@@ -4,10 +4,10 @@
 
 ## MockData.headers property
 
-Recorded headers to be served back, without the ignored ones
+Recorded headers to be served back, without the ignored ones.
 
 <b>Signature:</b>
 
 ```typescript
-readonly headers: ReadOnlyHeaders;
+readonly headers: Readonly<Headers>;
 ```

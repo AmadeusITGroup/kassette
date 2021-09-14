@@ -4,6 +4,8 @@
 
 ## IMock.delay property
 
+The currently computed delay that will be applied, configured either by a call to [setDelay](./kassette.imock.setdelay.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.delay.md)<!-- -->. Note that if the delay is set to `recorded` and the local mock to use is not yet loaded, the value returned by this getter will be the default delay and not the recorded delay.
+
 <b>Signature:</b>
 
 ```typescript

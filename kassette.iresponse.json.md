@@ -4,8 +4,15 @@
 
 ## IResponse.json property
 
+Whether the [body](./kassette.iresponse.body.md) field should be serialized into JSON (and `content-type` header should be set to `application/json`<!-- -->).
+
 <b>Signature:</b>
 
 ```typescript
 json: boolean;
 ```
+
+## Remarks
+
+When not explicitly set, the returned value will still be true if the `body` value is not a string, not a `Buffer`<!-- -->, and not `null` either.
+

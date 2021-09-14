@@ -4,6 +4,8 @@
 
 ## IMock.options property
 
+Link to global configuration options
+
 <b>Signature:</b>
 
 ```typescript

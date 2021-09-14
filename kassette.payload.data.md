@@ -4,6 +4,8 @@
 
 ## Payload.data property
 
+Data such as http status and headers, response delay.
+
 <b>Signature:</b>
 
 ```typescript

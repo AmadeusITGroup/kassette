@@ -4,6 +4,8 @@
 
 ## IMock.checksum() method
 
+Compute a checksum using content from the request.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,9 +16,21 @@ checksum(spec: ChecksumArgs): Promise<string>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  spec | [ChecksumArgs](./kassette.checksumargs.md) |  |
+|  spec | [ChecksumArgs](./kassette.checksumargs.md) | specifies which data from the request to include in the checksum |
 
 <b>Returns:</b>
 
 Promise&lt;string&gt;
+
+The actual checksum value, that you can then use for instance to add to the mock's path.
+
+## Remarks
+
+The computed checksum is intended to be added to the path of the mock so that semantically different requests use different mocks.
+
+It is difficult to predict what will actually be relevant to include in the checksum or not for your use case, and that's why we provide many options to include/exclude/transform data (cf [ChecksumArgs](./kassette.checksumargs.md)<!-- -->).
+
+Note that we designed the API so that it is usually not needed to call the checksum method more than once for a given request/mock.
+
+The method stores the computed content (which is passed to the hash algorithm) in property [checksumContent](./kassette.imock.checksumcontent.md) (in the `mock` object), as a string. It is built according to your options and the request's data. It is also persisted, so that you can debug more easily, especially by committing it into your SCM to analyze changes across versions of your code. File is along with the other files of the mock under file name `checksum`<!-- -->.
 

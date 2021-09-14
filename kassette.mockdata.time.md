@@ -4,6 +4,8 @@
 
 ## MockData.time property
 
+Time used by the server to process the request. It is used to simulate the real processing time when mocking the server if the [delay](./kassette.cliconfigurationspec.delay.md) is set to `recorded`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript

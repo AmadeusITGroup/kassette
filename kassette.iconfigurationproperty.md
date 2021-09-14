@@ -4,6 +4,7 @@
 
 ## IConfigurationProperty interface
 
+Contains the value and origin of a configuration property.
 
 <b>Signature:</b>
 

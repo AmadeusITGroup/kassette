@@ -4,8 +4,10 @@
 
 ## ChecksumArgs.query property
 
+Specifies whether and how to include the query part of the url in the hash. The default value is `true`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript
-query?: Spec<QuerySpec>;
+query?: ListOrFilter | boolean;
 ```

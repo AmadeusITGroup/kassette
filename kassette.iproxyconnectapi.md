@@ -16,12 +16,12 @@ export interface IProxyConnectAPI
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [connection](./kassette.iproxyconnectapi.connection.md) | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in connectionsStack |
+|  [connection](./kassette.iproxyconnectapi.connection.md) | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md) |
 |  [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md) | readonly Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt;\[\] | The connections stack |
-|  [destinationHostname](./kassette.iproxyconnectapi.destinationhostname.md) | string | The destination hostname that will be used in 'forward' mode. By default, it is equal to hostname. Can be changed with setDestination. |
-|  [destinationPort](./kassette.iproxyconnectapi.destinationport.md) | number | The destination port that will be used in 'forward' mode. By default, it is equal to port. Can be changed with setDestination. |
+|  [destinationHostname](./kassette.iproxyconnectapi.destinationhostname.md) | string | The destination hostname that will be used in <code>forward</code> mode. By default, it is equal to [hostname](./kassette.iproxyconnectapi.hostname.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->. |
+|  [destinationPort](./kassette.iproxyconnectapi.destinationport.md) | number | The destination port that will be used in <code>forward</code> mode. By default, it is equal to [port](./kassette.iproxyconnectapi.port.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->. |
 |  [hostname](./kassette.iproxyconnectapi.hostname.md) | string | The target hostname in the CONNECT request |
-|  [mode](./kassette.iproxyconnectapi.mode.md) | [ProxyConnectMode](./kassette.proxyconnectmode.md) | The currently selected mode. Can be changed with setMode. |
+|  [mode](./kassette.iproxyconnectapi.mode.md) | [ProxyConnectMode](./kassette.proxyconnectmode.md) | The currently selected mode, configured either by a call to [setMode](./kassette.iproxyconnectapi.setmode.md) or by [the global setting](./kassette.cliconfigurationspec.proxyconnectmode.md) |
 |  [port](./kassette.iproxyconnectapi.port.md) | number | The target port in the CONNECT request |
 |  [request](./kassette.iproxyconnectapi.request.md) | IncomingMessage | The original Node.js object representing the request |
 |  [socket](./kassette.iproxyconnectapi.socket.md) | Socket | The underlying socket |
@@ -30,7 +30,7 @@ export interface IProxyConnectAPI
 
 |  Method | Description |
 |  --- | --- |
-|  [process()](./kassette.iproxyconnectapi.process.md) | Processes the socket according to the mode stored in mode. This method is called automatically when the onProxyConnect function finishes, but it can also be called manually before. |
-|  [setDestination(hostname, port)](./kassette.iproxyconnectapi.setdestination.md) | Sets the destination hostname and port that will be used when the process method is called. Also changes the mode to 'forward'. |
-|  [setMode(mode)](./kassette.iproxyconnectapi.setmode.md) | Changes the mode that will be used when the process method is called. |
+|  [process()](./kassette.iproxyconnectapi.process.md) | Processes the socket according to the mode stored in [mode](./kassette.iproxyconnectapi.mode.md)<!-- -->. This method is called automatically when the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) function finishes, but it can also be called manually before. |
+|  [setDestination(hostname, port)](./kassette.iproxyconnectapi.setdestination.md) | Sets the destination [hostname](./kassette.iproxyconnectapi.destinationhostname.md) and [port](./kassette.iproxyconnectapi.destinationport.md) that will be used when the [process](./kassette.iproxyconnectapi.process.md) method is called. Also changes the [mode](./kassette.iproxyconnectapi.mode.md) to <code>forward</code>. |
+|  [setMode(mode)](./kassette.iproxyconnectapi.setmode.md) | Changes the [mode](./kassette.iproxyconnectapi.mode.md) that will be used when the [process](./kassette.iproxyconnectapi.process.md) method is called. |
 

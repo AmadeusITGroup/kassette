@@ -4,8 +4,10 @@
 
 ## IResponse.status property
 
+An object `{code, message}`<!-- -->, where each property is optional. If `code` is never given, a default value of `200` is applied.
+
 <b>Signature:</b>
 
 ```typescript
-status: ResponseStatus;
+status: Partial<Readonly<Status>> | null;
 ```

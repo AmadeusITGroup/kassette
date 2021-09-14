@@ -4,6 +4,8 @@
 
 ## IMock.remoteURL property
 
+The current remote URL, configured either by a call to [setRemoteURL](./kassette.imock.setremoteurl.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.remoteurl.md)<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript

@@ -6,7 +6,7 @@
 
 The public interface exposed to the end user to handle a given request and the associated mock and response.
 
-An object implementing this interface is passed to the [hook](./kassette.baseconfigurationspec.hook.md) function, under property `mock` of the single argument object.
+An object implementing this interface is passed to the [hook](./kassette.configurationspec.hook.md) function, under property `mock` of the single argument object.
 
 <b>Signature:</b>
 
@@ -18,43 +18,42 @@ export interface IMock
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [checksumContent](./kassette.imock.checksumcontent.md) | string \| null |  |
-|  [createPayload](./kassette.imock.createpayload.md) | (payload: [Payload](./kassette.payload.md)<!-- -->) =&gt; [UserPayload](./kassette.userpayload.md) |  |
-|  [defaultLocalPath](./kassette.imock.defaultlocalpath.md) | string | The default local path — relative to <code>mocksFolder</code> — of the mock computed from input request |
-|  [delay](./kassette.imock.delay.md) | number |  |
-|  [downloadPayload](./kassette.imock.downloadpayload.md) | () =&gt; Promise&lt;[RemotePayload](./kassette.remotepayload.md)<!-- -->&gt; |  |
-|  [fetchPayload](./kassette.imock.fetchpayload.md) | () =&gt; Promise&lt;[RemotePayload](./kassette.remotepayload.md)<!-- -->&gt; |  |
-|  [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) | (payload: [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->) =&gt; void |  |
-|  [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md) | () =&gt; Promise&lt;void&gt; |  |
-|  [hash](./kassette.imock.hash.md) | string | The hash of the mock (TBD) |
-|  [hasLocalFiles](./kassette.imock.haslocalfiles.md) | () =&gt; Promise&lt;boolean&gt; | Tells if the mock exists locally or not |
-|  [hasNoLocalFiles](./kassette.imock.hasnolocalfiles.md) | () =&gt; Promise&lt;boolean&gt; |  |
-|  [localPath](./kassette.imock.localpath.md) | string | The local path — relative to <code>mocksFolder</code> — of the mock, which is either the one set by the user through <code>setLocalPath</code> or the <code>defaultLocalPath</code> |
-|  [mockFolderFullPath](./kassette.imock.mockfolderfullpath.md) | string | The full path of the mock |
-|  [mocksFolder](./kassette.imock.mocksfolder.md) | string | The root folder of all mocks, from which specific mocks paths will be resolved (resolved against <code>options.root</code>) |
-|  [mode](./kassette.imock.mode.md) | [Mode](./kassette.mode.md) |  |
-|  [options](./kassette.imock.options.md) | [MockingOptions](./kassette.mockingoptions.md) |  |
-|  [persistPayload](./kassette.imock.persistpayload.md) | (payload: [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->) =&gt; Promise&lt;void&gt; |  |
-|  [process](./kassette.imock.process.md) | () =&gt; Promise&lt;void&gt; | Processes the input request to manage the mock and fill in the response, using user configuration |
-|  [readLocalPayload](./kassette.imock.readlocalpayload.md) | () =&gt; Promise&lt;[LocalPayload](./kassette.localpayload.md) \| [UserPayload](./kassette.userpayload.md) \| undefined&gt; |  |
-|  [readLocalPayloadAndFillResponse](./kassette.imock.readlocalpayloadandfillresponse.md) | () =&gt; Promise&lt;boolean&gt; |  |
-|  [readOrDownloadPayload](./kassette.imock.readordownloadpayload.md) | () =&gt; Promise&lt;[LocalPayload](./kassette.localpayload.md) \| [UserPayload](./kassette.userpayload.md) \| [RemotePayload](./kassette.remotepayload.md)<!-- -->&gt; |  |
-|  [readOrFetchPayload](./kassette.imock.readorfetchpayload.md) | () =&gt; Promise&lt;[LocalPayload](./kassette.localpayload.md) \| [UserPayload](./kassette.userpayload.md) \| [RemotePayload](./kassette.remotepayload.md)<!-- -->&gt; |  |
-|  [remoteURL](./kassette.imock.remoteurl.md) | string \| null |  |
-|  [request](./kassette.imock.request.md) | [IFetchedRequest](./kassette.ifetchedrequest.md) | The wrapper around the input request (see <code>Request</code>) |
-|  [response](./kassette.imock.response.md) | [IResponse](./kassette.iresponse.md) | The wrapper around the output response (see <code>Response</code>) |
-|  [sendResponse](./kassette.imock.sendresponse.md) | () =&gt; Promise&lt;void&gt; |  |
-|  [setDelay](./kassette.imock.setdelay.md) | (delay: [Delay](./kassette.delay.md) \| null) =&gt; void |  |
-|  [setLocalPath](./kassette.imock.setlocalpath.md) | ( pathParts: [NonSanitizedArray](./kassette.nonsanitizedarray.md)<!-- -->&lt;string&gt;) =&gt; void | Sets the local path of the mock |
-|  [setMocksFolder](./kassette.imock.setmocksfolder.md) | (value: [NonSanitizedArray](./kassette.nonsanitizedarray.md)<!-- -->&lt;string&gt; \| null) =&gt; void |  |
-|  [setMode](./kassette.imock.setmode.md) | (mode: [Mode](./kassette.mode.md) \| null) =&gt; void |  |
-|  [setPayload](./kassette.imock.setpayload.md) | (payload: [LocalPayload](./kassette.localpayload.md) \| [UserPayload](./kassette.userpayload.md)<!-- -->) =&gt; void |  |
-|  [setRemoteURL](./kassette.imock.setremoteurl.md) | (url: string \| null) =&gt; void |  |
-|  [sourcePayload](./kassette.imock.sourcepayload.md) | [PayloadWithOrigin](./kassette.payloadwithorigin.md) \| undefined |  |
+|  [checksumContent](./kassette.imock.checksumcontent.md) | string \| null | Content produced by the last call to the [checksum](./kassette.imock.checksum.md) method, as it was passed to the hash algorithm. |
+|  [defaultLocalPath](./kassette.imock.defaultlocalpath.md) | string | The default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder. |
+|  [delay](./kassette.imock.delay.md) | number | The currently computed delay that will be applied, configured either by a call to [setDelay](./kassette.imock.setdelay.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.delay.md)<!-- -->. Note that if the delay is set to <code>recorded</code> and the local mock to use is not yet loaded, the value returned by this getter will be the default delay and not the recorded delay. |
+|  [localPath](./kassette.imock.localpath.md) | string | The local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->. |
+|  [mockFolderFullPath](./kassette.imock.mockfolderfullpath.md) | string | The full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute. |
+|  [mocksFolder](./kassette.imock.mocksfolder.md) | string | The root folder of all mocks, from which specific mocks paths will be resolved (resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->) |
+|  [mode](./kassette.imock.mode.md) | [Mode](./kassette.mode.md) | The current mode, configured either by a call to [setMode](./kassette.imock.setmode.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.mode.md)<!-- -->. |
+|  [options](./kassette.imock.options.md) | [MockingOptions](./kassette.mockingoptions.md) | Link to global configuration options |
+|  [remoteURL](./kassette.imock.remoteurl.md) | string \| null | The current remote URL, configured either by a call to [setRemoteURL](./kassette.imock.setremoteurl.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.remoteurl.md)<!-- -->. |
+|  [request](./kassette.imock.request.md) | [IFetchedRequest](./kassette.ifetchedrequest.md) | The wrapper around the input request |
+|  [response](./kassette.imock.response.md) | [IResponse](./kassette.iresponse.md) | The wrapper around the output response |
+|  [sourcePayload](./kassette.imock.sourcepayload.md) | [PayloadWithOrigin](./kassette.payloadwithorigin.md) \| undefined | As soon as response is filled with a payload, this property holds the reference to that payload's wrapper. The wrapper is useful here to know where the payload comes from. Before that, this property is <code>undefined</code>. |
 
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
-|  [checksum(spec)](./kassette.imock.checksum.md) |  |
+|  [checksum(spec)](./kassette.imock.checksum.md) | Compute a checksum using content from the request. |
+|  [createPayload(payload)](./kassette.imock.createpayload.md) | Create a wrapped payload (with <code>user</code> origin) from the given payload data. |
+|  [downloadPayload()](./kassette.imock.downloadpayload.md) | Combines [fetchPayload](./kassette.imock.fetchpayload.md) and [persistPayload](./kassette.imock.persistpayload.md) and returns the wrapped payload. |
+|  [fetchPayload()](./kassette.imock.fetchpayload.md) | Forward the client request to the remote backend and get a wrapped payload from the response in output. |
+|  [fillResponseFromPayload(payload)](./kassette.imock.fillresponsefrompayload.md) | Use data present in given wrapped payload to fill in the response. |
+|  [getPayloadAndFillResponse()](./kassette.imock.getpayloadandfillresponse.md) | Depending on the [mode](./kassette.imock.mode.md)<!-- -->, gets the payload (remote / local / default) and uses [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) with that payload. If [mode](./kassette.imock.mode.md) is <code>manual</code>, does nothing. |
+|  [hasLocalFiles()](./kassette.imock.haslocalfiles.md) | Returns true if the mock exists locally. |
+|  [hasNoLocalFiles()](./kassette.imock.hasnolocalfiles.md) | Returns true if the mock does not exist locally. |
+|  [persistPayload(payload)](./kassette.imock.persistpayload.md) | Take the given wrapped payload and persist it in local files. |
+|  [process()](./kassette.imock.process.md) | Combines [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md) and [sendResponse](./kassette.imock.sendresponse.md)<!-- -->. |
+|  [readLocalPayload()](./kassette.imock.readlocalpayload.md) | Returns a wrapped payload built from data persisted in local files. If no local file is present, returns <code>undefined</code>. |
+|  [readLocalPayloadAndFillResponse()](./kassette.imock.readlocalpayloadandfillresponse.md) | Combines [readLocalPayload](./kassette.imock.readlocalpayload.md) and [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) if there is a local payload then returns <code>true</code>, otherwise does nothing and return <code>false</code>. |
+|  [readOrDownloadPayload()](./kassette.imock.readordownloadpayload.md) | Returns the wrapped local payload using [readLocalPayload](./kassette.imock.readlocalpayload.md) if it exists, otherwise use [downloadPayload](./kassette.imock.downloadpayload.md) and returns this wrapped payload. |
+|  [readOrFetchPayload()](./kassette.imock.readorfetchpayload.md) | Returns the wrapped local payload using [readLocalPayload](./kassette.imock.readlocalpayload.md) if it exists, otherwise use [fetchPayload](./kassette.imock.fetchpayload.md) and returns this wrapped payload. |
+|  [sendResponse()](./kassette.imock.sendresponse.md) | Sends the response back to the client, with the previously specified delay if the payload origin is not <code>remote</code>. |
+|  [setDelay(delay)](./kassette.imock.setdelay.md) | Sets the [delay](./kassette.imock.delay.md) that will be used to send the response to the client when the data is taken from the local mock. |
+|  [setLocalPath(pathParts)](./kassette.imock.setlocalpath.md) | Sets the [localPath](./kassette.imock.localpath.md) value. |
+|  [setMocksFolder(value)](./kassette.imock.setmocksfolder.md) | Sets the [mocksFolder](./kassette.imock.mocksfolder.md) value. |
+|  [setMode(mode)](./kassette.imock.setmode.md) | Sets the [mode](./kassette.imock.mode.md) for the current request. |
+|  [setPayload(payload)](./kassette.imock.setpayload.md) | Sets the current local payload, with a custom one you would have created. |
+|  [setRemoteURL(url)](./kassette.imock.setremoteurl.md) | Sets the [remote URL](./kassette.imock.remoteurl.md) for the current request. |
 

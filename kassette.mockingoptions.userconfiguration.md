@@ -4,7 +4,7 @@
 
 ## MockingOptions.userConfiguration property
 
-The user configuration
+The current global user configuration
 
 <b>Signature:</b>
 

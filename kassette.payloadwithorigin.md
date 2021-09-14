@@ -4,6 +4,7 @@
 
 ## PayloadWithOrigin interface
 
+Contains the payload along with its origin.
 
 <b>Signature:</b>
 
@@ -15,6 +16,6 @@ export interface PayloadWithOrigin<Origin extends PayloadOrigin = PayloadOrigin>
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [origin](./kassette.payloadwithorigin.origin.md) | Origin |  |
-|  [payload](./kassette.payloadwithorigin.payload.md) | [Payload](./kassette.payload.md) |  |
+|  [origin](./kassette.payloadwithorigin.origin.md) | Origin | Origin of the payload. |
+|  [payload](./kassette.payloadwithorigin.payload.md) | [Payload](./kassette.payload.md) | Content of the payload. |
 

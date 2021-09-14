@@ -4,6 +4,7 @@
 
 ## HookAPI interface
 
+Parameter of the [hook](./kassette.configurationspec.hook.md) callback, that is called for every HTTP request that kassette receives.
 
 <b>Signature:</b>
 
@@ -15,6 +16,6 @@ export interface HookAPI
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [console](./kassette.hookapi.console.md) | Console |  |
-|  [mock](./kassette.hookapi.mock.md) | [IMock](./kassette.imock.md) |  |
+|  [console](./kassette.hookapi.console.md) | [ConsoleSpec](./kassette.consolespec.md) | The console object as specified in the [configuration](./kassette.configurationspec.console.md)<!-- -->, otherwise it is the global console object (usually the one of the platform). |
+|  [mock](./kassette.hookapi.mock.md) | [IMock](./kassette.imock.md) | Provides the API to specify how to handle the HTTP request. |
 

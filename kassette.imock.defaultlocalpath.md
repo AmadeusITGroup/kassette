@@ -4,7 +4,7 @@
 
 ## IMock.defaultLocalPath property
 
-The default local path — relative to `mocksFolder` — of the mock computed from input request
+The default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder.
 
 <b>Signature:</b>
 

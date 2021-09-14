@@ -4,8 +4,15 @@
 
 ## IResponse.body property
 
+The body of the response.
+
 <b>Signature:</b>
 
 ```typescript
-body: Body | null;
+body: any;
 ```
+
+## Remarks
+
+If `json` is explicitly set to `true`<!-- -->, it will be serialized into JSON (and `content-type` header will be set to `application/json`<!-- -->). It will also be if `json` is not explicitly set but the `body` value is not a string, not a `Buffer`<!-- -->, and not `null` either. After that, the result will eventually be converted to a `Buffer` to be sent.
+

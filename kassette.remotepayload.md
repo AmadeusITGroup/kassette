@@ -4,6 +4,7 @@
 
 ## RemotePayload interface
 
+Remote payload and the request that was made to get it.
 
 <b>Signature:</b>
 
@@ -16,5 +17,5 @@ export interface RemotePayload extends PayloadWithOrigin<'remote'>
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [requestOptions](./kassette.remotepayload.requestoptions.md) | [RequestPayload](./kassette.requestpayload.md) |  |
+|  [requestOptions](./kassette.remotepayload.requestoptions.md) | [RequestPayload](./kassette.requestpayload.md) | Request used to get this remote payload. |
 

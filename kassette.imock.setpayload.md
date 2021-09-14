@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [setPayload](./kassette.imock.setpayload.md)
 
-## IMock.setPayload property
+## IMock.setPayload() method
+
+Sets the current local payload, with a custom one you would have created.
 
 <b>Signature:</b>
 
 ```typescript
-setPayload: (payload: LocalPayload | UserPayload) => void;
+setPayload(payload: PayloadWithOrigin<'local' | 'user'>): void;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  payload | [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'local' \| 'user'&gt; | payload to set |
+
+<b>Returns:</b>
+
+void
+

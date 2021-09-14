@@ -2,13 +2,29 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [ConfigurationSpec](./kassette.configurationspec.md)
 
-## ConfigurationSpec type
+## ConfigurationSpec interface
 
+Augments the CLI spec to add all pure runtime properties, that can be defined through the configuration file only
 
 <b>Signature:</b>
 
 ```typescript
-export declare type ConfigurationSpec = ImmutableFullyOptional<BaseConfigurationSpec>;
+export interface ConfigurationSpec extends CLIConfigurationSpec 
 ```
-<b>References:</b> [ImmutableFullyOptional](./kassette.immutablefullyoptional.md)<!-- -->, [BaseConfigurationSpec](./kassette.baseconfigurationspec.md)
+<b>Extends:</b> [CLIConfigurationSpec](./kassette.cliconfigurationspec.md)
+
+## Properties
+
+|  Property | Type | Description |
+|  --- | --- | --- |
+|  [console?](./kassette.configurationspec.console.md) | [ConsoleSpec](./kassette.consolespec.md) | <i>(Optional)</i> Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
+
+## Methods
+
+|  Method | Description |
+|  --- | --- |
+|  [hook(parameters)?](./kassette.configurationspec.hook.md) | <i>(Optional)</i> Callback called for every HTTP request that kassette receives (with the exception of <code>CONNECT</code> requests, which trigger the call of [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) instead). |
+|  [onExit()?](./kassette.configurationspec.onexit.md) | <i>(Optional)</i> Callback called when the proxy is programmatically closed (which can be done by using the callback returned from [runFromAPI()](./kassette.runfromapi.md)<!-- -->) |
+|  [onListen(parameters)?](./kassette.configurationspec.onlisten.md) | <i>(Optional)</i> Callback called when the proxy is started and listening. |
+|  [onProxyConnect(parameters)?](./kassette.configurationspec.onproxyconnect.md) | <i>(Optional)</i> Callback called when kassette receives a request with the [HTTP CONNECT method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT)<!-- -->, which usually happens when kassette is used as a browser proxy and the browser is trying to connect to a secure web site with the https protocol. |
 

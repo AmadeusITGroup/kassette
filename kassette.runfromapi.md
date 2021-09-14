@@ -9,18 +9,18 @@ Launch the proxy programmatically.
 <b>Signature:</b>
 
 ```typescript
-export declare function runFromAPI(options: APIOptions): Promise<RunResult>;
+export declare function runFromAPI(options: APIOptions): Promise<() => void>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  options | [APIOptions](./kassette.apioptions.md) |  |
+|  options | [APIOptions](./kassette.apioptions.md) | kassette configuration options |
 
 <b>Returns:</b>
 
-Promise&lt;[RunResult](./kassette.runresult.md)<!-- -->&gt;
+Promise&lt;() =&gt; void&gt;
 
-a callback that can be used to shutdown the proxy, calling the `onExit` callback defined in configuration (if provided).
+a callback that can be used to shutdown the proxy, calling the [onExit](./kassette.configurationspec.onexit.md) callback defined in configuration (if provided).
 

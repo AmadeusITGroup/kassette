@@ -4,7 +4,7 @@
 
 ## IProxyConnectAPI.destinationHostname property
 
-The destination hostname that will be used in 'forward' mode. By default, it is equal to hostname. Can be changed with setDestination.
+The destination hostname that will be used in `forward` mode. By default, it is equal to [hostname](./kassette.iproxyconnectapi.hostname.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->.
 
 <b>Signature:</b>
 

@@ -2,10 +2,23 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IResponse](./kassette.iresponse.md) &gt; [setData](./kassette.iresponse.setdata.md)
 
-## IResponse.setData property
+## IResponse.setData() method
+
+A convenient method to set the [body](./kassette.iresponse.body.md) value and set [json](./kassette.iresponse.json.md) to `true`<!-- -->.
 
 <b>Signature:</b>
 
 ```typescript
-setData: (data: JSONData) => void;
+setData(data: any): void;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  data | any | json object to use as the response body |
+
+<b>Returns:</b>
+
+void
+

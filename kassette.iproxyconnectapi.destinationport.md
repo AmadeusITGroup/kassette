@@ -4,7 +4,7 @@
 
 ## IProxyConnectAPI.destinationPort property
 
-The destination port that will be used in 'forward' mode. By default, it is equal to port. Can be changed with setDestination.
+The destination port that will be used in `forward` mode. By default, it is equal to [port](./kassette.iproxyconnectapi.port.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->.
 
 <b>Signature:</b>
 

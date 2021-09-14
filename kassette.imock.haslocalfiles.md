@@ -2,12 +2,20 @@
 
 [Home](./index.md) &gt; [@amadeus-it-group/kassette](./kassette.md) &gt; [IMock](./kassette.imock.md) &gt; [hasLocalFiles](./kassette.imock.haslocalfiles.md)
 
-## IMock.hasLocalFiles property
+## IMock.hasLocalFiles() method
 
-Tells if the mock exists locally or not
+Returns true if the mock exists locally.
 
 <b>Signature:</b>
 
 ```typescript
-hasLocalFiles: () => Promise<boolean>;
+hasLocalFiles(): Promise<boolean>;
 ```
+<b>Returns:</b>
+
+Promise&lt;boolean&gt;
+
+## Remarks
+
+[hasNoLocalFiles](./kassette.imock.hasnolocalfiles.md) returns the opposite boolean value.
+

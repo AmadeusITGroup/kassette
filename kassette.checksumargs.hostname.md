@@ -4,8 +4,10 @@
 
 ## ChecksumArgs.hostname property
 
+Specifies whether and how to include the hostname in the hash. The default value is `false`<!-- -->.
+
 <b>Signature:</b>
 
 ```typescript
-hostname?: Spec<HostnameSpec>;
+hostname?: FilterableSpec<string> | boolean;
 ```
