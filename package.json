@@ -41,7 +41,7 @@
     "@microsoft/api-documenter": "^7.13.50",
     "@microsoft/api-extractor": "^7.18.9",
     "@rollup/plugin-typescript": "^8.2.5",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.0.2",
     "@types/koa": "^2.13.4",
     "@types/koa-router": "^7.4.4",
     "@types/mime-types": "^2.1.1",
