@@ -39,7 +39,7 @@
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@microsoft/api-documenter": "^7.13.54",
-    "@microsoft/api-extractor": "^7.18.10",
+    "@microsoft/api-extractor": "^7.18.11",
     "@rollup/plugin-typescript": "^8.2.5",
     "@types/jest": "^27.0.2",
     "@types/koa": "^2.13.4",
