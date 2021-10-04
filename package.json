@@ -68,7 +68,7 @@
     "chalk": "^4.1.2",
     "date-fns": "^2.24.0",
     "interpret": "^2.2.0",
-    "mime-types": "^2.1.32",
+    "mime-types": "^2.1.33",
     "node-forge": "^0.10.0",
     "rechoir": "^0.8.0",
     "yargs": "^17.2.1"
