@@ -17,8 +17,8 @@ const _getSocketConnections = (socket: Socket) => {
   if (!result) {
     result = [
       {
-        hostname: socket.localAddress,
-        port: socket.localPort,
+        hostname: socket.localAddress!,
+        port: socket.localPort!,
         protocol: 'http',
       },
     ];
