@@ -73,7 +73,7 @@ export interface APIOptions {
    * method, as {@link GetConfigurationProps.apiConfiguration|apiConfiguration}, so you can apply your own logic to determine what configuration
    * to actually use.
    */
-  readonly apiConfiguration: ConfigurationSpec;
+  readonly apiConfiguration?: ConfigurationSpec;
 
   /**
    * Path to a configuration file, if the configuration should be loaded from a configuration file.
