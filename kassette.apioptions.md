@@ -16,7 +16,7 @@ export interface APIOptions
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [apiConfiguration](./kassette.apioptions.apiconfiguration.md) | [ConfigurationSpec](./kassette.configurationspec.md) | kassette configuration passed through the API. |
+|  [apiConfiguration?](./kassette.apioptions.apiconfiguration.md) | [ConfigurationSpec](./kassette.configurationspec.md) | <i>(Optional)</i> kassette configuration passed through the API. |
 |  [configurationPath?](./kassette.apioptions.configurationpath.md) | string | <i>(Optional)</i> Path to a configuration file, if the configuration should be loaded from a configuration file. |
 |  [fileConfigurationContext?](./kassette.apioptions.fileconfigurationcontext.md) | any | <i>(Optional)</i> Specifies the context argument passed to the [getConfiguration](./kassette.iconfigurationfile.getconfiguration.md) function defined in the configuration file (only used if [configurationPath](./kassette.apioptions.configurationpath.md) is specified). |
 

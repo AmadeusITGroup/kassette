@@ -9,7 +9,7 @@ kassette configuration passed through the API.
 <b>Signature:</b>
 
 ```typescript
-readonly apiConfiguration: ConfigurationSpec;
+readonly apiConfiguration?: ConfigurationSpec;
 ```
 
 ## Remarks
