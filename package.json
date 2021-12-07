@@ -45,7 +45,7 @@
     "@types/koa": "^2.13.4",
     "@types/koa-router": "^7.4.4",
     "@types/mime-types": "^2.1.1",
-    "@types/node": "^16.11.11",
+    "@types/node": "^16.11.12",
     "@types/node-forge": "^0.10.10",
     "@types/yargs": "^17.0.7",
     "chai": "^4.2.0",
