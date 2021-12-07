@@ -38,7 +38,7 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "@microsoft/api-documenter": "^7.13.71",
+    "@microsoft/api-documenter": "^7.13.72",
     "@microsoft/api-extractor": "^7.18.20",
     "@rollup/plugin-typescript": "^8.3.0",
     "@types/jest": "^27.0.3",
