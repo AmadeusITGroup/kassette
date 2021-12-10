@@ -129,7 +129,7 @@ export async function getConfiguration({
     onProxyConnect: buildProperty({
       cliValue: null,
       fileValue: fileConfiguration.onProxyConnect,
-      apiValue: fileConfiguration.onProxyConnect,
+      apiValue: apiConfiguration.onProxyConnect,
       defaultValue: () => {},
     }),
     console: buildProperty({
