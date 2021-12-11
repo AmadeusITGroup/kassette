@@ -39,13 +39,17 @@ export function createGlobalLogger(console: ConsoleSpec) {
  * a checked/unchecked mark,
  * an extra line.
  */
+const symbols = (process && process.platform === 'win32')
+  ? { ok: '\u221A', nok: '\u00D7'}
+  : { ok: '✓', nok: '✗'};
+
 export function logInfo({ message, timestamp, data, checked, extraLine }: LogPayload) {
   getConsole().log(
     safeBuildString([
       !timestamp ? null : [getTimestamp(), ' - '],
       message,
       data == null ? null : [': ', chalk.bold(chalk.green(data))],
-      checked == null ? null : [': ', chalk.bold(checked ? chalk.green('✓') : chalk.red('✗'))],
+      checked == null ? null : [': ', chalk.bold(checked ? chalk.green(symbols.ok) : chalk.red(symbols.nok))],
       !extraLine ? null : '\n',
     ]),
   );
