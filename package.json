@@ -58,7 +58,7 @@
     "playwright": "^1.17.1",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.61.1",
+    "rollup": "^2.63.0",
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
     "tslint": "^6.0.0",
