@@ -59,7 +59,12 @@ async function create({
                   server: `http://127.0.0.1:${proxyPort}`,
                 },
               }
-            : {},
+            : {
+                proxy: {
+                  server: 'per-context',
+                  bypass: '*',
+                },
+              },
         );
         const page = await context.newPage();
 
