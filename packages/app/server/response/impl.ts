@@ -111,7 +111,7 @@ export class Response implements IResponse {
           response.setHeader(header.key, header.value!);
         } catch (exception) {
           logError({
-            message: `${CONF.messages.setHeaderError}\n${header.key}: ${header.value}`,
+            message: `${CONF.messages.setHeaderError}\n${JSON.stringify(header)}`,
             exception,
           });
         }
