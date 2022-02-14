@@ -55,7 +55,7 @@
     "koa-router": "^10.1.1",
     "memfs": "^3.4.1",
     "mocha": "^9.2.0",
-    "playwright": "^1.18.1",
+    "playwright": "^1.19.0",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.67.2",
