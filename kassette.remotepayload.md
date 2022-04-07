@@ -11,7 +11,7 @@ Remote payload and the request that was made to get it.
 ```typescript
 export interface RemotePayload extends PayloadWithOrigin<'remote'> 
 ```
-<b>Extends:</b> [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'remote'&gt;
+<b>Extends:</b> [PayloadWithOrigin](./kassette.payloadwithorigin.md)
 
 ## Properties
 
