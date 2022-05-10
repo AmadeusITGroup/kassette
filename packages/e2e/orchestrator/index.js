@@ -6,7 +6,7 @@ const { promises: fs } = require('fs');
 // ------------------------------------------------------------------------- 3rd
 
 const rimraf = require('rimraf');
-const chalk = require('chalk');
+const picocolors = require('picocolors');
 
 // -------------------------------------------------------------------- internal
 
@@ -47,7 +47,7 @@ function Logger() {
 }
 
 function highlight(string, color = 'green') {
-  return chalk[`${color}Bright`](string);
+  return picocolors[`${color}`](string);
 }
 
 function highlightEntity(string) {

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import picocolors from 'picocolors';
 
 import { createGlobalLogger } from '../../logger';
 
@@ -20,7 +20,7 @@ function createLogger() {
 }
 
 function highlighted(text: string, color = 'green'): string {
-  return chalk.bold((chalk as any)[color](text));
+  return picocolors.bold((picocolors as any)[color](text));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
