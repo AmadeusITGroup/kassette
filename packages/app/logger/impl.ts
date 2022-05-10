@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------- 3rd
 
-import chalk from 'chalk';
+import picocolors from 'picocolors';
 import { format as datefnsFormat } from 'date-fns';
 
 // ---------------------------------------------------------------------- common
@@ -44,8 +44,10 @@ export function logInfo({ message, timestamp, data, checked, extraLine }: LogPay
     safeBuildString([
       !timestamp ? null : [getTimestamp(), ' - '],
       message,
-      data == null ? null : [': ', chalk.bold(chalk.green(data))],
-      checked == null ? null : [': ', chalk.bold(checked ? chalk.green('✓') : chalk.red('✗'))],
+      data == null ? null : [': ', picocolors.bold(picocolors.green(data))],
+      checked == null
+        ? null
+        : [': ', picocolors.bold(checked ? picocolors.green('✓') : picocolors.red('✗'))],
       !extraLine ? null : '\n',
     ]),
   );
@@ -55,7 +57,7 @@ export function logInfo({ message, timestamp, data, checked, extraLine }: LogPay
  * Logs an error message and possibly the given error.
  */
 export function logError({ message, exception }: ErrorLogPayload) {
-  getConsole().error(chalk.bold(chalk.red(message)));
+  getConsole().error(picocolors.bold(picocolors.red(message)));
 
   if (exception != null) {
     getConsole().error([exception.stack, exception.message].filter((value) => value != null)[0]);
@@ -95,9 +97,9 @@ export function buildString(chunks: Array<any | StringChunk>): string {
 
       let { text } = chunk;
       if (chunk.color != null) {
-        text = (chalk as any)[chunk.color](text);
+        text = (picocolors as any)[chunk.color](text);
         if (chunk.bright == null || chunk.bright) {
-          text = chalk.bold(text);
+          text = picocolors.bold(text);
         }
       }
       return text;

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import picocolors from 'picocolors';
 
 import {
   getConsole,
@@ -55,7 +55,7 @@ describe('logger', () => {
       const { output } = createLogger();
       logInfo({ message: 'boolean', data: false });
       expect(output).toEqual([
-        { message: `boolean: ${chalk.bold(chalk.green('false'))}`, type: 'log' },
+        { message: `boolean: ${picocolors.bold(picocolors.green('false'))}`, type: 'log' },
       ]);
     });
 
@@ -64,12 +64,14 @@ describe('logger', () => {
 
       logInfo({ message: 'boolean', checked: true });
       expect(output).toEqual([
-        { message: `boolean: ${chalk.bold(chalk.green('✓'))}`, type: 'log' },
+        { message: `boolean: ${picocolors.bold(picocolors.green('✓'))}`, type: 'log' },
       ]);
       clear();
 
       logInfo({ message: 'boolean', checked: false });
-      expect(output).toEqual([{ message: `boolean: ${chalk.bold(chalk.red('✗'))}`, type: 'log' }]);
+      expect(output).toEqual([
+        { message: `boolean: ${picocolors.bold(picocolors.red('✗'))}`, type: 'log' },
+      ]);
       clear();
     });
 
@@ -97,7 +99,9 @@ describe('logger', () => {
     it('should log simple message', () => {
       const { output } = createLogger();
       logError({ message: 'hello' });
-      expect(output).toEqual([{ message: chalk.bold(chalk.red('hello')), type: 'error' }]);
+      expect(output).toEqual([
+        { message: picocolors.bold(picocolors.red('hello')), type: 'error' },
+      ]);
     });
 
     it('should log exception', () => {
@@ -105,7 +109,7 @@ describe('logger', () => {
       const exception = new Error('dummy');
       logError({ message: 'hello', exception });
       expect(output).toEqual([
-        { message: chalk.bold(chalk.red('hello')), type: 'error' },
+        { message: picocolors.bold(picocolors.red('hello')), type: 'error' },
         { message: exception.stack || exception.message, type: 'error' },
       ]);
     });
@@ -142,25 +146,25 @@ describe('logger', () => {
     describe('styling', () => {
       it('should convert non-string values', () => {
         expect(buildString([{ text: 2, color: 'green', bright: false }, ' ', 'persons'])).toEqual(
-          `${chalk.green('2')} persons`,
+          `${picocolors.green('2')} persons`,
         );
       });
 
       it('should be able to disable bright colors', () => {
         expect(buildString([{ text: 2, color: 'green', bright: false }, ' ', 'persons'])).toEqual(
-          `${chalk.green('2')} persons`,
+          `${picocolors.green('2')} persons`,
         );
       });
 
       it('colors should be bright by default', () => {
         expect(buildString([{ text: 2, color: 'green' }, ' ', 'persons'])).toEqual(
-          `${chalk.bold(chalk.green('2'))} persons`,
+          `${picocolors.bold(picocolors.green('2'))} persons`,
         );
       });
 
       it('colors should be bright explicitly', () => {
         expect(buildString([{ text: 2, color: 'green', bright: true }, ' ', 'persons'])).toEqual(
-          `${chalk.bold(chalk.green('2'))} persons`,
+          `${picocolors.bold(picocolors.green('2'))} persons`,
         );
       });
     });
