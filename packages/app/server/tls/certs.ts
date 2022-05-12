@@ -2,8 +2,17 @@ import { pki, md } from 'node-forge';
 
 const TEN_YEARS_IN_MS = 10 * 365 * 24 * 60 * 60 * 1000;
 
-export async function createCertificate(hostNames: string[], issuer?: pki.Certificate, ca = true) {
-  const keyPair = await pki.rsa.generateKeyPair(1024);
+interface CertificateOptions {
+  issuer?: pki.Certificate;
+  ca?: boolean;
+  keySize: number;
+}
+
+export async function createCertificate(
+  hostNames: string[],
+  { issuer, ca, keySize }: CertificateOptions,
+) {
+  const keyPair = await pki.rsa.generateKeyPair(keySize);
   const cert = pki.createCertificate();
   const now = Date.now();
   cert.serialNumber = `${now}`;

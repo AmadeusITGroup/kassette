@@ -91,6 +91,7 @@ describe('server configuration', () => {
           hostname: { value: '127.0.0.1', origin: 'default' },
           port: { value: 8080, origin: 'cli' },
           tlsCAKeyPath: { value: 'dummy/tls/path', origin: 'cli' },
+          tlsKeySize: { value: 1024, origin: 'cli' },
           proxyConnectMode: { value: 'intercept', origin: 'default' },
           onProxyConnect: { value: nop, origin: 'file' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
@@ -118,6 +119,7 @@ describe('server configuration', () => {
 - (${highlighted('cli')} | file | api | default) CA key file path: ${highlighted(
         '"dummy/tls/path"',
       )}
+- (${highlighted('cli')} | file | api | default) TLS key size: ${highlighted('1024')}
 - (cli | ${highlighted('file')} | api | default) mocks folder: ${highlighted('"dummy/relative"')}
 - (cli | file | api | ${highlighted('default')}) delay: ${highlighted('"recorded"')}
 - (cli | ${highlighted('file')} | api | default) custom request handler: ${highlighted('✓')}
@@ -140,6 +142,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
           hostname: { value: '127.0.0.2', origin: 'cli' },
           port: { value: 8080, origin: 'cli' },
           tlsCAKeyPath: { value: null, origin: 'default' },
+          tlsKeySize: { value: 2048, origin: 'default' },
           proxyConnectMode: { value: 'forward', origin: 'cli' },
           onProxyConnect: { value: nop, origin: 'api' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
@@ -165,6 +168,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
 - (${highlighted('cli')} | file | api | default) proxy connect mode: ${highlighted('"forward"')}
 - (cli | file | api | ${highlighted('default')}) CA key file path: ${highlighted('null')}
+- (cli | file | api | ${highlighted('default')}) TLS key size: ${highlighted('2048')}
 - (cli | ${highlighted('file')} | api | default) mocks folder: ${highlighted('"dummy/relative"')}
 - (cli | file | api | ${highlighted('default')}) delay: ${highlighted('"recorded"')}
 - (cli | ${highlighted('file')} | api | default) custom request handler: ${highlighted('✓')}

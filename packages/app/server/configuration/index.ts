@@ -73,6 +73,7 @@ export function logApplicationData({ configuration, root }: ApplicationData) {
   logProperty('proxy mode', configuration.mode);
   logProperty('proxy connect mode', configuration.proxyConnectMode);
   logProperty('CA key file path', configuration.tlsCAKeyPath);
+  logProperty('TLS key size', configuration.tlsKeySize);
   logProperty('mocks folder', configuration.mocksFolder);
   logProperty('delay', configuration.delay);
   logProperty('custom request handler', configuration.hook, true);

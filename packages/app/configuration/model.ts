@@ -186,6 +186,11 @@ export interface CLIConfigurationSpec {
    * through kassette.
    */
   readonly tlsCAKeyPath?: string | null;
+
+  /**
+   * Size in bits of generated RSA keys.
+   */
+  readonly tlsKeySize?: number;
 }
 
 /**

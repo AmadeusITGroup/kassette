@@ -71,7 +71,11 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
     await mock.process();
   });
 
-  const tlsManager = new TLSManager({ tlsCAKeyPath: configuration.tlsCAKeyPath.value, root });
+  const tlsManager = new TLSManager({
+    tlsCAKeyPath: configuration.tlsCAKeyPath.value,
+    tlsKeySize: configuration.tlsKeySize.value,
+    root,
+  });
   await tlsManager.init();
 
   const handleSocket = (socket: Socket) => {

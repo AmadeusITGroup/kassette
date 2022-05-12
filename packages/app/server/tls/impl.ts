@@ -11,7 +11,13 @@ export class TLSManager {
   private _caPem: string;
   private _contexts = new Map<string, Promise<SecureContext>>();
 
-  constructor(private _config: { root: string; tlsCAKeyPath: string | null }) {}
+  constructor(
+    private _config: {
+      root: string;
+      tlsCAKeyPath: string | null;
+      tlsKeySize: number;
+    },
+  ) {}
 
   public async init() {
     const { root, tlsCAKeyPath } = this._config;
@@ -52,7 +58,9 @@ export class TLSManager {
       }
     }
     if (!this._caObject) {
-      const ca = await createCertificate(['DO NOT TRUST kassette TLS interception certificate']);
+      const ca = await createCertificate(['DO NOT TRUST kassette TLS interception certificate'], {
+        keySize: this._config.tlsKeySize,
+      });
       this._caObject = ca.object;
       this._caPem = ca.cert;
       if (tlsCAFilePath) {
@@ -65,7 +73,11 @@ export class TLSManager {
     let res = this._contexts.get(host);
     if (!res) {
       res = (async () => {
-        const certificate = await createCertificate([host], this._caObject, false);
+        const certificate = await createCertificate([host], {
+          issuer: this._caObject,
+          ca: false,
+          keySize: this._config.tlsKeySize,
+        });
         return createSecureContext({
           cert: `${certificate.cert}\n${this._caPem}`,
           key: certificate.key,
