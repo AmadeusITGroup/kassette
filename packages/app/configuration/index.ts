@@ -96,6 +96,12 @@ export async function getConfiguration({
       apiValue: apiConfiguration.tlsCAKeyPath,
       defaultValue: null,
     }),
+    tlsKeySize: buildProperty({
+      cliValue: cliConfiguration.tlsKeySize,
+      fileValue: fileConfiguration.tlsKeySize,
+      apiValue: apiConfiguration.tlsKeySize,
+      defaultValue: 2048,
+    }),
     delay: buildProperty({
       cliValue: cliConfiguration.delay,
       fileValue: fileConfiguration.delay,

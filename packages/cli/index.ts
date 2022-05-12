@@ -83,6 +83,10 @@ const { version } = require('../../package.json');
       describe: 'path to a PEM-encoded CA certificate and key file, created if it does not exist.',
       string: true,
     })
+    .option('tls-key-size', {
+      describe: 'size in bits of generated RSA keys.',
+      type: 'number',
+    })
     .option('d', {
       alias: ['delay'],
       describe: 'mock response artificial delay',
@@ -105,6 +109,7 @@ const { version } = require('../../package.json');
       mocksFolder: options.f,
       skipLog: options.q,
       tlsCAKeyPath: options.k,
+      tlsKeySize: options.tlsKeySize,
     },
     configurationPath: options.c as string,
   });
