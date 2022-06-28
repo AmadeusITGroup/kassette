@@ -32,14 +32,14 @@ export default {
 
   /** The set of messages displayed to the end user */
   messages: {
-    writingSource: 'Writing source file at',
-    writingInputRequest: 'Writing input request content file at',
-    writingForwardedRequest: 'Writing forwarded request content file at',
+    writingHarFile: 'Writing har file at',
+    writingInputRequestData: 'Writing input request data file at',
+    writingInputRequestBody: 'Writing input request body file at',
+    writingForwardedRequestData: 'Writing forwarded request data file at',
+    writingForwardedRequestBody: 'Writing forwarded request body file at',
     writingData: 'Writing data file at',
     writingBody: 'Writing body file at',
     writingChecksumFile: 'Writing checksum file at',
-
-    importingMockHook: 'Importing local mock hook function from',
 
     servingMockDirectly: 'Serving local mock directly',
     inexistentMock: 'Local mock did not exist, creating empty payload',

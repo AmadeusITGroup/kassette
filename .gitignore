@@ -32,3 +32,5 @@ coverage-e2e/
 # Mac OSX Finder files.
 **/.DS_Store
 .DS_Store
+
+__ws__

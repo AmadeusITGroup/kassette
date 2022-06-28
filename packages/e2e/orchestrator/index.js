@@ -189,6 +189,8 @@ async function run() {
   groupStart(`launching ${highlightEntity('client')}`);
   const client = await clientHandler.create({
     proxyPort: proxy.port,
+    backendPort: backend.port,
+    alternativeBackendPort: alternativeBackend.port,
 
     pushClientData: results.pusher('clientData'),
     pushClientResult,

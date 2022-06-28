@@ -1,6 +1,7 @@
 import picocolors from 'picocolors';
 
 import { createGlobalLogger } from '../../logger';
+import { defaultHarKeyManager } from '../../../lib/har/harFile';
 
 import { logProperty, logApplicationData, build } from './';
 
@@ -95,7 +96,11 @@ describe('server configuration', () => {
           proxyConnectMode: { value: 'intercept', origin: 'default' },
           onProxyConnect: { value: nop, origin: 'file' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
+          mocksFormat: { value: 'folder', origin: 'default' },
           mocksFolder: { value: 'dummy/relative', origin: 'file' },
+          mocksHarFile: { value: 'dummy/relative.har', origin: 'file' },
+          harFileCacheTime: { value: 5 * 60 * 1000, origin: 'default' },
+          mocksHarKeyManager: { value: defaultHarKeyManager, origin: 'default' },
           mode: { value: 'remote', origin: 'default' },
           delay: { value: 'recorded', origin: 'default' },
           skipLog: { value: false, origin: 'default' },
@@ -103,6 +108,12 @@ describe('server configuration', () => {
           hook: { value: nop, origin: 'file' },
           onExit: { value: nop, origin: 'default' },
           console: { value: { log: nop, error: nop }, origin: 'api' },
+          saveChecksumContent: { value: true, origin: 'default' },
+          saveDetailedTimings: { value: true, origin: 'default' },
+          saveInputRequestData: { value: true, origin: 'default' },
+          saveInputRequestBody: { value: true, origin: 'default' },
+          saveForwardedRequestData: { value: true, origin: 'default' },
+          saveForwardedRequestBody: { value: true, origin: 'default' },
         },
       });
 
@@ -120,7 +131,12 @@ describe('server configuration', () => {
         '"dummy/tls/path"',
       )}
 - (${highlighted('cli')} | file | api | default) TLS key size: ${highlighted('1024')}
+- (cli | file | api | ${highlighted('default')}) mocks format: ${highlighted('"folder"')}
 - (cli | ${highlighted('file')} | api | default) mocks folder: ${highlighted('"dummy/relative"')}
+- (cli | ${highlighted('file')} | api | default) mocks har file: ${highlighted(
+        '"dummy/relative.har"',
+      )}
+- (cli | file | api | ${highlighted('default')}) mocks har key manager: ${highlighted('✗', 'red')}
 - (cli | file | api | ${highlighted('default')}) delay: ${highlighted('"recorded"')}
 - (cli | ${highlighted('file')} | api | default) custom request handler: ${highlighted('✓')}
 - (cli | ${highlighted('file')} | api | default) on proxy connect handler: ${highlighted('✓')}
@@ -146,7 +162,11 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
           proxyConnectMode: { value: 'forward', origin: 'cli' },
           onProxyConnect: { value: nop, origin: 'api' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
+          mocksFormat: { value: 'folder', origin: 'default' },
           mocksFolder: { value: 'dummy/relative', origin: 'file' },
+          mocksHarFile: { value: 'mocks.har', origin: 'default' },
+          harFileCacheTime: { value: 5 * 60 * 1000, origin: 'default' },
+          mocksHarKeyManager: { value: defaultHarKeyManager, origin: 'default' },
           mode: { value: 'remote', origin: 'default' },
           delay: { value: 'recorded', origin: 'default' },
           skipLog: { value: false, origin: 'default' },
@@ -154,6 +174,12 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
           hook: { value: nop, origin: 'file' },
           onExit: { value: nop, origin: 'default' },
           console: { value: { log: nop, error: nop }, origin: 'api' },
+          saveChecksumContent: { value: true, origin: 'default' },
+          saveDetailedTimings: { value: true, origin: 'default' },
+          saveInputRequestData: { value: true, origin: 'default' },
+          saveInputRequestBody: { value: true, origin: 'default' },
+          saveForwardedRequestData: { value: true, origin: 'default' },
+          saveForwardedRequestBody: { value: true, origin: 'default' },
         },
       });
 
@@ -169,7 +195,10 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
 - (${highlighted('cli')} | file | api | default) proxy connect mode: ${highlighted('"forward"')}
 - (cli | file | api | ${highlighted('default')}) CA key file path: ${highlighted('null')}
 - (cli | file | api | ${highlighted('default')}) TLS key size: ${highlighted('2048')}
+- (cli | file | api | ${highlighted('default')}) mocks format: ${highlighted('"folder"')}
 - (cli | ${highlighted('file')} | api | default) mocks folder: ${highlighted('"dummy/relative"')}
+- (cli | file | api | ${highlighted('default')}) mocks har file: ${highlighted('"mocks.har"')}
+- (cli | file | api | ${highlighted('default')}) mocks har key manager: ${highlighted('✗', 'red')}
 - (cli | file | api | ${highlighted('default')}) delay: ${highlighted('"recorded"')}
 - (cli | ${highlighted('file')} | api | default) custom request handler: ${highlighted('✓')}
 - (cli | file | ${highlighted('api')} | default) on proxy connect handler: ${highlighted('✓')}

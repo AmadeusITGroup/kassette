@@ -22,7 +22,9 @@ import {
   IMergedConfiguration,
   ConfigurationPropertySpec,
   ConfigurationPropertySource,
+  MocksFormat,
 } from './model';
+import { defaultHarKeyManager, HarKeyManager } from '../../lib/har/harFile';
 
 export * from './model';
 
@@ -52,6 +54,19 @@ export async function getConfiguration({
     fileConfiguration = {};
   }
 
+  const mocksFolder = buildProperty({
+    cliValue: cliConfiguration.mocksFolder,
+    fileValue: fileConfiguration.mocksFolder,
+    apiValue: apiConfiguration.mocksFolder,
+    defaultValue: './mocks',
+  });
+  const mocksHarFile = buildProperty({
+    cliValue: cliConfiguration.mocksHarFile,
+    fileValue: fileConfiguration.mocksHarFile,
+    apiValue: apiConfiguration.mocksHarFile,
+    defaultValue: './mocks.har',
+  });
+
   return {
     filePath: configurationPath == null ? null : configurationPath,
     skipLog: buildProperty({
@@ -72,17 +87,69 @@ export async function getConfiguration({
       apiValue: apiConfiguration.port,
       defaultValue: 8080,
     }),
-    mocksFolder: buildProperty({
-      cliValue: cliConfiguration.mocksFolder,
-      fileValue: fileConfiguration.mocksFolder,
-      apiValue: apiConfiguration.mocksFolder,
-      defaultValue: './mocks',
+    mocksFolder,
+    mocksHarFile,
+    harFileCacheTime: buildProperty({
+      cliValue: cliConfiguration.harFileCacheTime,
+      fileValue: fileConfiguration.harFileCacheTime,
+      apiValue: apiConfiguration.harFileCacheTime,
+      defaultValue: 5 * 60 * 1000, // 5 min
+    }),
+    mocksHarKeyManager: buildProperty<HarKeyManager>({
+      cliValue: null,
+      fileValue: fileConfiguration.mocksHarKeyManager,
+      apiValue: apiConfiguration.mocksHarKeyManager,
+      defaultValue: defaultHarKeyManager,
     }),
     mode: buildProperty<Mode>({
       cliValue: cliConfiguration.mode,
       fileValue: fileConfiguration.mode,
       apiValue: apiConfiguration.mode,
       defaultValue: 'local_or_download',
+    }),
+    mocksFormat: buildProperty<MocksFormat>({
+      cliValue: cliConfiguration.mocksFormat,
+      fileValue: fileConfiguration.mocksFormat,
+      apiValue: apiConfiguration.mocksFormat,
+      // defaults to folder, unless mocksHarFile is specified and mocksFolder is unspecified
+      defaultValue:
+        mocksHarFile.origin !== 'default' && mocksFolder.origin === 'default' ? 'har' : 'folder',
+    }),
+    saveChecksumContent: buildProperty<boolean>({
+      cliValue: cliConfiguration.saveChecksumContent,
+      fileValue: fileConfiguration.saveChecksumContent,
+      apiValue: apiConfiguration.saveChecksumContent,
+      defaultValue: true,
+    }),
+    saveDetailedTimings: buildProperty<boolean>({
+      cliValue: cliConfiguration.saveDetailedTimings,
+      fileValue: fileConfiguration.saveDetailedTimings,
+      apiValue: apiConfiguration.saveDetailedTimings,
+      defaultValue: true,
+    }),
+    saveInputRequestData: buildProperty<boolean>({
+      cliValue: cliConfiguration.saveInputRequestData,
+      fileValue: fileConfiguration.saveInputRequestData,
+      apiValue: apiConfiguration.saveInputRequestData,
+      defaultValue: true,
+    }),
+    saveInputRequestBody: buildProperty<boolean>({
+      cliValue: cliConfiguration.saveInputRequestBody,
+      fileValue: fileConfiguration.saveInputRequestBody,
+      apiValue: apiConfiguration.saveInputRequestBody,
+      defaultValue: true,
+    }),
+    saveForwardedRequestData: buildProperty<boolean | null>({
+      cliValue: cliConfiguration.saveForwardedRequestData,
+      fileValue: fileConfiguration.saveForwardedRequestData,
+      apiValue: apiConfiguration.saveForwardedRequestData,
+      defaultValue: null,
+    }),
+    saveForwardedRequestBody: buildProperty<boolean | null>({
+      cliValue: cliConfiguration.saveForwardedRequestBody,
+      fileValue: fileConfiguration.saveForwardedRequestBody,
+      apiValue: apiConfiguration.saveForwardedRequestBody,
+      defaultValue: null,
     }),
     proxyConnectMode: buildProperty<ProxyConnectMode>({
       cliValue: cliConfiguration.proxyConnectMode,

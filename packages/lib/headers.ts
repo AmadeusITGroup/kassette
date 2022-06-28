@@ -56,19 +56,26 @@ const proxyHandler: ProxyHandler<IncomingHttpHeaders> = {
 export const headersContainer = (): IncomingHttpHeaders =>
   new Proxy(Object.create(null), proxyHandler);
 
+export const appendHeader = (
+  headers: IncomingHttpHeaders,
+  headerName: string,
+  headerValue: string,
+) => {
+  let result: string | string[] = headerValue;
+  const existingHeader = headers[headerName];
+  if (Array.isArray(existingHeader)) {
+    existingHeader.push(headerValue);
+    result = existingHeader;
+  } else if (typeof existingHeader === 'string') {
+    result = [existingHeader, headerValue];
+  }
+  headers[headerName] = result;
+};
+
 export const processRawHeaders = (rawHeaders: string[]) => {
   const headers = headersContainer();
   for (let i = 0, l = rawHeaders.length; i < l; i += 2) {
-    const headerName = rawHeaders[i];
-    let headerValue: string | string[] = rawHeaders[i + 1];
-    const existingHeader = headers[headerName];
-    if (Array.isArray(existingHeader)) {
-      existingHeader.push(headerValue);
-      headerValue = existingHeader;
-    } else if (typeof existingHeader === 'string') {
-      headerValue = [existingHeader, headerValue];
-    }
-    headers[headerName] = headerValue;
+    appendHeader(headers, rawHeaders[i], rawHeaders[i + 1]);
   }
   return headers;
 };

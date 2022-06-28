@@ -4,7 +4,7 @@ import * as yargs from 'yargs';
 
 // ------------------------------------------------------------------------- app
 
-import { runFromCLI, Mode, ProxyConnectMode } from '..';
+import { runFromCLI, Mode, ProxyConnectMode, MocksFormat } from '..';
 
 ////////////////////////////////////////////////////////////////////////////////
 // XXX 2019-01-09T16:24:12+01:00 IMPORTANT
@@ -62,9 +62,50 @@ const { version } = require('../../package.json');
     })
     .option('f', {
       alias: ['folder', 'mocks-folder'],
-      describe: 'path to mocks base folder',
+      describe: 'path to mocks base folder (if mocks-format is "folder")',
       string: true,
       // default: './mocks',
+    })
+    .options('har-file', {
+      alias: ['mocks-har-file'],
+      describe: 'path to the har file containing mocks (if mocks-format is "har")',
+      string: true,
+    })
+    .options('har-file-cache-time', {
+      describe:
+        'time in milliseconds during which a har file is kept in memory after its last usage',
+      number: true,
+    })
+    .options('mocks-format', {
+      choices: ['folder', 'har'],
+      describe: 'mocks file format',
+      string: true,
+    })
+    .options('save-checksum-content', {
+      boolean: true,
+      describe:
+        'save the content used to create a checksum when creating a new mock with a checksum',
+    })
+    .options('save-detailed-timings', {
+      boolean: true,
+      describe:
+        'save detailed timings (blocked, dns, connect, send, wait, receive, ssl) when creating a new mock',
+    })
+    .options('save-input-request-data', {
+      boolean: true,
+      describe: 'save the input request data (headers, method, URL) when creating a new mock',
+    })
+    .options('save-input-request-body', {
+      boolean: true,
+      describe: 'save the content of the input request body when creating a new mock',
+    })
+    .options('save-forwarded-request-data', {
+      boolean: true,
+      describe: 'save the forwarded request data (headers, method, URL) when creating a new mock',
+    })
+    .options('save-forwarded-request-body', {
+      boolean: true,
+      describe: 'save the forwarded request body when creating a new mock',
     })
     .option('m', {
       alias: 'mode',
@@ -105,8 +146,17 @@ const { version } = require('../../package.json');
       port: options.p,
       delay: delay as number | undefined,
       mode: options.m as Mode,
+      mocksFormat: options.mocksFormat as MocksFormat,
       proxyConnectMode: options.x as ProxyConnectMode,
+      mocksHarFile: options.harFile,
+      harFileCacheTime: options.harFileCacheTime,
       mocksFolder: options.f,
+      saveChecksumContent: options.saveChecksumContent,
+      saveDetailedTimings: options.saveDetailedTimings,
+      saveInputRequestData: options.saveInputRequestData,
+      saveInputRequestBody: options.saveInputRequestBody,
+      saveForwardedRequestData: options.saveForwardedRequestData,
+      saveForwardedRequestBody: options.saveForwardedRequestBody,
       skipLog: options.q,
       tlsCAKeyPath: options.k,
       tlsKeySize: options.tlsKeySize,

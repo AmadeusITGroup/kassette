@@ -29,6 +29,7 @@ export {
   MockData,
   MockingOptions,
   Mode,
+  MocksFormat,
   Payload,
   PayloadOrigin,
   PayloadWithOrigin,
@@ -39,5 +40,16 @@ export {
   runFromCLI, // internal
   Status,
 } from './app';
+export {
+  RequestTimings,
+  HarFormatTimings,
+  HarFormatEntry,
+  HarFormatPostData,
+  HarFormatRequest,
+  HarFormatResponse,
+  HarFormatNameValuePair,
+  HarFormatContent,
+} from './lib/har/harTypes';
+export { HarKeyManager } from './lib/har/harFile';
 export { RecursiveArray } from './lib/array';
 export { Headers } from './lib/headers';

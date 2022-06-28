@@ -4,6 +4,7 @@ import { HookAPI } from '../mocking';
 import { IProxyConnectAPI } from '../server/proxy';
 
 import { ConsoleSpec } from '../logger';
+import { HarKeyManager } from '../../lib/har/harFile';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -44,6 +45,37 @@ export type Mode =
   | 'local_or_remote'
   | 'local_or_download'
   | 'manual';
+
+/**
+ * Specifies the mocks format to use. It can be defined globally through
+ * the {@link CLIConfigurationSpec.mocksFormat|mocksFormat} setting
+ * or per-request from the {@link ConfigurationSpec.hook|hook} method through
+ * {@link IMock.setMocksFormat|setMocksFormat}.
+ *
+ * @remarks
+ *
+ * Here are the two possible formats:
+ *
+ * - the `folder` format is specific to kassette and stores each request with its response in
+ * one folder containing up to 7 files:
+ * `data.json` (headers, status code and message of the response, as specified in {@link MockData}),
+ * `body.[ext]` (content of the body of the backend response),
+ * `input-request.json` (headers, method, URL and body file name of the input request, from client to proxy, for debug),
+ * `input-request-body.[ext]` (content of the body of the input request),
+ * `forwarded-request.json` (headers, method, URL, whether body was eventually a string or a Buffer and body file name
+ * of the forwarded request, from proxy to backend, for debug),
+ * `forwarded-request-body.[ext]` (the content of the body of the forwarded request),
+ * `checksum` (if a checksum was computed, the content generated to compute it).
+ * `[ext]` is an extension computed based on the actual type of the content in the file.
+ *
+ * - the `har` {@link http://www.softwareishard.com/blog/har-12-spec | format } is supported
+ * {@link http://www.softwareishard.com/blog/har-adopters/ | by several other tools} and can store
+ * multiple requests with their responses in a single (json-based) file. In this file, each
+ * request/response couple follows the structure specified in {@link HarFormatEntry}.
+ *
+ * @public
+ */
+export type MocksFormat = 'folder' | 'har';
 
 /**
  * Delay that will be used to send the response to the client
@@ -131,6 +163,97 @@ export interface CLIConfigurationSpec {
   readonly mode?: Mode;
 
   /**
+   * The default mocks format.
+   *
+   * @remarks
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setMocksFormat|mock.setMocksFormat}.
+   *
+   * The default value of the global `mocksFormat` setting is `folder`, except in the following case:
+   * if the global {@link CLIConfigurationSpec.mocksHarFile|mocksHarFile} setting is defined
+   * and the global {@link CLIConfigurationSpec.mocksFolder|mocksFolder} setting is not defined,
+   * then the default value of the global `mocksFormat` setting is `har`.
+   */
+  readonly mocksFormat?: MocksFormat;
+
+  /**
+   * Whether to save the content used to create a checksum when creating a new mock with a checksum.
+   *
+   * @remarks
+   *
+   * The default value of the global `saveChecksumContent` setting is `true`.
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setSaveChecksumContent|mock.setSaveChecksumContent}.
+   */
+  readonly saveChecksumContent?: boolean;
+
+  /**
+   * Whether to save {@link RequestTimings | detailed timings} when creating a new mock.
+   *
+   * @remarks
+   *
+   * The default value of the global `saveDetailedTimings` setting is `true`.
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setSaveDetailedTimings|mock.setSaveDetailedTimings}.
+   */
+  readonly saveDetailedTimings?: boolean;
+
+  /**
+   * Whether to save the input request data (headers, method, URL) when creating a new mock.
+   *
+   * @remarks
+   *
+   * The default value of the global `saveInputRequestData` setting is `true`.
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setSaveInputRequestData|mock.setSaveInputRequestData}.
+   */
+  readonly saveInputRequestData?: boolean;
+
+  /**
+   * Whether to save the content of the input request body when creating a new mock.
+   *
+   * @remarks
+   *
+   * The default value of the global `saveInputRequestBody` setting is `true`.
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setSaveInputRequestBody|mock.setSaveInputRequestBody}.
+   */
+  readonly saveInputRequestBody?: boolean;
+
+  /**
+   * Whether to save the forwarded request data (headers, method, URL) when creating a new mock.
+   *
+   * @remarks
+   *
+   * The default value of the global `saveForwardedRequestData` setting is `null`, which means
+   * `true` when `mocksFormat` is `folder` (for backward-compatibility), and
+   * `false` when `mocksFormat` is `har`.
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setSaveForwardedRequestData|mock.setSaveForwardedRequestData}.
+   */
+  readonly saveForwardedRequestData?: boolean | null;
+
+  /**
+   * Whether to save the forwarded request body when creating a new mock.
+   *
+   * @remarks
+   *
+   * The default value of the global `saveForwardedRequestData` setting is `null`, which means
+   * `true` when `mocksFormat` is `folder` (for backward-compatibility), and
+   * `false` when `mocksFormat` is `har`.
+   *
+   * It can be changed at request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setSaveForwardedRequestBody|mock.setSaveForwardedRequestBody}.
+   */
+  readonly saveForwardedRequestBody?: boolean | null;
+
+  /**
    * The default delay.
    *
    * @remarks
@@ -141,7 +264,8 @@ export interface CLIConfigurationSpec {
   readonly delay?: Delay;
 
   /**
-   * The default root folder of all mocks, from which specific mocks paths will be resolved.
+   * When the {@link CLIConfigurationSpec.mocksFormat|mocks format} is 'folder', specifies
+   * the default root folder of all mocks, from which specific mocks paths will be resolved.
    *
    * @remarks
    *
@@ -149,6 +273,22 @@ export interface CLIConfigurationSpec {
    * through {@link IMock.setMocksFolder|mock.setMocksFolder}.
    */
   readonly mocksFolder?: string;
+
+  /**
+   * When the {@link CLIConfigurationSpec.mocksFormat|mocks format} is 'har', specifies
+   * the default har file to use.
+   *
+   * @remarks
+   *
+   * It can be changed at a request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setMocksHarFile|mock.setMocksHarFile}.
+   */
+  readonly mocksHarFile?: string;
+
+  /**
+   * Time in milliseconds during which a har file is kept in memory after its last usage.
+   */
+  readonly harFileCacheTime?: number;
 
   /**
    * The URL of the remote backend, from which only the protocol, hostname and port are used.
@@ -206,6 +346,16 @@ export interface ConfigurationSpec extends CLIConfigurationSpec {
    * @param parameters - exposes the API to control how to process the request
    */
   hook?(parameters: HookAPI): void | Promise<void>;
+
+  /**
+   * Function called to get or set the key of a mock in a har file, as explained in {@link HarKeyManager}.
+   *
+   * @remarks
+   *
+   * It can be changed at a request level in the {@link ConfigurationSpec.hook|hook} method
+   * through {@link IMock.setMocksHarKeyManager|mock.setMocksHarKeyManager}.
+   */
+  readonly mocksHarKeyManager?: HarKeyManager;
 
   /**
    * Callback called when kassette receives a request with the

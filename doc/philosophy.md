@@ -4,15 +4,6 @@
   style='position: absolute; top: 50%; transform: translateY(-50%) translateX(-50%); left: 50%'
 >WIP</span></div>
 
-Table of contents:
-
-<!-- TOC -->
-
-- [Properties](#properties)
-- [Methods](#methods)
-
-<!-- /TOC -->
-
 <a id="markdown-properties" name="properties"></a>
 
 # Properties

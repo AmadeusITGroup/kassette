@@ -63,7 +63,7 @@ export interface IResponse {
    * Merge given `headers` map with the previously set headers (initial set is an empty map).
    * @param headers - Headers to set. Each header value can be a number, a string, or an array of strings. Put a `null` value to suppress a header
    */
-  setHeaders(headers: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders>;
+  setHeaders(headers?: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders>;
 
   /**
    * Sends the response, applying some data previously specified but not set yet

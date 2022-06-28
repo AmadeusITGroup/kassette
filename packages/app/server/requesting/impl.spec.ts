@@ -3,7 +3,7 @@ jest.mock('http');
 
 import picocolors from 'picocolors';
 
-import { requestHTTP, requestHTTPS, measure, sendRequest } from './impl';
+import { requestHTTP, requestHTTPS, sendRequest } from './impl';
 
 import { readAll } from '../../../lib/stream';
 import { IFetchedRequest } from '../request/model';
@@ -34,38 +34,6 @@ function highlighted(text: string, color = 'green'): string {
 ////////////////////////////////////////////////////////////////////////////////
 
 describe('requesting', () => {
-  describe('measure', () => {
-    it('should return start, end, duration and output', async () => {
-      const delay = 1000;
-      const wait = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
-      let called = false;
-      let finished = false;
-      const returnedValue = {};
-      const myAsyncFunction = async () => {
-        called = true;
-        await wait(delay);
-        finished = true;
-        return returnedValue;
-      };
-
-      const { start, end, duration, output } = await measure(myAsyncFunction);
-
-      expect(called).toBeTruthy();
-      expect(finished).toBeTruthy();
-
-      expect(start).toBeGreaterThanOrEqual(0);
-      expect(end).toBeGreaterThanOrEqual(0);
-      expect(end).toBeGreaterThan(start);
-
-      expect(duration).toBe(end - start);
-      const margin = 50;
-      expect(duration).toBeLessThanOrEqual(delay + margin);
-      expect(duration).toBeGreaterThanOrEqual(delay - margin);
-
-      expect(output).toBe(output);
-    });
-  });
-
   describe('requestHTTP', () => {
     it('should send HTTP request and get raw response', async () => {
       const url = 'http://remote.dev/my/api';

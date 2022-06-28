@@ -43,6 +43,30 @@ async function getLocalMockInfo({ folder }) {
   return { files, mock };
 }
 
+async function copyFile(source, destination) {
+  const { promises: fs } = require('fs');
+  await fs.copyFile(source, destination);
+}
+
+async function mkParentDirectory(filePath) {
+  const path = require('path');
+  const { promises: fs } = require('fs');
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+}
+
+async function getHarFile({ file }) {
+  const { promises: fs } = require('fs');
+  try {
+    const fileContent = await fs.readFile(file);
+    return {
+      harFile: JSON.parse(fileContent),
+    };
+  } catch (exception) {
+    if (exception.code !== 'ENOENT') throw exception;
+    return null;
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Data
 ////////////////////////////////////////////////////////////////////////////////
@@ -482,6 +506,466 @@ const useCases = [
   },
 
   //////////////////////////////////////////////////////////////////////////////
+  // Mock files generation with har files
+  //
+  // Description of the iterations:
+  //
+  // - 1:
+  //   - mode: remote
+  //   - mocks present before: no
+  //   - mocks present after: no
+  //   - mocks updated: no
+  //   - final response origin: remote
+  // - 2
+  //   - mode: local or download
+  //   - mocks present before: no
+  //   - mocks present after: yes
+  //   - mocks updated: yes
+  //   - final response origin: remote
+  // - 3
+  //   - mode: local or download
+  //   - mocks present before: yes
+  //   - mocks present after: yes
+  //   - mocks updated: no
+  //   - final response origin: local
+  // - 4
+  //   - mode: download
+  //   - mocks present before: yes
+  //   - mocks present after: yes
+  //   - mocks updated: yes
+  //   - final response origin: remote
+  // - 5
+  //   - mode: local
+  //   - mocks present before: yes
+  //   - mocks present after: yes
+  //   - mocks updated: no
+  //   - final response origin: local
+  // For iterations 6 and 7, which are similar to iterations 5 and 4, the har file is copied
+  // to a new location and loaded from there (to test the har file loading process).
+  // - 6
+  //   - mode: local
+  //   - mocks present before: yes
+  //   - mocks present after: yes
+  //   - mocks updated: no
+  //   - final response origin: local
+  // - 7
+  //   - mode: download
+  //   - mocks present before: yes
+  //   - mocks present after: yes
+  //   - mocks updated: yes
+  //   - final response origin: remote
+  //////////////////////////////////////////////////////////////////////////////
+
+  {
+    name: 'generate-files-har',
+    description: 'mock har files generation',
+    iterations: 7,
+
+    request: async ({ iteration }) => {
+      return { request: { headers: { 'x-iteration': iteration } } };
+    },
+
+    serve: async ({ response, request }) => {
+      const output = {};
+      const iteration = request.headers['x-iteration'];
+      response.body = output.body = `from backend: ${iteration}`;
+      response.status = output.status = 200;
+      return output;
+    },
+
+    proxy: async ({ mock }, { iteration }) => {
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har']);
+      if (iteration >= 5) {
+        // from the 6th iteration, copy the har file to a new location to force testing the loading process:
+        const oldMockFile = mock.mocksHarFile;
+        mock.setMocksHarFile(oldMockFile.replace(/mocks\.har$/, `iteration-${iteration}.har`));
+        await copyFile(oldMockFile, mock.mocksHarFile);
+      }
+      const harFile = mock.mocksHarFile;
+
+      if (iteration === 0) {
+        mock.setMode('remote');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 1) {
+        mock.setMode('local_or_download');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return {
+          harFile,
+          wrappedPayload,
+        };
+      } else if (iteration === 2) {
+        mock.setMode('local_or_download');
+
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        // TODO 2018-12-11T11:18:31+01:00
+        // Alter the data read from the files to check it's feasible,
+        // and then verify that the client side received the altered data
+        return {
+          harFile,
+          wrappedPayload,
+          // alteredData: ...,
+        };
+      } else if (iteration === 3) {
+        mock.setMode('download');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 4) {
+        mock.setMode('local');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 5) {
+        mock.setMode('local');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 6) {
+        mock.setMode('download');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      }
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should not persist any data if mode is remote', async () => {
+        const { data } = getData(0);
+        expect(
+          data.postProcessing.harFile,
+          'When working in "remote" mode, the proxy should not create local files',
+        ).to.be.undefined;
+        expect(data.proxy.wrappedPayload.origin).to.equal('remote');
+      });
+
+      it('should persist data in local or remote mode', async () => {
+        const expectedBody = 'from backend: 1';
+        let iterationData;
+
+        iterationData = getData(1).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'When proxy works in "local_or_download" mode, it should create an entry in the har mock file',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'Getting the current payload during the iteration where the proxy is creating the local files should indicate the payload comes from the "remote" source (the backend)',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 1, when it was stored',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock stored at iteration 1',
+        );
+
+        iterationData = getData(2).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'Entry in the har mock file should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'local',
+          'Getting the current payload during the iteration where the proxy has already local files available should indicate the payload comes from the "local" source',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 1, when it was stored',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock stored at iteration 1',
+        );
+      });
+
+      it('should update mock unconditionally in download mode', async () => {
+        let expectedBody = 'from backend: 3';
+        let iterationData;
+
+        iterationData = getData(3).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'When proxy works in "download" mode, it should create/update an entry in the har mock file',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'In "download" mode, the data forwarded to the client comes from the remote backend.',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
+
+        iterationData = getData(4).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'Entry in the har mock file should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal('local');
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
+
+        iterationData = getData(5).data;
+        expect(iterationData.proxy.harFile).to.include('iteration-5.har');
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'Entry in the har mock file should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal('local');
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
+
+        expectedBody = 'from backend: 6';
+        iterationData = getData(6).data;
+        expect(iterationData.proxy.harFile).to.include('iteration-6.har');
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'When proxy works in "download" mode, it should create/update an entry in the har mock file',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'In "download" mode, the data forwarded to the client comes from the remote backend.',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 6, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 6',
+        );
+      });
+    },
+  },
+
+  {
+    name: 'har-file-from-playwright',
+    description: 'use a har file produced by playwright',
+    iterations: 2,
+    browserProxy: true,
+
+    request: async ({ backendPort, iteration }) => {
+      return {
+        request: {
+          url: `http://127.0.0.1:${backendPort}/${iteration}`,
+        },
+      };
+    },
+
+    serve: async ({ response, request }) => {
+      const output = {};
+      const url = request.url;
+      response.body = output.body =
+        url === '/0'
+          ? 'hello from server!'
+          : Buffer.from('AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gZWZnaGlqa2xtbm9w', 'base64');
+      response.status = output.status = 200;
+      response.set('Access-Control-Allow-Origin', '*');
+      response.set('Content-Type', url === '/0' ? 'text/plain' : 'application/octet-stream');
+      return output;
+    },
+
+    proxy: async ({ mock }, { iteration }) => {
+      mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
+      mock.setMode('local');
+      mock.setMocksFormat('har');
+      const harFile = mock.mocksHarFile;
+      await mkParentDirectory(harFile);
+      const playwright = require('playwright');
+      const browser = await playwright.chromium.launch();
+      let body;
+      try {
+        const context = await browser.newContext({
+          recordHar: {
+            path: harFile,
+          },
+        });
+        const page = await context.newPage();
+        body = await page.evaluate(async (url) => {
+          const response = await fetch(url);
+          const body = await response.text();
+          return body;
+        }, mock.request.url.href);
+        await context.close();
+      } finally {
+        await browser.close();
+      }
+      await mock.process();
+      return { harFile, body };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should use the response from har file (text content)', () => {
+        const data = getData(0).data;
+        expect(data.proxy.body).to.equal('hello from server!');
+        expect(data.client.body).to.equal('hello from server!');
+        expect(data.client.status.code).to.equal(200);
+        expect(data.postProcessing.harFile.log.creator.name).to.equal('Playwright'); // used har file produced by playwright
+        expect(data.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          'hello from server!',
+        );
+        expect(data.postProcessing.harFile.log.entries[0].response.content.encoding).not.to.be.a(
+          'string',
+        );
+      });
+
+      it('should use the response from har file (binary content)', () => {
+        const expectedBodyBase64 = 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gZWZnaGlqa2xtbm9w';
+        const expectedBody = Buffer.from(expectedBodyBase64, 'base64').toString('binary');
+        const data = getData(1).data;
+        expect(data.proxy.body).to.equal(expectedBody);
+        expect(data.client.body).to.equal(expectedBody);
+        expect(data.client.status.code).to.equal(200);
+        expect(data.postProcessing.harFile.log.creator.name).to.equal('Playwright'); // used har file produced by playwright
+        expect(data.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBodyBase64,
+        );
+        expect(data.postProcessing.harFile.log.entries[0].response.content.encoding).to.equal(
+          'base64',
+        );
+      });
+    },
+  },
+
+  {
+    name: 'har-file-to-playwright',
+    description: 'use a har file produced by kassette in playwright',
+    iterations: 2,
+    browserProxy: true,
+
+    request: async ({ backendPort, iteration }) => {
+      return {
+        request: {
+          url: `http://127.0.0.1:${backendPort}/${iteration}`,
+        },
+      };
+    },
+
+    serve: async ({ response, request }) => {
+      const output = {};
+      const url = request.url;
+      response.body = output.body =
+        url === '/0'
+          ? 'hello from server!'
+          : Buffer.from('AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gZWZnaGlqa2xtbm9w', 'base64');
+      response.status = output.status = 200;
+      response.set('Access-Control-Allow-Origin', '*');
+      response.set('Content-Type', url === '/0' ? 'text/plain' : 'application/octet-stream');
+      return output;
+    },
+
+    proxy: async ({ mock }) => {
+      mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har']);
+      mock.setMode('download');
+      mock.setMocksFormat('har');
+      const harFile = mock.mocksHarFile;
+      await mock.process();
+      return { harFile };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should use the response from har file (text content)', async () => {
+        const expectedBody = 'hello from server!';
+        const data = getData(0).data;
+        expect(data.client.body).to.equal(expectedBody);
+        expect(data.client.status.code).to.equal(200);
+        expect(data.postProcessing.harFile.log.creator.name).to.equal('kassette'); // used har file produced by playwright
+        expect(data.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+        );
+        expect(data.postProcessing.harFile.log.entries[0].response.content.encoding).not.to.be.a(
+          'string',
+        );
+        const url = data.postProcessing.harFile.log.entries[0].request.url;
+        const harFile = data.proxy.harFile;
+        const playwright = require('playwright');
+        const browser = await playwright.chromium.launch({});
+        try {
+          const context = await browser.newContext();
+          await context.routeFromHAR(harFile);
+          const page = await context.newPage();
+          const body = await page.evaluate(async (url) => {
+            const response = await fetch(url);
+            const body = await response.text();
+            return body;
+          }, url);
+          expect(body.toString('utf8')).to.equal(expectedBody);
+          await context.close();
+        } finally {
+          await browser.close();
+        }
+      });
+
+      it('should use the response from har file (binary content)', async () => {
+        const expectedBodyBase64 = 'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gZWZnaGlqa2xtbm9w';
+        const expectedBody = Buffer.from(expectedBodyBase64, 'base64').toString('binary');
+        const data = getData(1).data;
+        expect(data.client.body).to.equal(expectedBody);
+        expect(data.client.status.code).to.equal(200);
+        expect(data.postProcessing.harFile.log.creator.name).to.equal('kassette'); // used har file produced by playwright
+        expect(data.postProcessing.harFile.log.entries[1].response.content.text).to.equal(
+          expectedBodyBase64,
+        );
+        expect(data.postProcessing.harFile.log.entries[1].response.content.encoding).to.equal(
+          'base64',
+        );
+        const url = data.postProcessing.harFile.log.entries[1].request.url;
+        const harFile = data.proxy.harFile;
+        const playwright = require('playwright');
+        const browser = await playwright.chromium.launch({});
+        try {
+          const context = await browser.newContext();
+          await context.routeFromHAR(harFile);
+          const page = await context.newPage();
+          const body = await page.evaluate(async (url) => {
+            const response = await fetch(url);
+            const body = await response.text();
+            return body;
+          }, url);
+          expect(body.toString('utf8')).to.equal(expectedBody);
+          await context.close();
+        } finally {
+          await browser.close();
+        }
+      });
+    },
+  },
+
+  //////////////////////////////////////////////////////////////////////////////
   // Mode: local or remote
   //
   // To test that, we need one request with a mock, and one without.
@@ -690,6 +1174,232 @@ const useCases = [
     },
   },
 
+  {
+    name: 'save-request-parts-folder',
+    description: 'checks the behavior of setSaveXXX',
+    iterations: 8,
+
+    request() {
+      return {
+        request: {
+          url: '/',
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            hello: 'ok',
+          }),
+        },
+      };
+    },
+
+    serve: async ({ response }) => {
+      response.status = 200;
+      response.body = 'ok';
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+      mock.setMode('download');
+      mock.setLocalPath([
+        mock.localPath,
+        `iteration-${iteration}`,
+        await mock.checksum({ body: true, query: false }),
+      ]);
+      mock.setSaveChecksumContent(iteration !== 0);
+      mock.setSaveDetailedTimings(iteration !== 1);
+      mock.setSaveForwardedRequestData(iteration !== 2 && iteration !== 3);
+      mock.setSaveForwardedRequestBody(iteration !== 3 && iteration !== 4);
+      mock.setSaveInputRequestData(iteration !== 5 && iteration !== 6);
+      mock.setSaveInputRequestBody(iteration !== 6 && iteration !== 7);
+      return { filesRoot: mock.mockFolderFullPath };
+    },
+
+    postProcess: async ({ data }) => {
+      const { readFile } = require('fs/promises');
+      const { join } = require('path');
+      const folder = data.proxy.filesRoot;
+      const result = await getLocalMockInfo({ folder });
+      result.filesContent = {};
+      for (const fileName of result.files) {
+        result.filesContent[fileName] = await readFile(join(folder, fileName), 'utf8');
+      }
+      return result;
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should respect setSaveXXX options', () => {
+        for (let iteration = 0; iteration < 8; iteration++) {
+          const data = getData(iteration).data.postProcessing;
+          /** @type import("..").MockData */
+          const entry = data.mock.data;
+          const files = data.filesContent;
+          // setSaveChecksumContent
+          if (iteration !== 0) {
+            expect(files.checksum).to.equal(
+              'method\n\npathname\n\nbody\n{"hello":"ok"}\n\nquery\n\nheaders\n\ncustom data\n',
+            );
+          } else {
+            expect(files.checksum).to.be.undefined;
+          }
+          // setSaveDetailedTimings
+          if (iteration !== 1) {
+            expect(entry.timings.dns).to.equal(-1);
+            expect(entry.timings.ssl).to.equal(-1);
+            expect(entry.timings.wait).to.be.above(0);
+            expect(entry.timings.connect).to.be.above(0);
+            expect(entry.timings.send).to.be.above(0);
+            expect(entry.timings.blocked).to.be.above(0);
+            expect(entry.timings.receive).to.be.above(0);
+            expect(entry.time).to.equal(
+              entry.timings.wait +
+                entry.timings.connect +
+                entry.timings.send +
+                entry.timings.blocked +
+                entry.timings.receive,
+            );
+          } else {
+            expect(entry.timings).to.be.undefined;
+          }
+          // setSaveForwardedRequestData
+          if (iteration !== 2 && iteration !== 3) {
+            expect(JSON.parse(files['forwarded-request.json']).method).to.equal('post');
+          } else {
+            expect(files['forwarded-request.json']).to.be.undefined;
+          }
+          // setSaveForwardedRequestBody
+          if (iteration !== 3 && iteration !== 4) {
+            expect(files['forwarded-request-body.json']).to.equal('{"hello":"ok"}');
+          } else {
+            expect(files['forwarded-request-body.json']).to.be.undefined;
+          }
+          // setSaveInputRequestData
+          if (iteration !== 5 && iteration !== 6) {
+            expect(JSON.parse(files['input-request.json']).method).to.equal('post');
+          } else {
+            expect(files['input-request.json']).to.be.undefined;
+          }
+          // setSaveInputRequestBody
+          if (iteration !== 6 && iteration !== 7) {
+            expect(files['input-request-body.json']).to.equal('{"hello":"ok"}');
+          } else {
+            expect(files['input-request-body.json']).to.be.undefined;
+          }
+        }
+      });
+    },
+  },
+
+  {
+    name: 'save-request-parts-har',
+    description: 'checks the behavior of setSaveXXX',
+    iterations: 8,
+
+    request() {
+      return {
+        request: {
+          url: '/',
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            hello: 'ok',
+          }),
+        },
+      };
+    },
+
+    serve: async ({ response }) => {
+      response.status = 200;
+      response.body = 'ok';
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+      mock.setMode('download');
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
+      mock.setMockHarKey([await mock.checksum({ body: true, query: false })]);
+      mock.setSaveChecksumContent(iteration !== 0);
+      mock.setSaveDetailedTimings(iteration !== 1);
+      mock.setSaveForwardedRequestData(iteration !== 2 && iteration !== 3);
+      mock.setSaveForwardedRequestBody(iteration !== 3 && iteration !== 4);
+      mock.setSaveInputRequestData(iteration !== 5 && iteration !== 6);
+      mock.setSaveInputRequestBody(iteration !== 6 && iteration !== 7);
+      return { harFile: mock.mocksHarFile };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should respect setSaveXXX options', () => {
+        for (let iteration = 0; iteration < 8; iteration++) {
+          /** @type import("..").HarFormatEntry */
+          const entry = getData(iteration).data.postProcessing.harFile.log.entries[0];
+          // setSaveChecksumContent
+          if (iteration !== 0) {
+            expect(entry._kassetteChecksumContent).to.equal(
+              'method\n\npathname\n\nbody\n{"hello":"ok"}\n\nquery\n\nheaders\n\ncustom data\n',
+            );
+          } else {
+            expect(entry._kassetteChecksumContent).to.be.undefined;
+          }
+          // setSaveDetailedTimings
+          if (iteration !== 1) {
+            expect(entry.timings.dns).to.equal(-1);
+            expect(entry.timings.ssl).to.equal(-1);
+            expect(entry.timings.wait).to.be.above(0);
+            expect(entry.timings.connect).to.be.above(0);
+            expect(entry.timings.send).to.be.above(0);
+            expect(entry.timings.blocked).to.be.above(0);
+            expect(entry.timings.receive).to.be.above(0);
+            expect(entry.time).to.equal(
+              entry.timings.wait +
+                entry.timings.connect +
+                entry.timings.send +
+                entry.timings.blocked +
+                entry.timings.receive,
+            );
+          } else {
+            expect(entry.timings).to.be.undefined;
+          }
+          // setSaveForwardedRequestData
+          if (iteration !== 2 && iteration !== 3) {
+            expect(entry._kassetteForwardedRequest.method).to.equal('POST');
+          } else {
+            expect(entry._kassetteForwardedRequest?.method).to.be.undefined;
+          }
+          // setSaveForwardedRequestBody
+          if (iteration !== 3 && iteration !== 4) {
+            expect(entry._kassetteForwardedRequest.postData.text).to.equal('{"hello":"ok"}');
+          } else {
+            expect(entry._kassetteForwardedRequest?.postData).to.be.undefined;
+          }
+          if (iteration === 3) {
+            expect(entry._kassetteForwardedRequest).to.be.undefined;
+          }
+          // setSaveInputRequestData
+          if (iteration !== 5 && iteration !== 6) {
+            expect(entry.request.method).to.equal('POST');
+          } else {
+            expect(entry.request?.method).to.be.undefined;
+          }
+          // setSaveInputRequestBody
+          if (iteration !== 6 && iteration !== 7) {
+            expect(entry.request.postData.text).to.equal('{"hello":"ok"}');
+          } else {
+            expect(entry.request?.postData).to.be.undefined;
+          }
+          if (iteration === 6) {
+            expect(entry.request).to.be.undefined;
+          }
+        }
+      });
+    },
+  },
+
   //////////////////////////////////////////////////////////////////////////////
   // Custom file extension
   //////////////////////////////////////////////////////////////////////////////
@@ -807,10 +1517,11 @@ const useCases = [
       'user should be able to detect missing mock and return custom one, as well as persist it',
     iterations: 2,
 
-    proxy: async ({ mock }) => {
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }) => {
       mock.setMode('local');
 
-      if (await mock.hasNoLocalFiles()) {
+      const hasNoLocalFiles = await mock.hasNoLocalFiles();
+      if (hasNoLocalFiles) {
         const payload = mock.createPayload({
           body: '...',
           data: {
@@ -824,6 +1535,7 @@ const useCases = [
         mock.setPayload(payload);
         await mock.persistPayload(payload);
       }
+      return { hasNoLocalFiles };
     },
 
     defineAssertions: ({ it, getData, expect, useCase }) => {
@@ -831,11 +1543,65 @@ const useCases = [
         const { data } = getData(0);
         expect(data.client.body).to.equal('...');
         expect(data.client.status.code).to.equal(404);
+        expect(data.proxy.hasNoLocalFiles).to.equal(true);
       });
       it('should be able to persist this payload', () => {
         const { data } = getData(1);
         expect(data.client.body).to.equal('...');
         expect(data.client.status.code).to.equal(404);
+        expect(data.proxy.hasNoLocalFiles).to.equal(false);
+      });
+    },
+  },
+
+  {
+    name: 'local-mode-404-override-har',
+    description:
+      'user should be able to detect missing mock and return custom one, as well as persist it',
+    iterations: 2,
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }) => {
+      mock.setMode('local');
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har']);
+
+      const hasNoLocalMock = await mock.hasNoLocalMock();
+      if (hasNoLocalMock) {
+        const payload = mock.createPayload({
+          body: '...',
+          data: {
+            bodyFileName: 'body.txt',
+            status: {
+              code: 404,
+            },
+            time: 0,
+          },
+        });
+        mock.setPayload(payload);
+        await mock.persistPayload(payload);
+      }
+      await mock.process();
+      return { harFile: mock.mocksHarFile, hasNoLocalMock };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect, useCase }) => {
+      it('should be able to return a custom payload', () => {
+        const { data } = getData(0);
+        expect(data.client.body).to.equal('...');
+        expect(data.client.status.code).to.equal(404);
+        expect(data.proxy.hasNoLocalMock).to.equal(true);
+        expect(data.postProcessing.harFile.log.entries.length).to.equal(1);
+      });
+      it('should be able to persist this payload', () => {
+        const { data } = getData(1);
+        expect(data.client.body).to.equal('...');
+        expect(data.client.status.code).to.equal(404);
+        expect(data.proxy.hasNoLocalMock).to.equal(false);
+        expect(data.postProcessing.harFile.log.entries.length).to.equal(1);
       });
     },
   },

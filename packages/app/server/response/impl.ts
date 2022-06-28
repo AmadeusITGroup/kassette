@@ -65,7 +65,7 @@ export class Response implements IResponse {
   get headers(): Readonly<IncomingHttpHeaders> {
     return this._headers;
   }
-  public setHeaders(headers: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders> {
+  public setHeaders(headers?: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders> {
     return Object.assign(this._headers, headers);
   }
 
