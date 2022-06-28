@@ -1,44 +1,3 @@
-<!-- TOC depthTo:2 -->
-
-- [Mock instance](#mock-instance)
-  - [Managing paths](#managing-paths)
-    - [Mocks root path](#mocks-root-path)
-    - [Instance path](#instance-path)
-    - [Checksum](#checksum)
-      - [Introduction](#introduction)
-      - [Content options](#content-options)
-      - [Output](#output)
-  - [Managing behavior](#managing-behavior)
-    - [Delay](#delay)
-    - [Mode](#mode)
-    - [Remote backend](#remote-backend)
-  - [The Payload model](#the-payload-model)
-    - [Properties](#properties)
-    - [Payload with origin](#payload-with-origin)
-    - [Creating payloads](#creating-payloads)
-    - [Filling the response with a payload](#filling-the-response-with-a-payload)
-  - [Managing local files](#managing-local-files)
-    - [Existence](#existence)
-    - [Read/Write](#readwrite)
-    - [List of generated files](#list-of-generated-files)
-  - [Processing](#processing)
-    - [Convenient methods](#convenient-methods)
-    - [Main processing](#main-processing)
-  - [Getting request information](#getting-request-information)
-    - [Main](#main)
-    - [URL](#url)
-    - [Others](#others)
-  - [Setting response data](#setting-response-data)
-    - [Main](#main-1)
-    - [Body](#body)
-    - [Headers](#headers)
-    - [Status](#status)
-  - [Accessing global configuration](#accessing-global-configuration)
-  - [Miscellaneous](#miscellaneous)
-- [Launching the proxy](#launching-the-proxy)
-
-<!-- /TOC -->
-
 <a id="markdown-mock-instance" name="mock-instance"></a>
 
 # Mock instance
@@ -47,16 +6,56 @@ This is the instance passed to the `hook` function, under property `mock` of the
 
 <a id="markdown-managing-paths" name="managing-paths"></a>
 
-## Managing paths
+## Mocks format
 
-### Mocks root path
+- `mocksFormat`: the format to use to store mocks
+- `setMocksFormat(value)` set the `mocksFormat` value
+
+kassette can store mocks in two different formats: `folder` or `har`.
+
+The default value of the global `mocksFormat` setting is `folder`, except in the following case: if the global `mocksHarFile` setting is defined and the global `mocksFolder` setting is not defined, then the default value of the global `mocksFormat` setting is `har`.
+
+### `folder` format
+
+When `mocksFormat` is `folder`, kassette stores each request with its response in one folder containing up to 7 files, as described below.
+
+In below file names, `[ext]` is an extension computed based on the actual type of the content in the file. If no extension could be determined, the file will actual drop the `.[ext]` part.
+
+Mock files:
+
+- `data.json`: headers, status code and message, request time, creation date and body file name
+- `body.[ext]`: the content of the body of the backend response
+
+Input request (from client to proxy), for debug:
+
+- `input-request-data.json`: headers, method, URL and body file name
+- `input-request-body.[ext]`: the content of the body
+
+Forwarded request (from proxy to backend), for debug:
+
+- `forwarded-request-data.json`: headers, method, URL, whether body was eventually a `string` or a `Buffer` and body file name
+- `forwarded-request-body.[ext]`: the content of the body
+
+Checksum: as described in dedicated section, if a checksum was computed, the content generated to compute it will be output in a file named `checkum`.
+
+Apart from the two first files from this list (`data.json` and `body.[ext]`), which are mandatory to be able to replay mocks, the generation of all the other files is mostly only useful to debug and can be disabled with the following settings:
+
+- `saveInputRequestData`
+- `saveInputRequestBody`
+- `saveForwardedRequestData`
+- `saveForwardedRequestBody`
+- `saveChecksumContent`
+
+Also, the `saveDetailedTimings` setting can be used to control whether detailed timings (`blocked`, `dns`, `connect`, `send`, `wait`, `receive`, `ssl`) are stored in the `timings` field in the `data.json` file (in addition to the global `time` field).
+
+#### Mocks root path
 
 You likely won't have to change that, since most of the time you will want to keep your mocks under a same root folder, the distinction being made by calling `setLocalPath` instead (see below).
 
 - `mocksFolder`: the root folder of all mocks
 - `setMocksFolder(value)`: set `mocksFolder` value by providing any combination of arrays of path parts, as for `setLocalPath`. You can pass an absolute path, or a relative one which will be resolved against `options.root`.
 
-### Instance path
+#### Instance path
 
 - `mockFolderFullPath`: the full, absolute path of the mock, built from `localPath`/`defaultLocalPath`, `mocksFolder` and possibly `options.root` ([see below](#accessing-global-configuration)) if `mocksFolder` is not absolute
 - `localPath`: the local path of the mock, relative to `mocksFolder`. Can be set by the user, otherwise will be the default value `defaultLocalPath`
@@ -70,6 +69,68 @@ You likely won't have to change that, since most of the time you will want to ke
     - `prefix`
     - all portions of the URL pathname except the first one (also excluding the very first one which is empty since `pathname` has a leading slash)
     - optionally a suffix sequence depending on a boolean
+
+### `har` format
+
+When `mocksFormat` is `har`, kassette can store several requests/responses in the same har file.
+
+kassette mostly follows the [har format specification](http://www.softwareishard.com/blog/har-12-spec/).
+
+Some parts of the specification are not implemented and some custom fields are added, as described in the [API reference](https://amadeusitgroup.github.io/kassette/kassette.harformatentry.html).
+
+As with the `folder` format, it is possible to control what is included in the har file through the following settings:
+
+- `saveInputRequestData`
+- `saveInputRequestBody`
+- `saveForwardedRequestData`
+- `saveForwardedRequestBody`
+- `saveChecksumContent`
+- `saveDetailedTimings`
+
+#### har file location
+
+- `mocksHarFile`: contains the full path to the har file to use
+- `setMocksHarFile(value)`: sets the `mocksHarFile` value by providing any combination of arrays of path parts, as for `setMocksFolder`. You can pass an absolute path, or a relative one which will be resolved against `options.root`.
+
+#### key inside the har file
+
+- `mockHarKey`: key under which the entry will be read or written in the har file. Can be set by the user, otherwise will be the default value `defaultMockHarKey`. How the key is stored in the har file depends on the har key manager.
+- `defaultMockHarKey`: specifies the default mock har key to use in case `setMockHarKey` is not called with a non-null value. It is computed by calling the har key manager with the current request. With the default har key manager, it is the concatenation of the HTTP method with the full URL, separated by a forward slash.
+- `setMockHarKey(value)`: sets the `mockHarKey` value. If an array is set (which can be nested), it is flattened with null items removed, and joined with forward slashes to produce a string.
+
+#### har key manager
+
+Each entry in a har file is supposed to have a corresponding unique key (a string). The har key manager is both a getter and a setter for the key of an entry.
+
+The har key manager is a function that is called either to get the key of an entry (when the key parameter is undefined) or to set it (when the key parameter is defined).
+
+Here is the default har key manager:
+
+```ts
+export const defaultHarKeyManager: HarKeyManager = (entry: HarFormatEntry, key?: string) => {
+  const defaultKey = joinPath(
+    entry._kassetteMockKey ?? [entry.request?.method, entry.request?.url],
+  );
+  if (key && key !== defaultKey) {
+    entry._kassetteMockKey = key;
+    return key;
+  }
+  return defaultKey;
+};
+```
+
+The har key manager should not modify the entry when the key parameter is undefined.
+
+When the key parameter is defined, the har key manager is supposed to change the provided entry, in order to store the key in it, because after the call, the entry will be persisted in the har file. In this case, the key parameter either comes from a call to `setMockHarKey`, or from `defaultMockHarKey`.
+
+In order to compute the `defaultMockHarKey` property, the har key manager is called with an entry that includes the request but not the response (and with an undefined key parameter).
+
+In all cases, the har key manager is expected to return the key of the entry. If an array is returned (which can be nested), it is flattened with null items removed, and joined with forward slashes to produce a string.
+
+The default har key manager is expected to work fine for most use cases, especially when working with a har file recorded with kassette. With the default har key manager, if a key is set with `setMockHarKey`, it is stored in the `_kassetteMockKey` field. Otherwise, the default key is the concatenation of the request method and url, with a separating forward slash. It can be useful to replace the default har key manager with a custom one especially when working with har files that are produced by other applications than kassette, if the default key is not convenient.
+
+- `mocksHarKeyManager`: contains the mocks har key manager to use for this request
+- `setMocksHarKeyManager(value)`: sets the `mocksHarKeyManager` value
 
 ### Checksum
 
@@ -312,38 +373,17 @@ Most of the APIs accept and return a wrapped payload, which has the following pr
 
 <a id="markdown-managing-local-files" name="managing-local-files"></a>
 
-## Managing local files
+## Managing local mocks
 
 ### Existence
 
-- `async hasLocalFiles()`: return `true` if there are persisted local files under the mock instance's path, otherwise `false`
-- `async hasNoLocalFiles()`: the opposite of `hasLocalFiles`, for convenience
+- `async hasLocalMock()`: returns `true` if there is a local mock for the current request, or `false` otherwise
+- `async hasNoLocalMock()`: the opposite of `hasLocalMock`, for convenience
 
 ### Read/Write
 
-- `async readLocalPayload()`: return a wrapped payload built from data persisted in local files. If no local files are present, return `undefined`
-- `async persistPayload(wrappedPayload)`: take the given wrapped payload and persist it in local files
-
-### List of generated files
-
-In below file names, `[ext]` is an extension computed based on the actual type of the content in the file. If no extension could be determined, the file will actual drop the `.[ext]` part.
-
-Mock files:
-
-- `data.json`: headers, status code and message, request time, creation date and body file name
-- `body.[ext]`: the content of the body of the backend response
-
-Input request (from client to proxy), for debug:
-
-- `input-request-data.json`: headers, method, URL and body file name
-- `input-request-body.[ext]`: the content of the body
-
-Forwarded request (from proxy to backend), for debug:
-
-- `forwarded-request-data.json`: headers, method, URL, whether body was eventually a `string` or a `Buffer` and body file name
-- `forwarded-request-body.[ext]`: the content of the body
-
-Checksum: as described in dedicated section, if a checksum was computed, the content generated to compute it will be output in a file named `checkum`.
+- `async readLocalPayload()`: returns a wrapped payload built from data persisted in local mock. If no local mock is present, returns `undefined`
+- `async persistPayload(wrappedPayload)`: takes the given wrapped payload and persists it in a local mock
 
 <a id="markdown-processing" name="processing"></a>
 

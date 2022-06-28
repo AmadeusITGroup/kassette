@@ -2,15 +2,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-async function execute({ name, iteration }) {
+async function execute({ name, ...args }) {
   await executeIteration({
     name,
-    iteration,
     hook: window.UseCases.useCasesMap[name].request,
+    ...args,
   });
 }
 
-async function executeIteration({ name, iteration, hook }) {
+async function executeIteration({ name, iteration, hook, ...args }) {
   window.log(`Executing use case "${name}", iteration ${iteration}`);
 
   //////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ async function executeIteration({ name, iteration, hook }) {
   let url = '';
   let requestOptions = {};
   if (hook != null) {
-    const payload = await hook({ name, iteration });
+    const payload = await hook({ name, iteration, ...args });
     clientData = payload.data;
     requestOptions = payload.request;
     const customUrl = requestOptions.url;

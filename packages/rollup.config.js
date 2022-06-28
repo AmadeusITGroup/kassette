@@ -2,6 +2,7 @@ const path = require('path');
 const pkg = require('../package.json');
 const dependencies = Object.keys(pkg.dependencies);
 const typescript = require('@rollup/plugin-typescript');
+const replace = require('@rollup/plugin-replace');
 
 export default [
   {
@@ -14,6 +15,7 @@ export default [
     input: path.join(__dirname, './index.ts'),
     external: dependencies.concat([
       'crypto',
+      'events',
       'fs',
       'http',
       'https',
@@ -24,6 +26,10 @@ export default [
       'url',
     ]),
     plugins: [
+      replace({
+        'process.env.KASSETTE_VERSION': JSON.stringify(pkg.version),
+        preventAssignment: true,
+      }),
       typescript({
         tsconfig: path.join(__dirname, 'tsconfig.rollup.json'),
       }),

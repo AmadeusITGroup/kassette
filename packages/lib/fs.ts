@@ -63,6 +63,9 @@ export interface IFileHandler {
 
   /** writes the given content into the file */
   write(content: Buffer | string | null | undefined): Promise<void>;
+
+  /** gets the size and the last modified time of the file, or returns `null` if it doesn't exist */
+  stat(): Promise<{ mtime: number; size: number } | null>;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +73,17 @@ export interface IFileHandler {
 ////////////////////////////////////////////////////////////////////////////////
 
 export class FileHandler implements IFileHandler {
-  constructor(private readonly _spec: FileHandlerSpec) {}
+  private readonly _spec: FileHandlerSpec;
+
+  constructor(spec: FileHandlerSpec | string) {
+    if (typeof spec === 'string') {
+      spec = {
+        name: nodePath.basename(spec),
+        root: nodePath.dirname(spec),
+      };
+    }
+    this._spec = spec;
+  }
 
   /** the root of the file */
   @CachedProperty()
@@ -105,5 +118,20 @@ export class FileHandler implements IFileHandler {
 
   async write(content: Buffer | string | null | undefined): Promise<void> {
     return writeFile(this.path, content != null ? content : Buffer.alloc(0));
+  }
+
+  async stat(): Promise<{ mtime: number; size: number } | null> {
+    try {
+      const stat = await fs.stat(this.path);
+      return {
+        mtime: stat.mtimeMs,
+        size: stat.size,
+      };
+    } catch (exception) {
+      if (exception.code === 'ENOENT') {
+        return null;
+      }
+      throw exception;
+    }
   }
 }

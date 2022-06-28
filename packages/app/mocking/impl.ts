@@ -21,7 +21,7 @@ import { UserProperty } from '../../lib/user-property';
 import { logInfo, logSeparator, LogPayload, logError } from '../logger';
 import { MissingRemoteURLError } from '../error';
 
-import { Mode, Delay } from '../configuration';
+import { Mode, Delay, MocksFormat } from '../configuration';
 
 import { SendRequestOutput } from '../server/model';
 import { IResponse } from '../server/response/model';
@@ -47,10 +47,43 @@ import { ChecksumArgs } from './checksum/model';
 // ------------------------------------------------------------------------ conf
 
 import CONF from './conf';
+import {
+  fromHarContent,
+  fromHarHeaders,
+  fromHarHttpVersion,
+  rawHeadersToHarHeaders,
+  toHarContent,
+  toHarHeaders,
+  toHarHttpVersion,
+  toHarPostData,
+  toHarQueryString,
+} from '../../lib/har/harUtils';
+import {
+  HarFormatEntry,
+  HarFormatNameValuePair,
+  HarFormatPostData,
+  HarFormatRequest,
+} from '../../lib/har/harTypes';
+import { callKeyManager, getHarFile, HarFile, HarKeyManager } from '../../lib/har/harFile';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
+
+const isRemotePayload = (payload: PayloadWithOrigin): payload is RemotePayload => {
+  return payload.origin === 'remote' && 'requestOptions' in payload;
+};
+
+const splitFromHarHeaders = (
+  headers?: HarFormatNameValuePair[],
+): Pick<MockData, 'headers' | 'ignoredHeaders'> => {
+  const mainHeaders: HarFormatNameValuePair[] = [];
+  const ignoredHeaders: HarFormatNameValuePair[] = [];
+  for (const header of headers ?? []) {
+    (CONF.ignoredHeaders.includes(header.name) ? ignoredHeaders : mainHeaders).push(header);
+  }
+  return { headers: fromHarHeaders(mainHeaders), ignoredHeaders: fromHarHeaders(ignoredHeaders) };
+};
 
 export class Mock implements IMock {
   //////////////////////////////////////////////////////////////////////////////
@@ -91,6 +124,50 @@ export class Mock implements IMock {
       const folder = joinPath(input);
       return joinPath([nodePath.isAbsolute(folder) ? null : this.options.root, folder]);
     },
+  });
+
+  private _mocksHarFile = new UserProperty<NonSanitizedArray<string>, string>({
+    getDefaultInput: () => this.options.userConfiguration.mocksHarFile.value,
+    transform: ({ input }) => {
+      const file = joinPath(input);
+      return joinPath([nodePath.isAbsolute(file) ? null : this.options.root, file]);
+    },
+  });
+
+  private _mocksHarKeyManager = new UserProperty<HarKeyManager>({
+    getDefaultInput: () => this.options.userConfiguration.mocksHarKeyManager.value,
+  });
+  private _mockHarKey = new UserProperty<NonSanitizedArray<string>, string | undefined>({
+    transform: ({ inputOrigin, input }) =>
+      inputOrigin === 'none' ? this.defaultMockHarKey : joinPath(input),
+  });
+
+  private _mocksFormat = new UserProperty<MocksFormat>({
+    getDefaultInput: () => this.options.userConfiguration.mocksFormat.value,
+  });
+
+  private _saveChecksumContent = new UserProperty<boolean>({
+    getDefaultInput: () => this.options.userConfiguration.saveChecksumContent.value,
+  });
+
+  private _saveDetailedTimings = new UserProperty<boolean>({
+    getDefaultInput: () => this.options.userConfiguration.saveDetailedTimings.value,
+  });
+
+  private _saveInputRequestData = new UserProperty<boolean>({
+    getDefaultInput: () => this.options.userConfiguration.saveInputRequestData.value,
+  });
+
+  private _saveInputRequestBody = new UserProperty<boolean>({
+    getDefaultInput: () => this.options.userConfiguration.saveInputRequestBody.value,
+  });
+
+  private _saveForwardedRequestData = new UserProperty<boolean | null>({
+    getDefaultInput: () => this.options.userConfiguration.saveForwardedRequestData.value,
+  });
+
+  private _saveForwardedRequestBody = new UserProperty<boolean | null>({
+    getDefaultInput: () => this.options.userConfiguration.saveForwardedRequestBody.value,
   });
 
   private _remoteURL = new UserProperty<string | null>({
@@ -150,6 +227,55 @@ export class Mock implements IMock {
     this._setUserProperty(this._mode, value);
   }
 
+  public get mocksFormat(): MocksFormat {
+    return this._mocksFormat.output;
+  }
+  public setMocksFormat(value: MocksFormat | null): void {
+    this._setUserProperty(this._mocksFormat, value);
+  }
+
+  public get saveChecksumContent(): boolean {
+    return this._saveChecksumContent.output;
+  }
+  public setSaveChecksumContent(value: boolean | null): void {
+    this._setUserProperty(this._saveChecksumContent, value);
+  }
+
+  public get saveDetailedTimings(): boolean {
+    return this._saveDetailedTimings.output;
+  }
+  public setSaveDetailedTimings(value: boolean | null): void {
+    this._setUserProperty(this._saveDetailedTimings, value);
+  }
+
+  public get saveInputRequestData(): boolean {
+    return this._saveInputRequestData.output;
+  }
+  public setSaveInputRequestData(value: boolean | null): void {
+    this._setUserProperty(this._saveInputRequestData, value);
+  }
+
+  public get saveInputRequestBody(): boolean {
+    return this._saveInputRequestBody.output;
+  }
+  public setSaveInputRequestBody(value: boolean | null): void {
+    this._setUserProperty(this._saveInputRequestBody, value);
+  }
+
+  public get saveForwardedRequestData(): boolean {
+    return this._saveForwardedRequestData.output ?? this.mocksFormat === 'folder';
+  }
+  public setSaveForwardedRequestData(value: boolean | null): void {
+    this._setUserProperty(this._saveForwardedRequestData, value);
+  }
+
+  public get saveForwardedRequestBody(): boolean {
+    return this._saveForwardedRequestBody.output ?? this.mocksFormat === 'folder';
+  }
+  setSaveForwardedRequestBody(value: boolean | null): void {
+    this._setUserProperty(this._saveForwardedRequestBody, value);
+  }
+
   public get remoteURL(): string | null {
     return this._remoteURL.output;
   }
@@ -162,6 +288,34 @@ export class Mock implements IMock {
   }
   public setMocksFolder(value: NonSanitizedArray<string> | null) {
     this._setUserProperty(this._mocksFolder, value);
+  }
+
+  public get mocksHarFile(): string {
+    return this._mocksHarFile.output;
+  }
+  public setMocksHarFile(value: NonSanitizedArray<string> | null) {
+    this._setUserProperty(this._mocksHarFile, value);
+  }
+
+  @CachedProperty()
+  public get defaultMockHarKey(): string | undefined {
+    return callKeyManager(this.mocksHarKeyManager, {
+      request: { ...this._harFmtRequest, postData: this._harFmtPostData },
+    });
+  }
+
+  public get mockHarKey(): string | undefined {
+    return this._mockHarKey.output;
+  }
+  public setMockHarKey(value: NonSanitizedArray<string> | null) {
+    this._setUserProperty(this._mockHarKey, value);
+  }
+
+  public get mocksHarKeyManager(): HarKeyManager {
+    return this._mocksHarKeyManager.output;
+  }
+  public setMocksHarKeyManager(value: HarKeyManager | null) {
+    this._setUserProperty(this._mocksHarKeyManager, value);
   }
 
   public get delay(): number {
@@ -202,11 +356,30 @@ export class Mock implements IMock {
     return nodePath.join(this.mocksFolder, this.localPath);
   }
 
+  public async hasLocalMock(): Promise<boolean> {
+    if (this.mocksFormat === 'folder') {
+      return this._folderFmtDataFile.exists();
+    } else {
+      return !!(await this.readLocalPayload());
+    }
+  }
+  public async hasNoLocalMock(): Promise<boolean> {
+    return !(await this.hasLocalMock());
+  }
+
   public async hasLocalFiles(): Promise<boolean> {
-    return this.dataFile.exists();
+    this.logInfo({
+      message: 'hasLocalFiles is deprecated! Please use hasLocalMock instead.',
+      checked: false,
+    });
+    return this.hasLocalMock();
   }
   public async hasNoLocalFiles(): Promise<boolean> {
-    return !(await this.hasLocalFiles());
+    this.logInfo({
+      message: 'hasNoLocalFiles is deprecated! Please use hasNoLocalMock instead.',
+      checked: false,
+    });
+    return this.hasNoLocalMock();
   }
 
   public checksumContent: string | null = null;
@@ -338,59 +511,109 @@ export class Mock implements IMock {
     return `${baseName}.${extension}`;
   }
 
-  private _createFileHandler(name: string): FileHandler {
+  private _folderFmtCreateFileHandler(name: string): FileHandler {
     return new FileHandler({ root: this.mockFolderFullPath, name: name });
   }
 
   @CachedProperty()
-  private get dataFile(): FileHandler {
-    return this._createFileHandler(CONF.dataFilename);
+  private get _folderFmtDataFile(): FileHandler {
+    return this._folderFmtCreateFileHandler(CONF.dataFilename);
   }
 
   @CachedProperty()
-  private get inputRequestFile(): FileHandler {
-    return this._createFileHandler(`${CONF.inputRequestBaseFilename}.json`);
+  private get _folderFmtInputRequestFile(): FileHandler {
+    return this._folderFmtCreateFileHandler(`${CONF.inputRequestBaseFilename}.json`);
   }
 
   @CachedProperty()
-  private get forwardedRequestFile(): FileHandler {
-    return this._createFileHandler(`${CONF.forwardedRequestBaseFilename}.json`);
+  private get _folderFmtForwardedRequestFile(): FileHandler {
+    return this._folderFmtCreateFileHandler(`${CONF.forwardedRequestBaseFilename}.json`);
   }
 
   @CachedProperty()
-  private get checksumFile(): FileHandler {
-    return this._createFileHandler(CONF.checksumFilename);
+  private get _folderFmtChecksumFile(): FileHandler {
+    return this._folderFmtCreateFileHandler(CONF.checksumFilename);
+  }
+
+  @CachedProperty()
+  private get _harFmtFile(): HarFile {
+    return getHarFile(this.mocksHarFile, this.options.userConfiguration.harFileCacheTime.value);
+  }
+
+  @CachedProperty()
+  private get _harFmtRequest(): HarFormatRequest {
+    return {
+      method: this.request.original.method,
+      url: this.request.url.href,
+      httpVersion: toHarHttpVersion(this.request.original.httpVersion),
+      headers: rawHeadersToHarHeaders(this.request.original.rawHeaders),
+      cookies: [], // cookies parsing is not implemented
+      queryString: toHarQueryString(this.request.url.searchParams),
+      headersSize: -1,
+      bodySize: this.request.body.length,
+    };
+  }
+
+  @CachedProperty()
+  private get _harFmtPostData(): HarFormatPostData | undefined {
+    return toHarPostData(this.request.body, this.request.headers['content-type']);
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // Payload > Writing
   //////////////////////////////////////////////////////////////////////////////
 
-  public async persistPayload({ payload: { data, body } }: PayloadWithOrigin) {
-    const { dataFile, inputRequestFile, checksumFile } = this;
-    const bodyFile = this._createFileHandler(data.bodyFileName);
+  public async persistPayload(payload: PayloadWithOrigin) {
+    switch (this.mocksFormat) {
+      case 'folder':
+        await this._folderFmtPersistPayload(payload);
+        break;
+      case 'har':
+        await this._harFmtPersistPayload(payload);
+        break;
+    }
+  }
 
-    this.logInfo({
-      message: CONF.messages.writingInputRequest,
-      data: nodePath.relative(this.mocksFolder, inputRequestFile.path),
-    });
-    const inputRequestBodyFile = this._createFileHandler(
-      this._getBodyFileName(
-        `${CONF.inputRequestBaseFilename}-body`,
-        this.request.headers['content-type'],
-      ),
-    );
-    await inputRequestFile.write(
-      stringifyPretty({
-        headers: this.request.headers,
-        method: this.request.method,
-        url: this.request.url,
-        bodyFileName: inputRequestBodyFile.name,
-      }),
-    );
-    await inputRequestBodyFile.write(this.request.body.toString());
+  private async _folderFmtPersistPayload(payload: PayloadWithOrigin) {
+    if (isRemotePayload(payload)) {
+      await this._folderFmtPersistForwardedPayload(payload);
+    }
+    const {
+      payload: { data, body },
+    } = payload;
+    const inputRequestDataFile = this.saveInputRequestData ? this._folderFmtInputRequestFile : null;
+    const inputRequestBodyFile = this.saveInputRequestBody
+      ? this._folderFmtCreateFileHandler(
+          this._getBodyFileName(
+            `${CONF.inputRequestBaseFilename}-body`,
+            this.request.headers['content-type'],
+          ),
+        )
+      : null;
+    if (inputRequestDataFile) {
+      this.logInfo({
+        message: CONF.messages.writingInputRequestData,
+        data: nodePath.relative(this.mocksFolder, inputRequestDataFile.path),
+      });
+      await inputRequestDataFile.write(
+        stringifyPretty({
+          headers: this.request.headers,
+          method: this.request.method,
+          url: this.request.url,
+          bodyFileName: inputRequestBodyFile?.name,
+        }),
+      );
+    }
+    if (inputRequestBodyFile) {
+      this.logInfo({
+        message: CONF.messages.writingInputRequestBody,
+        data: nodePath.relative(this.mocksFolder, inputRequestBodyFile.path),
+      });
+      await inputRequestBodyFile.write(this.request.body.toString());
+    }
 
-    if (this.checksumContent != null) {
+    if (this.saveChecksumContent && this.checksumContent != null) {
+      const checksumFile = this._folderFmtChecksumFile;
       this.logInfo({
         message: CONF.messages.writingChecksumFile,
         data: nodePath.relative(this.mocksFolder, checksumFile.path),
@@ -398,12 +621,16 @@ export class Mock implements IMock {
       await checksumFile.write(this.checksumContent);
     }
 
+    const dataFile = this._folderFmtDataFile;
     this.logInfo({
       message: CONF.messages.writingData,
       data: nodePath.relative(this.mocksFolder, dataFile.path),
     });
-    await dataFile.write(stringifyPretty(data));
+    await dataFile.write(
+      stringifyPretty(this.saveDetailedTimings ? data : { ...data, timings: undefined }),
+    );
 
+    const bodyFile = this._folderFmtCreateFileHandler(data.bodyFileName);
     this.logInfo({
       message: CONF.messages.writingBody,
       data: nodePath.relative(this.mocksFolder, bodyFile.path),
@@ -411,11 +638,76 @@ export class Mock implements IMock {
     await bodyFile.write(body);
   }
 
+  private async _harFmtPersistPayload(payload: PayloadWithOrigin) {
+    const {
+      payload: { data, body },
+    } = payload;
+    this.logInfo({
+      message: CONF.messages.writingHarFile,
+      data: this._harFmtFile.path,
+    });
+    const entry: HarFormatEntry = {
+      _kassetteChecksumContent:
+        this.saveChecksumContent && this.checksumContent ? this.checksumContent : undefined,
+      startedDateTime: data.creationDateTime
+        ? new Date(data.creationDateTime.getTime() - data.time).toISOString()
+        : undefined,
+      time: data.time,
+      timings: this.saveDetailedTimings ? data.timings : undefined,
+      cache: {},
+      response: {
+        httpVersion: toHarHttpVersion(data.httpVersion),
+        status: data.status.code,
+        statusText: data.status.message,
+        headers: toHarHeaders(data.headers).concat(toHarHeaders(data.ignoredHeaders)),
+        redirectURL: (data.headers?.location as any) ?? '',
+        cookies: [], // cookies parsing is not implemented
+        headersSize: -1,
+        bodySize: body?.length ?? 0,
+        content: toHarContent(body, data.headers?.['content-type']),
+      },
+    };
+    if (this.saveInputRequestData) {
+      entry.request = { ...this._harFmtRequest };
+    }
+    if (this.saveInputRequestBody) {
+      if (!entry.request) {
+        entry.request = {};
+      }
+      entry.request.postData = this._harFmtPostData;
+    }
+    if (isRemotePayload(payload)) {
+      if (this.saveForwardedRequestData) {
+        entry._kassetteForwardedRequest = {
+          method: payload.requestOptions.method.toUpperCase(),
+          url: payload.requestOptions.url,
+          httpVersion: toHarHttpVersion(),
+          headers: toHarHeaders(payload.requestOptions.headers),
+          cookies: [], // cookies parsing is not implemented
+          queryString: toHarQueryString(new URL(payload.requestOptions.url).searchParams),
+          headersSize: -1,
+          bodySize: payload.requestOptions.body.length,
+        };
+      }
+      if (this.saveForwardedRequestBody) {
+        if (!entry._kassetteForwardedRequest) {
+          entry._kassetteForwardedRequest = {};
+        }
+        entry._kassetteForwardedRequest.postData = toHarPostData(
+          payload.requestOptions.body,
+          payload.requestOptions.headers['content-type'],
+        );
+      }
+    }
+
+    await this._harFmtFile.setEntry(this.mockHarKey, entry, this.mocksHarKeyManager);
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   // Payload > Reading / creation
   //////////////////////////////////////////////////////////////////////////////
 
-  private _createPayloadFromResponse({ response, time }: SendRequestOutput): Payload {
+  private _createPayloadFromResponse({ response, time, timings }: SendRequestOutput): Payload {
     const headers = {};
     const ignoredHeaders = {};
     Object.entries(response.headers).forEach(([header, value]) => {
@@ -429,11 +721,13 @@ export class Mock implements IMock {
     return {
       body: response.body,
       data: {
+        httpVersion: response.original.httpVersion,
         headers,
         ignoredHeaders,
         status: response.status,
         bodyFileName: this._getBodyFileName('body', response.headers['content-type']),
         time,
+        timings,
         creationDateTime: new Date(),
       },
     };
@@ -447,17 +741,49 @@ export class Mock implements IMock {
     if (this._localPayload != null) {
       return this._localPayload;
     }
-    if (await this.hasNoLocalFiles()) {
-      return;
+    let payload: Payload;
+    switch (this.mocksFormat) {
+      case 'folder': {
+        const fileContent = await this._folderFmtDataFile.read();
+        if (!fileContent) {
+          return;
+        }
+        const data: MockData = JSON.parse(fileContent.toString(), (key, value) =>
+          key !== 'creationDateTime' || key == null ? value : new Date(value),
+        );
+        payload = {
+          data,
+          body: await this._folderFmtCreateFileHandler(data.bodyFileName).read(),
+        };
+        break;
+      }
+      case 'har': {
+        const entry = await this._harFmtFile.getEntry(this.mockHarKey, this.mocksHarKeyManager);
+        if (!entry || !entry.response) {
+          return;
+        }
+        const creationDateTime = new Date(entry.startedDateTime!);
+        creationDateTime.setTime(creationDateTime.getTime() + entry.time!);
+        const data: MockData = {
+          creationDateTime,
+          bodyFileName: '',
+          status: {
+            code: entry.response.status!,
+            message: entry.response.statusText!,
+          },
+          time: entry.time!,
+          timings: entry.timings ? { ...entry.timings } : undefined,
+          httpVersion: fromHarHttpVersion(entry.response.httpVersion),
+          ...splitFromHarHeaders(entry.response.headers),
+        };
+        payload = {
+          data,
+          body: fromHarContent(entry.response.content),
+        };
+        break;
+      }
     }
 
-    const data: MockData = JSON.parse((await this.dataFile.read())!.toString(), (key, value) =>
-      key !== 'creationDateTime' || key == null ? value : new Date(value),
-    );
-    const payload = {
-      data: data,
-      body: await this._createFileHandler(data.bodyFileName).read(),
-    };
     return (this._localPayload = { origin: 'local', payload });
   }
 
@@ -513,31 +839,45 @@ export class Mock implements IMock {
   public async downloadPayload(): Promise<RemotePayload> {
     const remotePayload = await this.fetchPayload();
 
-    const { forwardedRequestFile } = this;
-    this.logInfo({
-      message: CONF.messages.writingForwardedRequest,
-      data: nodePath.relative(this.mocksFolder, forwardedRequestFile.path),
-    });
-    const forwardedRequestBodyFile = this._createFileHandler(
-      this._getBodyFileName(
-        `${CONF.forwardedRequestBaseFilename}-body`,
-        remotePayload.requestOptions.headers['content-type'],
-      ),
-    );
-    await forwardedRequestFile.write(
-      stringifyPretty({
-        bodyType: remotePayload.requestOptions.body instanceof Buffer ? 'buffer' : 'string',
-        headers: remotePayload.requestOptions.headers,
-        method: remotePayload.requestOptions.method,
-        url: remotePayload.requestOptions.url,
-        bodyFileName: forwardedRequestBodyFile.name,
-      }),
-    );
-    await forwardedRequestBodyFile.write(remotePayload.requestOptions.body.toString());
-
     await this.persistPayload(remotePayload);
 
     return remotePayload;
+  }
+
+  private async _folderFmtPersistForwardedPayload(remotePayload: RemotePayload) {
+    const forwardedRequestDataFile = this.saveForwardedRequestData
+      ? this._folderFmtForwardedRequestFile
+      : null;
+    const forwardedRequestBodyFile = this.saveForwardedRequestBody
+      ? this._folderFmtCreateFileHandler(
+          this._getBodyFileName(
+            `${CONF.forwardedRequestBaseFilename}-body`,
+            remotePayload.requestOptions.headers['content-type'],
+          ),
+        )
+      : null;
+    if (forwardedRequestDataFile) {
+      this.logInfo({
+        message: CONF.messages.writingForwardedRequestData,
+        data: nodePath.relative(this.mocksFolder, forwardedRequestDataFile.path),
+      });
+      await forwardedRequestDataFile.write(
+        stringifyPretty({
+          bodyType: remotePayload.requestOptions.body instanceof Buffer ? 'buffer' : 'string',
+          headers: remotePayload.requestOptions.headers,
+          method: remotePayload.requestOptions.method,
+          url: remotePayload.requestOptions.url,
+          bodyFileName: forwardedRequestBodyFile?.name,
+        }),
+      );
+    }
+    if (forwardedRequestBodyFile) {
+      this.logInfo({
+        message: CONF.messages.writingForwardedRequestBody,
+        data: nodePath.relative(this.mocksFolder, forwardedRequestBodyFile.path),
+      });
+      await forwardedRequestBodyFile.write(remotePayload.requestOptions.body.toString());
+    }
   }
 
   public async readOrDownloadPayload(): Promise<

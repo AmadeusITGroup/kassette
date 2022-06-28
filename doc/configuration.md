@@ -1,20 +1,3 @@
-<!-- TOC -->
-
-- [Introduction](#introduction)
-- [How to provide the configuration](#how-to-provide-the-configuration)
-  - [Precedence](#precedence)
-  - [From CLI](#from-cli)
-  - [From file](#from-file)
-  - [From API](#from-api)
-- [Configuration properties](#configuration-properties)
-  - [Server](#server)
-  - [Global mock defaults](#global-mock-defaults)
-  - [Hook](#hook)
-  - [`onProxyConnect` and `proxyConnectMode`](#on-proxy-connect)
-  - [Others](#others)
-
-<!-- /TOC -->
-
 <a id="markdown-introduction" name="introduction"></a>
 
 # Introduction
@@ -59,6 +42,15 @@ Check available options using `kassette --help` or `kassette -h`. To summarize, 
 - `port`: `-p` • `--port`
 - `remoteURL`: `-u` • `--url` • `--remote` • `--remote-url`
 - `mocksFolder`: `-f` • `--folder` • `--mocks-folder`
+- `mocksHarFile`: `--har-file` • `--mocks-har-file`
+- `harFileCacheTime`: `--har-file-cache-time`
+- `mocksFormat`: `--mocks-format`
+- `saveChecksumContent`: `--save-checksum-content`
+- `saveDetailedTimings`: `--save-detailed-timings`
+- `saveInputRequestData`: `--save-input-request-data`
+- `saveInputRequestBody`: `--save-input-request-body`
+- `saveRequestRequestData`: `--save-request-request-data`
+- `saveRequestRequestBody`: `--save-request-request-body`
 - `mode`: `-m` • `--mode`
 - `proxyConnectMode`: `-x` • `--proxy-connect-mode`
 - `tlsCAKeyPath`: `-k` • `--tls-ca-key`
@@ -129,9 +121,18 @@ Here is the list:
 
 - `mode`
 - `delay`
+- `mocksFormat`
 - `mocksFolder`
+- `mocksHarFile`
+- `mocksHarKeyManager`
 - `remoteURL`
 - `skipLogs`
+- `saveChecksumContent`
+- `saveDetailedTimings`
+- `saveInputRequestData`
+- `saveInputRequestBody`
+- `saveForwardedRequestData`
+- `saveForwardedRequestBody`
 
 <a id="markdown-hook" name="hook"></a>
 

@@ -6,6 +6,7 @@ import { IncomingHttpHeaders } from 'http';
 
 import { IFetchedServerResponse } from '../server-response/model';
 import { IFetchedRequest } from '../request/model';
+import { RequestTimings } from '../../../lib/har/harTypes';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -45,6 +46,7 @@ export interface SendRequestSpec {
 
 export interface SendRequestOutput {
   response: IFetchedServerResponse;
+  timings: RequestTimings;
   time: number;
   requestOptions: RequestPayload;
 }

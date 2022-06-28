@@ -27,30 +27,37 @@ import { ServerResponse } from '../server-response';
 // ------------------------------------------------------------------------ conf
 
 import CONF from '../conf';
+import { Socket } from 'net';
+import { RequestTimings } from '../../../lib/har/harTypes';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function requestHTTP({
-  url,
-  method,
-  headers,
-  body,
-}: RequestPayload): Promise<IncomingMessage> {
+const noop = () => {};
+
+export interface RequestEvents {
+  socket?: (socket: Socket) => void;
+  finish?: () => void;
+}
+
+export async function requestHTTP(
+  { url, method, headers, body }: RequestPayload,
+  { socket = noop, finish = noop }: RequestEvents = {},
+): Promise<IncomingMessage> {
   return new Promise<IncomingMessage>((resolve, reject) =>
     httpRequest(url, { method, headers }, (message) => resolve(message))
       .on('error', reject)
+      .on('finish', finish)
+      .on('socket', socket)
       .end(body),
   );
 }
 
-export async function requestHTTPS({
-  url,
-  method,
-  headers,
-  body,
-}: RequestPayload): Promise<IncomingMessage> {
+export async function requestHTTPS(
+  { url, method, headers, body }: RequestPayload,
+  { socket = noop, finish = noop }: RequestEvents = {},
+): Promise<IncomingMessage> {
   const { hostname, port, pathname, search, hash } = new URL(url);
   return new Promise<IncomingMessage>((resolve, reject) =>
     httpsRequest(
@@ -75,6 +82,8 @@ export async function requestHTTPS({
       (message) => resolve(message),
     )
       .on('error', reject)
+      .on('finish', finish)
+      .on('socket', socket)
       .end(body),
   );
 }
@@ -83,20 +92,75 @@ export async function requestHTTPS({
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function measure(callback: Function) {
-  const { now } = performance;
-
-  const start = now();
-  const output = await callback();
-  const end = now();
-
+const timestamp = () => {
+  let value: number | undefined;
   return {
-    start,
-    end,
-    duration: end - start,
-    output,
+    get value() {
+      return value;
+    },
+    get defined() {
+      return value != null;
+    },
+    trigger() {
+      value = performance.now();
+    },
   };
-}
+};
+
+const computeDiffFactory = (curTime: number) => {
+  return (nextTime: ReturnType<typeof timestamp>) => {
+    if (nextTime.defined) {
+      const diff = nextTime.value! - curTime;
+      curTime = nextTime.value!;
+      return diff;
+    }
+    return -1;
+  };
+};
+
+const timingCollector = () => {
+  const timeStart = timestamp();
+  const timeInit = timestamp();
+  const timeLookup = timestamp();
+  const timeConnect = timestamp();
+  const timeTlsConnect = timestamp();
+  const timeSendComplete = timestamp();
+  const timeReceiveResponse = timestamp();
+  const timeEnd = timestamp();
+  const requestEvents: RequestEvents = {
+    socket(socket) {
+      timeInit.trigger();
+      socket.once('lookup', timeLookup.trigger);
+      socket.once('connect', timeConnect.trigger);
+      socket.once('secureConnect', timeTlsConnect.trigger);
+    },
+    finish: timeSendComplete.trigger,
+  };
+  return {
+    start: timeStart.trigger,
+    response: timeReceiveResponse.trigger,
+    end: timeEnd.trigger,
+    requestEvents,
+    total() {
+      return timeEnd.value! - timeStart.value!;
+    },
+    timings(): RequestTimings {
+      const computeDiff = computeDiffFactory(timeStart.value!);
+      return {
+        blocked: computeDiff(timeInit),
+        dns: computeDiff(timeLookup),
+        connect: computeDiff(timeTlsConnect.defined ? timeTlsConnect : timeConnect),
+        send: computeDiff(timeSendComplete),
+        wait: computeDiff(timeReceiveResponse),
+        receive: computeDiff(timeEnd),
+        ssl:
+          timeTlsConnect.defined && timeConnect.defined
+            ? timeTlsConnect.value! - timeConnect.value!
+            : -1,
+      };
+    },
+  };
+};
 
 /** Returns a server response with a fetched body, as well as timing information */
 export async function sendRequest({
@@ -133,15 +197,21 @@ export async function sendRequest({
   };
   delete requestOptions.headers.host;
 
-  const { duration: time, output: response } = await measure(() => request(requestOptions));
+  const timings = timingCollector();
+  timings.start();
+  const response = await request(requestOptions, timings.requestEvents);
+  timings.response();
+  const body = await readAll(response);
+  timings.end();
 
   if (!skipLog) {
     logInfo({ timestamp: true, message: CONF.messages.requestComplete });
   }
 
   return {
-    response: new ServerResponse(response, await readAll(response)),
-    time,
+    response: new ServerResponse(response, body),
+    time: timings.total(),
+    timings: timings.timings(),
     requestOptions,
   };
 }

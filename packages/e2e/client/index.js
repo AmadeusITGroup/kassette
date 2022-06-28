@@ -26,6 +26,8 @@ function localPath(...args) {
 
 async function create({
   proxyPort,
+  backendPort,
+  alternativeBackendPort,
   pushClientData,
   pushClientResult,
   console,
@@ -54,7 +56,12 @@ async function create({
           for (let iteration = 0; iteration < iterations; iteration++) {
             setCurrentContext(useCase, iteration);
             onStartIteration(iteration);
-            const result = await nodeRequest({ iteration, proxyPort });
+            const result = await nodeRequest({
+              iteration,
+              proxyPort,
+              backendPort,
+              alternativeBackendPort,
+            });
             await pushClientResult({ useCase: name, iteration, data: result });
           }
         } else {
@@ -106,13 +113,18 @@ async function create({
           const useCasesSource = await fs.readFile(localPath('../use-cases.js'), 'utf8');
           await page.addScriptTag({
             content: `(function(exports) {${useCasesSource}})(window.UseCases = {});`,
-          }),
-            await page.addScriptTag({ path: localPath('browser.js') });
+          });
+          await page.addScriptTag({ path: localPath('browser.js') });
 
           for (let iteration = 0; iteration < iterations; iteration++) {
             setCurrentContext(useCase, iteration);
             onStartIteration(iteration);
-            await page.evaluate((spec) => execute(spec), { name, iteration });
+            await page.evaluate((spec) => execute(spec), {
+              name,
+              iteration,
+              backendPort,
+              alternativeBackendPort,
+            });
           }
         }
         onEndUseCase();

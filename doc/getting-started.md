@@ -1,23 +1,5 @@
 kassette is a customizable proxy server, focused on handling mocking and persistence of requests made to one or more backends.
 
-Table of contents:
-
-<!-- TOC -->
-
-- [Usage by examples](#usage-by-examples)
-  - [Run with a simple configuration file](#run-with-a-simple-configuration-file)
-  - [Run with a simple hook](#run-with-a-simple-hook)
-  - [Run with an advanced hook](#run-with-an-advanced-hook)
-  - [Override configuration file options with CLI options](#override-configuration-file-options-with-cli-options)
-  - [Run as a browser proxy](#run-as-a-browser-proxy)
-  - [Filter TLS connections to intercept as a browser proxy](#filter-tls-connections-to-intercept-as-a-browser-proxy)
-  - [Get help in the terminal](#get-help-in-the-terminal)
-  - [Run with no option](#run-with-no-option)
-- [Configuration](#configuration)
-- [Learn more](#learn-more)
-
-<!-- /TOC -->
-
 <a id="markdown-usage-by-examples" name="usage-by-examples"></a>
 
 # Usage by examples
@@ -151,7 +133,7 @@ exports.getConfiguration = async () => {
       // (you can later on fill/alter its manually if you will)
       //////////////////////////////////////////////////////////////////////////
 
-      if (await mock.hasLocalFiles()) { return; }
+      if (await mock.hasLocalMock()) { return; }
 
       mock.setMode('manual');
       let wrappedPayload = await mock.downloadPayload();
@@ -227,6 +209,24 @@ Once kassette is started, you have to configure your browser to use kassette as 
 npx playwright cr --proxy-server=http://127.0.0.1:8080 --ignore-https-errors
 ```
 
+<a id="markdown-record-replay-har-browser-proxy" name="record-replay-har-browser-proxy"></a>
+
+## Record and replay mocks in a HAR file (as a browser proxy)
+
+Run `kassette --har-file mocks.har`.
+
+This will start kassette as a browser proxy on port 8080 in the `local_or_download` mode and store all new requests in the `mocks.har` file.
+
+In the `local_or_download` mode, existing requests are served from the HAR file instead of calling the remote server. To find a matching request, kassette by default only uses the HTTP method and the full URL (ignoring any header and the request body). This can be changed by using a configuration file and calling `setMockHarKey` in the `hook` function.
+
+To only replay mocks from the HAR file without changing it and without calling the remote server (answering with a 404 error when there is no matching request in the HAR file), start kassette in the `local` mode instead: `kassette --har-file mocks.har -m local`
+
+Once kassette is started, as explained in the previous example, configure your browser to use kassette as its proxy. You can use playwright:
+
+```sh
+npx playwright cr --proxy-server=http://127.0.0.1:8080 --ignore-https-errors
+```
+
 <a id="markdown-filter-tls-connections-to-intercept-as-a-browser-proxy" name="filter-tls-connections-to-intercept-as-a-browser-proxy"></a>
 
 ## Filter TLS connections to intercept as a browser proxy
@@ -278,7 +278,7 @@ Run `kassette -h` or `kassette --help` to get help in the terminal.
 Example output:
 
 ```
-kassette version 1.0.1
+kassette version 1.4.0
 
 Options:
   -h, --help                             Show help  [boolean]
@@ -287,10 +287,20 @@ Options:
       --hostname, --host                 hostname on which to run the server  [string]
   -p, --port                             port on which to run the server  [number]
   -u, --url, --remote, --remote-url      remote server url  [string]
-  -f, --folder, --mocks-folder           path to mocks base folder  [string]
+  -f, --folder, --mocks-folder           path to mocks base folder (if mocks-format is "folder")  [string]
+      --har-file, --mocks-har-file       path to the har file containing mocks (if mocks-format is "har")  [string]
+      --har-file-cache-time              time in milliseconds during which a har file is kept in memory after its last usage  [number]
+      --mocks-format                     mocks file format  [string] [choices: "folder", "har"]
+      --save-checksum-content            save the content used to create a checksum when creating a new mock with a checksum  [boolean]
+      --save-detailed-timings            save detailed timings (blocked, dns, connect, send, wait, receive, ssl) when creating a new mock  [boolean]
+      --save-input-request-data          save the input request data (headers, method, URL) when creating a new mock  [boolean]
+      --save-input-request-body          save the content of the input request body when creating a new mock  [boolean]
+      --save-forwarded-request-data      save the forwarded request data (headers, method, URL) when creating a new mock  [boolean]
+      --save-forwarded-request-body      save the forwarded request body when creating a new mock  [boolean]
   -m, --mode                             server mode  [choices: "download", "local_or_download", "local_or_remote", "local", "remote", "manual"]
   -x, --proxy-connect-mode               proxy connect mode  [choices: "close", "intercept", "forward", "manual"]
   -k, --tls-ca-key                       path to a PEM-encoded CA certificate and key file, created if it does not exist.  [string]
+      --tls-key-size                     size in bits of generated RSA keys.  [number]
   -d, --delay                            mock response artificial delay
   -v, --version                          Show version number  [boolean]
 

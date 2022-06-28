@@ -5,12 +5,14 @@ import { RecursiveArray } from '../../lib/array';
 
 // ------------------------------------------------------------------------- app
 
-import { IMergedConfiguration, Mode, Delay } from '../configuration';
+import { IMergedConfiguration, Mode, Delay, MocksFormat } from '../configuration';
 
 import { Status, IFetchedRequest, IResponse, RequestPayload } from '../server/model';
 
 import { ConsoleSpec } from '../logger/model';
 import { ChecksumArgs } from './checksum/model';
+import { RequestTimings } from '../../lib/har/harTypes';
+import { HarKeyManager } from '../../lib/har/harFile';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -98,7 +100,9 @@ export interface IMock {
   setDelay(delay: Delay | null): void;
 
   /**
-   * The root folder of all mocks, from which specific mocks paths will be resolved (resolved against {@link MockingOptions.root|options.root})
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the root folder of all mocks,
+   * from which specific mocks paths will be resolved
+   * (resolved against {@link MockingOptions.root|options.root}).
    */
   readonly mocksFolder: string;
 
@@ -113,20 +117,78 @@ export interface IMock {
   setMocksFolder(value: RecursiveArray<string | null | undefined> | null): void;
 
   /**
-   * The local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har', contains the full path of the the har file to use.
+   */
+  readonly mocksHarFile: string;
+
+  /**
+   * Sets the {@link IMock.mocksHarFile|mocksHarFile} value.
+   *
+   * @param value - any combination of arrays of path parts.
+   * You can pass an absolute path, or a relative one which will be resolved against {@link MockingOptions.root|options.root}.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.mocksHarFile|the global setting}.
+   */
+  setMocksHarFile(value: RecursiveArray<string | null | undefined> | null): void;
+
+  /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har', specifies the default mock har key to use in case
+   * {@link IMock.setMockHarKey | setMockHarKey} is not called with a non-null value.
+   * It is computed by calling the {@link IMock.mocksHarKeyManager|mocks har key manager} with the current request.
+   *
+   * @remarks
+   *
+   * Note that it is lazily computed, but once computed, it is not re-computed even if
+   * {@link IMock.mocksHarKeyManager | mocksHarKeyManager} changes.
+   */
+  readonly defaultMockHarKey?: string;
+
+  /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har', specifies the key to use inside the har file to either
+   * read or write a mock.
+   *
+   * @remarks
+   *
+   * The way the key is stored inside the har file depends on the value of {@link IMock.mocksHarKeyManager|mocksHarKeyManager}.
+   */
+  readonly mockHarKey?: string;
+
+  /**
+   * Sets the {@link IMock.mockHarKey|mockHarKey} value.
+   *
+   * @param value - specifies the key to use inside the har file to either read or write a mock. If an array is set (which can be nested),
+   * it is flattened with null items removed, and joined with forward slashes to produce a string.
+   * Passing null resets the value to {@link IMock.defaultMockHarKey|the default value}.
+   */
+  setMockHarKey(value: RecursiveArray<string | null | undefined> | null): void;
+
+  /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har', specifies the {@link HarKeyManager|har key manager} to use.
+   */
+  readonly mocksHarKeyManager: HarKeyManager;
+
+  /**
+   * Sets the {@link IMock.mocksHarKeyManager|mocksHarKeyManager} value.
+   *
+   * @param value - the {@link HarKeyManager|har key manager} to use for this request.
+   * Passing null resets the value to the default coming from {@link ConfigurationSpec.mocksHarKeyManager|the global setting}.
+   */
+  setMocksHarKeyManager(value: HarKeyManager | null): void;
+
+  /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
    * It is either the one set by the user through {@link IMock.setLocalPath|setLocalPath} or {@link IMock.defaultLocalPath|defaultLocalPath}.
    */
   readonly localPath: string;
 
   /**
-   * The default local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the default local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}, .
    * It uses the URL pathname to build an equivalent folders hierarchy,
    * and appends the HTTP method as a leaf folder.
    */
   readonly defaultLocalPath: string;
 
   /**
-   * The full, absolute path of the mock, built from {@link IMock.localPath|localPath}/{@link IMock.defaultLocalPath|defaultLocalPath}, {@link IMock.mocksFolder|mocksFolder}
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the full, absolute path of the mock, built from {@link IMock.localPath|localPath}/{@link IMock.defaultLocalPath|defaultLocalPath}, {@link IMock.mocksFolder|mocksFolder}
    * and possibly {@link MockingOptions.root|options.root} if {@link IMock.mocksFolder|mocksFolder} is not absolute.
    */
   readonly mockFolderFullPath: string;
@@ -190,6 +252,8 @@ export interface IMock {
   /**
    * Returns true if the mock exists locally.
    *
+   * @deprecated Use {@link IMock.hasLocalMock} instead.
+   *
    * @remarks
    *
    * {@link IMock.hasNoLocalFiles|hasNoLocalFiles} returns the opposite boolean value.
@@ -199,11 +263,122 @@ export interface IMock {
   /**
    * Returns true if the mock does not exist locally.
    *
+   * @deprecated Use {@link IMock.hasNoLocalMock} instead.
+   *
    * @remarks
    *
    * {@link IMock.hasLocalFiles|hasLocalFiles} returns the opposite boolean value.
    */
   hasNoLocalFiles(): Promise<boolean>;
+
+  /**
+   * Returns true if the mock exists locally.
+   *
+   * @remarks
+   *
+   * {@link IMock.hasNoLocalMock|hasNoLocalMock} returns the opposite boolean value.
+   */
+  hasLocalMock(): Promise<boolean>;
+
+  /**
+   * Returns true if the mock does not exist locally.
+   *
+   * @remarks
+   *
+   * {@link IMock.hasLocalMock|hasLocalMock} returns the opposite boolean value.
+   */
+  hasNoLocalMock(): Promise<boolean>;
+
+  /**
+   * The mocks format used for this request.
+   */
+  readonly mocksFormat: MocksFormat;
+
+  /**
+   * Sets the {@link IMock.mocksFormat|mocksFormat} value.
+   *
+   * @param value - the mocks format to use for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.mocksFormat|the global setting}.
+   */
+  setMocksFormat(value: MocksFormat | null): void;
+
+  /**
+   * Whether to save the content used to create a checksum when creating a new mock with a checksum for this request.
+   */
+  readonly saveChecksumContent: boolean;
+
+  /**
+   * Sets the {@link IMock.saveChecksumContent|saveChecksumContent} value.
+   *
+   * @param value - whether to save the content used to create a checksum when creating a new mock with a checksum for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.saveChecksumContent|the global setting}.
+   */
+  setSaveChecksumContent(value: boolean | null): void;
+
+  /**
+   * Whether to save {@link RequestTimings | detailed timings} when creating a new mock for this request.
+   */
+  readonly saveDetailedTimings: boolean;
+
+  /**
+   * Sets the {@link IMock.saveDetailedTimings|saveDetailedTimings} value.
+   *
+   * @param value - whether to save {@link RequestTimings | detailed timings} when creating a new mock with a checksum for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.saveDetailedTimings|the global setting}.
+   */
+  setSaveDetailedTimings(value: boolean | null): void;
+
+  /**
+   * Whether to save the input request data (headers, method, URL) when creating a new mock for this request.
+   */
+  readonly saveInputRequestData: boolean;
+
+  /**
+   * Sets the {@link IMock.saveInputRequestData|saveInputRequestData} value.
+   *
+   * @param value - whether to save the input request data (headers, method, URL) when creating a new mock for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.saveInputRequestData|the global setting}.
+   */
+  setSaveInputRequestData(value: boolean | null): void;
+
+  /**
+   * Whether to save the content of the input request body when creating a new mock for this request.
+   */
+  readonly saveInputRequestBody: boolean;
+
+  /**
+   * Sets the {@link IMock.saveInputRequestBody|saveInputRequestBody} value.
+   *
+   * @param value - whether to save the content of the input request body when creating a new mock for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.saveInputRequestBody|the global setting}.
+   */
+  setSaveInputRequestBody(value: boolean | null): void;
+
+  /**
+   * Whether to save the forwarded request data (headers, method, URL) when creating a new mock for this request.
+   */
+  readonly saveForwardedRequestData: boolean;
+
+  /**
+   * Sets the {@link IMock.saveForwardedRequestData|saveForwardedRequestData} value.
+   *
+   * @param value - whether to save the forwarded request data (headers, method, URL) when creating a new mock for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.saveForwardedRequestData|the global setting}.
+   */
+  setSaveForwardedRequestData(value: boolean | null): void;
+
+  /**
+   * Whether to save the forwarded request body when creating a new mock for this request.
+   */
+  readonly saveForwardedRequestBody: boolean;
+
+  /**
+   * Sets the {@link IMock.saveForwardedRequestBody|saveForwardedRequestBody} value.
+   *
+   * @param value - whether to save the forwarded request body when creating a new mock for this request.
+   * Passing null resets the value to the default coming from {@link CLIConfigurationSpec.saveForwardedRequestBody|the global setting}.
+   */
+  setSaveForwardedRequestBody(value: boolean | null): void;
 
   /**
    * Returns a wrapped payload built from data persisted in local files.
@@ -338,16 +513,22 @@ export interface MockSpec {
  */
 export interface MockData {
   /**
+   * Http version of the server when the mock was recorded. Will most likely be '1.1' or perhaps '1.0'.
+   * It is not used when replaying responses.
+   */
+  readonly httpVersion?: string;
+
+  /**
    * Recorded headers to be served back, without the ignored ones.
    */
-  readonly headers: Readonly<IncomingHttpHeaders>;
+  readonly headers?: Readonly<IncomingHttpHeaders>;
 
   /**
    * Ignored headers, which are recorded headers that should not be served back.
    * In practice, this is mainly the `content-length` header (because the `content-length` header that is
    * actually served back is computed based on the actual data to send).
    */
-  readonly ignoredHeaders: Readonly<IncomingHttpHeaders>;
+  readonly ignoredHeaders?: Readonly<IncomingHttpHeaders>;
 
   /**
    * The name of the local file containing the body content (needed since the name is dynamic)
@@ -366,9 +547,14 @@ export interface MockData {
   readonly time: number;
 
   /**
+   * Detailed timings recorded during the request.
+   */
+  readonly timings?: RequestTimings;
+
+  /**
    * Timestamp when the payload was created.
    */
-  readonly creationDateTime: Date;
+  readonly creationDateTime?: Date;
 }
 
 /**
@@ -441,13 +627,4 @@ export interface RemotePayload extends PayloadWithOrigin<'remote'> {
    * Request used to get this remote payload.
    */
   requestOptions: RequestPayload;
-}
-
-export type MockDataPatch = {
-  -readonly [key in keyof MockData]+?: MockData[key];
-};
-
-export interface PayloadPatch {
-  body?: Buffer | string | null;
-  data?: MockDataPatch;
 }
