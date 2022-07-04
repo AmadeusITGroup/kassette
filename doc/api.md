@@ -255,9 +255,9 @@ API:
 
 The URL of the remote backend, from which only **protocol**, **hostname** and **port** are used.
 
-Can be left `null`, in which case anything leading to sending the request to the remote backend will trigger an exception and stop the program.
+The default value is the special `"*"` value, which means reading from the request the remote backend to target. This is useful when using kassette as a browser proxy.
 
-Can also contain the special `"*"` value, which means reading from the request the remote backend to target. This is useful when using kassette as a browser proxy.
+Can be set to `null` or `""`, in which case anything leading to sending the request to the remote backend will trigger an exception and stop the program.
 
 API:
 
