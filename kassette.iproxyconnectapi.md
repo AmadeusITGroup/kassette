@@ -14,17 +14,17 @@ export interface IProxyConnectAPI
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [connection](./kassette.iproxyconnectapi.connection.md) | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md) |
-|  [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md) | readonly Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt;\[\] | The connections stack |
-|  [destinationHostname](./kassette.iproxyconnectapi.destinationhostname.md) | string | The destination hostname that will be used in <code>forward</code> mode. By default, it is equal to [hostname](./kassette.iproxyconnectapi.hostname.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->. |
-|  [destinationPort](./kassette.iproxyconnectapi.destinationport.md) | number | The destination port that will be used in <code>forward</code> mode. By default, it is equal to [port](./kassette.iproxyconnectapi.port.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->. |
-|  [hostname](./kassette.iproxyconnectapi.hostname.md) | string | The target hostname in the CONNECT request |
-|  [mode](./kassette.iproxyconnectapi.mode.md) | [ProxyConnectMode](./kassette.proxyconnectmode.md) | The currently selected mode, configured either by a call to [setMode](./kassette.iproxyconnectapi.setmode.md) or by [the global setting](./kassette.cliconfigurationspec.proxyconnectmode.md) |
-|  [port](./kassette.iproxyconnectapi.port.md) | number | The target port in the CONNECT request |
-|  [request](./kassette.iproxyconnectapi.request.md) | IncomingMessage | The original Node.js object representing the request |
-|  [socket](./kassette.iproxyconnectapi.socket.md) | Socket | The underlying socket |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [connection](./kassette.iproxyconnectapi.connection.md) | <code>readonly</code> | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md) |
+|  [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md) | <code>readonly</code> | readonly Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt;\[\] | The connections stack |
+|  [destinationHostname](./kassette.iproxyconnectapi.destinationhostname.md) | <code>readonly</code> | string | The destination hostname that will be used in <code>forward</code> mode. By default, it is equal to [hostname](./kassette.iproxyconnectapi.hostname.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->. |
+|  [destinationPort](./kassette.iproxyconnectapi.destinationport.md) | <code>readonly</code> | number | The destination port that will be used in <code>forward</code> mode. By default, it is equal to [port](./kassette.iproxyconnectapi.port.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->. |
+|  [hostname](./kassette.iproxyconnectapi.hostname.md) | <code>readonly</code> | string | The target hostname in the CONNECT request |
+|  [mode](./kassette.iproxyconnectapi.mode.md) | <code>readonly</code> | [ProxyConnectMode](./kassette.proxyconnectmode.md) | The currently selected mode, configured either by a call to [setMode](./kassette.iproxyconnectapi.setmode.md) or by [the global setting](./kassette.cliconfigurationspec.proxyconnectmode.md) |
+|  [port](./kassette.iproxyconnectapi.port.md) | <code>readonly</code> | number | The target port in the CONNECT request |
+|  [request](./kassette.iproxyconnectapi.request.md) | <code>readonly</code> | IncomingMessage | The original Node.js object representing the request |
+|  [socket](./kassette.iproxyconnectapi.socket.md) | <code>readonly</code> | Socket | The underlying socket |
 
 ## Methods
 

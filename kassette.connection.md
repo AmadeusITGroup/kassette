@@ -14,9 +14,9 @@ export interface Connection
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [hostname](./kassette.connection.hostname.md) | string | target hostname |
-|  [port](./kassette.connection.port.md) | number | target port |
-|  [protocol](./kassette.connection.protocol.md) | string | protocol such as <code>http</code> or <code>https</code>, without the trailing <code>:</code> |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [hostname](./kassette.connection.hostname.md) |  | string | target hostname |
+|  [port](./kassette.connection.port.md) |  | number | target port |
+|  [protocol](./kassette.connection.protocol.md) |  | string | protocol such as <code>http</code> or <code>https</code>, without the trailing <code>:</code> |
 

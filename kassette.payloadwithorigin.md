@@ -14,8 +14,8 @@ export interface PayloadWithOrigin<Origin extends PayloadOrigin = PayloadOrigin>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [origin](./kassette.payloadwithorigin.origin.md) | Origin | Origin of the payload. |
-|  [payload](./kassette.payloadwithorigin.payload.md) | [Payload](./kassette.payload.md) | Content of the payload. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [origin](./kassette.payloadwithorigin.origin.md) |  | Origin | Origin of the payload. |
+|  [payload](./kassette.payloadwithorigin.payload.md) |  | [Payload](./kassette.payload.md) | Content of the payload. |
 

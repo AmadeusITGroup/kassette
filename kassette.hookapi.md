@@ -14,8 +14,8 @@ export interface HookAPI
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [console](./kassette.hookapi.console.md) | [ConsoleSpec](./kassette.consolespec.md) | The console object as specified in the [configuration](./kassette.configurationspec.console.md)<!-- -->, otherwise it is the global console object (usually the one of the platform). |
-|  [mock](./kassette.hookapi.mock.md) | [IMock](./kassette.imock.md) | Provides the API to specify how to handle the HTTP request. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [console](./kassette.hookapi.console.md) |  | [ConsoleSpec](./kassette.consolespec.md) | The console object as specified in the [configuration](./kassette.configurationspec.console.md)<!-- -->, otherwise it is the global console object (usually the one of the platform). |
+|  [mock](./kassette.hookapi.mock.md) |  | [IMock](./kassette.imock.md) | Provides the API to specify how to handle the HTTP request. |
 

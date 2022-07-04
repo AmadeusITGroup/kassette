@@ -15,7 +15,7 @@ export interface RemotePayload extends PayloadWithOrigin<'remote'>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [requestOptions](./kassette.remotepayload.requestoptions.md) | [RequestPayload](./kassette.requestpayload.md) | Request used to get this remote payload. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [requestOptions](./kassette.remotepayload.requestoptions.md) |  | [RequestPayload](./kassette.requestpayload.md) | Request used to get this remote payload. |
 

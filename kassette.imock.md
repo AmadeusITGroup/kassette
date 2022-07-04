@@ -16,20 +16,20 @@ export interface IMock
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [checksumContent](./kassette.imock.checksumcontent.md) | string \| null | Content produced by the last call to the [checksum](./kassette.imock.checksum.md) method, as it was passed to the hash algorithm. |
-|  [defaultLocalPath](./kassette.imock.defaultlocalpath.md) | string | The default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder. |
-|  [delay](./kassette.imock.delay.md) | number | The currently computed delay that will be applied, configured either by a call to [setDelay](./kassette.imock.setdelay.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.delay.md)<!-- -->. Note that if the delay is set to <code>recorded</code> and the local mock to use is not yet loaded, the value returned by this getter will be the default delay and not the recorded delay. |
-|  [localPath](./kassette.imock.localpath.md) | string | The local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->. |
-|  [mockFolderFullPath](./kassette.imock.mockfolderfullpath.md) | string | The full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute. |
-|  [mocksFolder](./kassette.imock.mocksfolder.md) | string | The root folder of all mocks, from which specific mocks paths will be resolved (resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->) |
-|  [mode](./kassette.imock.mode.md) | [Mode](./kassette.mode.md) | The current mode, configured either by a call to [setMode](./kassette.imock.setmode.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.mode.md)<!-- -->. |
-|  [options](./kassette.imock.options.md) | [MockingOptions](./kassette.mockingoptions.md) | Link to global configuration options |
-|  [remoteURL](./kassette.imock.remoteurl.md) | string \| null | The current remote URL, configured either by a call to [setRemoteURL](./kassette.imock.setremoteurl.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.remoteurl.md)<!-- -->. |
-|  [request](./kassette.imock.request.md) | [IFetchedRequest](./kassette.ifetchedrequest.md) | The wrapper around the input request |
-|  [response](./kassette.imock.response.md) | [IResponse](./kassette.iresponse.md) | The wrapper around the output response |
-|  [sourcePayload](./kassette.imock.sourcepayload.md) | [PayloadWithOrigin](./kassette.payloadwithorigin.md) \| undefined | As soon as response is filled with a payload, this property holds the reference to that payload's wrapper. The wrapper is useful here to know where the payload comes from. Before that, this property is <code>undefined</code>. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [checksumContent](./kassette.imock.checksumcontent.md) | <code>readonly</code> | string \| null | Content produced by the last call to the [checksum](./kassette.imock.checksum.md) method, as it was passed to the hash algorithm. |
+|  [defaultLocalPath](./kassette.imock.defaultlocalpath.md) | <code>readonly</code> | string | The default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder. |
+|  [delay](./kassette.imock.delay.md) | <code>readonly</code> | number | The currently computed delay that will be applied, configured either by a call to [setDelay](./kassette.imock.setdelay.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.delay.md)<!-- -->. Note that if the delay is set to <code>recorded</code> and the local mock to use is not yet loaded, the value returned by this getter will be the default delay and not the recorded delay. |
+|  [localPath](./kassette.imock.localpath.md) | <code>readonly</code> | string | The local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->. |
+|  [mockFolderFullPath](./kassette.imock.mockfolderfullpath.md) | <code>readonly</code> | string | The full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute. |
+|  [mocksFolder](./kassette.imock.mocksfolder.md) | <code>readonly</code> | string | The root folder of all mocks, from which specific mocks paths will be resolved (resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->) |
+|  [mode](./kassette.imock.mode.md) | <code>readonly</code> | [Mode](./kassette.mode.md) | The current mode, configured either by a call to [setMode](./kassette.imock.setmode.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.mode.md)<!-- -->. |
+|  [options](./kassette.imock.options.md) | <code>readonly</code> | [MockingOptions](./kassette.mockingoptions.md) | Link to global configuration options |
+|  [remoteURL](./kassette.imock.remoteurl.md) | <code>readonly</code> | string \| null | The current remote URL, configured either by a call to [setRemoteURL](./kassette.imock.setremoteurl.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.remoteurl.md)<!-- -->. |
+|  [request](./kassette.imock.request.md) | <code>readonly</code> | [IFetchedRequest](./kassette.ifetchedrequest.md) | The wrapper around the input request |
+|  [response](./kassette.imock.response.md) | <code>readonly</code> | [IResponse](./kassette.iresponse.md) | The wrapper around the output response |
+|  [sourcePayload](./kassette.imock.sourcepayload.md) |  | [PayloadWithOrigin](./kassette.payloadwithorigin.md) \| undefined | As soon as response is filled with a payload, this property holds the reference to that payload's wrapper. The wrapper is useful here to know where the payload comes from. Before that, this property is <code>undefined</code>. |
 
 ## Methods
 

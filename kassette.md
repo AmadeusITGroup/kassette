@@ -28,7 +28,7 @@ kassette is a development server, used mainly for testing, which proxies request
 |  [IConfigurationFile](./kassette.iconfigurationfile.md) | Interface that a kassette configuration file should export. |
 |  [IConfigurationProperty](./kassette.iconfigurationproperty.md) | Contains the value and origin of a configuration property. |
 |  [IFetchedRequest](./kassette.ifetchedrequest.md) | A handier wrapper around a request |
-|  [IMock](./kassette.imock.md) | The public interface exposed to the end user to handle a given request and the associated mock and response.<!-- -->An object implementing this interface is passed to the [hook](./kassette.configurationspec.hook.md) function, under property <code>mock</code> of the single argument object. |
+|  [IMock](./kassette.imock.md) | <p>The public interface exposed to the end user to handle a given request and the associated mock and response.</p><p>An object implementing this interface is passed to the [hook](./kassette.configurationspec.hook.md) function, under property <code>mock</code> of the single argument object.</p> |
 |  [IncludableSpec](./kassette.includablespec.md) | Base interface used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that can be included or not in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
 |  [IProxyConnectAPI](./kassette.iproxyconnectapi.md) | A handier wrapper around a CONNECT request |
 |  [IResponse](./kassette.iresponse.md) | A handier wrapper around a server response |

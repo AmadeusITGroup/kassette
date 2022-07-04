@@ -14,7 +14,7 @@ export interface IncludableSpec
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [include?](./kassette.includablespec.include.md) | boolean | <i>(Optional)</i> Whether to include this piece of data in the hash. It is <code>true</code> by default (if an object is passed). |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [include?](./kassette.includablespec.include.md) |  | boolean | <i>(Optional)</i> Whether to include this piece of data in the hash. It is <code>true</code> by default (if an object is passed). |
 

@@ -14,18 +14,18 @@ export interface IFetchedRequest
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [body](./kassette.ifetchedrequest.body.md) | Buffer | The body content |
-|  [connection](./kassette.ifetchedrequest.connection.md) | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in connectionsStack |
-|  [connectionsStack](./kassette.ifetchedrequest.connectionsstack.md) | readonly Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt;\[\] | The connections stack |
-|  [headers](./kassette.ifetchedrequest.headers.md) | IncomingHttpHeaders | The headers |
-|  [hostname](./kassette.ifetchedrequest.hostname.md) | string | The hostname part of the URL |
-|  [method](./kassette.ifetchedrequest.method.md) | string | The HTTP method |
-|  [original](./kassette.ifetchedrequest.original.md) | IncomingMessage | The original Node.js object representing the request |
-|  [pathname](./kassette.ifetchedrequest.pathname.md) | string | The path part of the URL |
-|  [port](./kassette.ifetchedrequest.port.md) | string | The port part of the URL |
-|  [protocol](./kassette.ifetchedrequest.protocol.md) | string | The protocol part of the URL, without the trailing <code>:</code> |
-|  [queryParameters](./kassette.ifetchedrequest.queryparameters.md) | Readonly&lt;Record&lt;string, string&gt;&gt; | The query parameters taken from the URL, as a read-only map of strings |
-|  [url](./kassette.ifetchedrequest.url.md) | URL | The URL |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [body](./kassette.ifetchedrequest.body.md) | <code>readonly</code> | Buffer | The body content |
+|  [connection](./kassette.ifetchedrequest.connection.md) | <code>readonly</code> | Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt; | The last connection in connectionsStack |
+|  [connectionsStack](./kassette.ifetchedrequest.connectionsstack.md) | <code>readonly</code> | readonly Readonly&lt;[Connection](./kassette.connection.md)<!-- -->&gt;\[\] | The connections stack |
+|  [headers](./kassette.ifetchedrequest.headers.md) | <code>readonly</code> | IncomingHttpHeaders | The headers |
+|  [hostname](./kassette.ifetchedrequest.hostname.md) | <code>readonly</code> | string | The hostname part of the URL |
+|  [method](./kassette.ifetchedrequest.method.md) | <code>readonly</code> | string | The HTTP method |
+|  [original](./kassette.ifetchedrequest.original.md) | <code>readonly</code> | IncomingMessage | The original Node.js object representing the request |
+|  [pathname](./kassette.ifetchedrequest.pathname.md) | <code>readonly</code> | string | The path part of the URL |
+|  [port](./kassette.ifetchedrequest.port.md) | <code>readonly</code> | string | The port part of the URL |
+|  [protocol](./kassette.ifetchedrequest.protocol.md) | <code>readonly</code> | string | The protocol part of the URL, without the trailing <code>:</code> |
+|  [queryParameters](./kassette.ifetchedrequest.queryparameters.md) | <code>readonly</code> | Readonly&lt;Record&lt;string, string&gt;&gt; | The query parameters taken from the URL, as a read-only map of strings |
+|  [url](./kassette.ifetchedrequest.url.md) | <code>readonly</code> | URL | The URL |
 

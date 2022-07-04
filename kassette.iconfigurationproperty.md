@@ -14,8 +14,8 @@ export interface IConfigurationProperty<PropertyType>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [origin](./kassette.iconfigurationproperty.origin.md) | [ConfigurationPropertySource](./kassette.configurationpropertysource.md) | The id of the source of the resolved value of the property |
-|  [value](./kassette.iconfigurationproperty.value.md) | PropertyType | The resolved value of the property |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [origin](./kassette.iconfigurationproperty.origin.md) | <code>readonly</code> | [ConfigurationPropertySource](./kassette.configurationpropertysource.md) | The id of the source of the resolved value of the property |
+|  [value](./kassette.iconfigurationproperty.value.md) | <code>readonly</code> | PropertyType | The resolved value of the property |
 

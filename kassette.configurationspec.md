@@ -15,9 +15,9 @@ export interface ConfigurationSpec extends CLIConfigurationSpec
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [console?](./kassette.configurationspec.console.md) | [ConsoleSpec](./kassette.consolespec.md) | <i>(Optional)</i> Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [console?](./kassette.configurationspec.console.md) | <code>readonly</code> | [ConsoleSpec](./kassette.consolespec.md) | <i>(Optional)</i> Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
 
 ## Methods
 

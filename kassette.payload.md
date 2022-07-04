@@ -22,8 +22,8 @@ The payload can also be persisted and read, to avoid contacting the backend late
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [body](./kassette.payload.body.md) | Buffer \| string \| null | Body of the HTTP response. |
-|  [data](./kassette.payload.data.md) | [MockData](./kassette.mockdata.md) | Data such as http status and headers, response delay. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [body](./kassette.payload.body.md) |  | Buffer \| string \| null | Body of the HTTP response. |
+|  [data](./kassette.payload.data.md) |  | [MockData](./kassette.mockdata.md) | Data such as http status and headers, response delay. |
 

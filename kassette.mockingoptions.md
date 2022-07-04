@@ -14,8 +14,8 @@ export interface MockingOptions
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [root](./kassette.mockingoptions.root.md) | string | The root folder from which to resolve given relative paths |
-|  [userConfiguration](./kassette.mockingoptions.userconfiguration.md) | [IMergedConfiguration](./kassette.imergedconfiguration.md) | The current global user configuration |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [root](./kassette.mockingoptions.root.md) | <code>readonly</code> | string | The root folder from which to resolve given relative paths |
+|  [userConfiguration](./kassette.mockingoptions.userconfiguration.md) | <code>readonly</code> | [IMergedConfiguration](./kassette.imergedconfiguration.md) | The current global user configuration |
 

@@ -14,9 +14,9 @@ export interface GetConfigurationProps
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [apiConfiguration](./kassette.getconfigurationprops.apiconfiguration.md) | [ConfigurationSpec](./kassette.configurationspec.md) | If run from the API, this is the configuration coming from the [runFromAPI()](./kassette.runfromapi.md) call. Otherwise it is an empty object. |
-|  [cliConfiguration](./kassette.getconfigurationprops.cliconfiguration.md) | [CLIConfigurationSpec](./kassette.cliconfigurationspec.md) | If run from the CLI, this is the configuration coming from the CLI. Otherwise it is an empty object. |
-|  [context](./kassette.getconfigurationprops.context.md) | any | If run from the API, this is the context value provided (if any) through [runFromAPI()](./kassette.runfromapi.md)<!-- -->. Otherwise it is undefined. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [apiConfiguration](./kassette.getconfigurationprops.apiconfiguration.md) |  | [ConfigurationSpec](./kassette.configurationspec.md) | If run from the API, this is the configuration coming from the [runFromAPI()](./kassette.runfromapi.md) call. Otherwise it is an empty object. |
+|  [cliConfiguration](./kassette.getconfigurationprops.cliconfiguration.md) |  | [CLIConfigurationSpec](./kassette.cliconfigurationspec.md) | If run from the CLI, this is the configuration coming from the CLI. Otherwise it is an empty object. |
+|  [context](./kassette.getconfigurationprops.context.md) |  | any | If run from the API, this is the context value provided (if any) through [runFromAPI()](./kassette.runfromapi.md)<!-- -->. Otherwise it is undefined. |
 

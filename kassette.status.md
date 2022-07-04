@@ -14,8 +14,8 @@ export interface Status
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [code](./kassette.status.code.md) | number | The status code |
-|  [message](./kassette.status.message.md) | string | The status message |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [code](./kassette.status.code.md) |  | number | The status code |
+|  [message](./kassette.status.message.md) |  | string | The status message |
 
