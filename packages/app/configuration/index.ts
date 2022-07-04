@@ -112,7 +112,7 @@ export async function getConfiguration({
       cliValue: cliConfiguration.remoteURL,
       fileValue: fileConfiguration.remoteURL,
       apiValue: apiConfiguration.remoteURL,
-      defaultValue: null,
+      defaultValue: '*',
     }),
     onListen: buildProperty({
       cliValue: null,

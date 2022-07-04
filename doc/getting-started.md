@@ -214,11 +214,9 @@ exports.getConfiguration = async () => {
 
 ## Run as a browser proxy
 
-Run: `kassette -u '*' -m remote`
+Run: `kassette -m remote`
 
-This starts kassette as a browser proxy. Using kassette as the browser proxy allows to easily intercept all requests made by the browser without having to change any URL.
-
-The `-u '*'` argument means that kassette will read from each request which remote server to target for that request (as it is transmitted when using a browser proxy).
+This starts kassette as a browser proxy. Using kassette as the browser proxy allows to easily intercept all requests made by the browser without having to change any URL. When running kassette without specifying any remote URL, or when explicitly specifying `*` as the remote URL (i.e. with `-u '*'` on the command line) kassette will read from each request which remote server to target for that request (as it is transmitted when using a browser proxy).
 
 The `-m remote` argument means kassette will transfer the requests to the remote server and will not store anything locally.
 
@@ -243,7 +241,6 @@ exports.getConfiguration = () => {
   return {
     port: 4200,
     mocksFolder: './mocks-folder',
-    remoteURL: '*',
     proxyConnectMode: 'forward',
     mode: 'local_or_download',
 
