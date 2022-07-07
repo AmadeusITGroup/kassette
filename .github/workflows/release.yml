@@ -1,0 +1,43 @@
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+        description: Version number (x.y.z)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - run: npm ci
+      - name: npm version
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+          npm version ${{ inputs.version }}
+      - run: git show HEAD
+      - name: npm login
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm whoami
+      - run: npm publish --access=public
+      - run: git push origin master v${{ inputs.version }}
+      - name: Fetching gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          path: build/gh-pages
+      - name: Updating API documentation in gh-pages branch
+        run: |
+          rm -rf *
+          cp -a ../apidoc/output/* .
+          git add .
+          git commit --allow-empty -a -m "Updating from ${{ github.sha }}"
+          git push origin gh-pages
+        working-directory: ./build/gh-pages

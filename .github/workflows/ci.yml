@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x # current LTS
+          node-version: 16.x # current LTS
 
       - name: Install dependencies
         run: npm ci
@@ -42,21 +42,3 @@ jobs:
 
       - name: Build API documentation
         run: npm run apidoc
-
-      - name: Fetching gh-pages branch
-        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: actions/checkout@v3
-        with:
-          ref: gh-pages
-          path: build/gh-pages
-      - name: Updating API documentation in gh-pages branch
-        if: matrix.os == 'ubuntu-latest' && github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          rm -rf *
-          cp -a ../apidoc/output/* .
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit --allow-empty -a -m "Updating from ${{ github.sha }}"
-          git push origin gh-pages
-        working-directory: ./build/gh-pages
