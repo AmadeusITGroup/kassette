@@ -33,20 +33,3 @@ For now, [playwright](https://playwright.dev) is used to manipulate a headless C
 # Versioning
 
 The project follows [semantic versioning](https://semver.org/).
-
-# Releasing
-
-Example doing the release `1.0.1` from `1.0.0`, considering a remote called `upstream` pointing to the parent repository:
-
-- get latest master: `git checkout master`
-- change `package.json` version to `1.0.1`
-- ensure tests dependencies and update the packages lockfile: `npm install`
-- run unit tests: `npm run ut`
-- run e2e tests: `npm run e2e`
-- commit changes: `git commit -avm "chore: release 1.0.1"`
-- create tag: `git tag 1.0.1`
-- push commits and tags `upstream`:
-  - `git push upstream`
-  - `git push upstream --tags`
-
-_For now the publishing part is not done yet, a manual `npm publish` would do (use `npm pack` beforehand if you want to check the content of the package)._

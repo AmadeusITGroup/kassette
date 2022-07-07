@@ -18,15 +18,24 @@
   "main": "dist/index.js",
   "bin": "./bin/index.js",
   "keywords": [
-    "Record",
-    "Replay",
-    "Test",
-    "Testing",
-    "Server",
-    "Mock",
-    "Mocking",
-    "Amadeus",
-    "Software Factory"
+    "record",
+    "replay",
+    "test",
+    "testing",
+    "server",
+    "mock",
+    "mocking",
+    "http",
+    "https",
+    "proxy",
+    "proxy-server",
+    "http-proxy",
+    "https-proxy",
+    "man-in-the-middle",
+    "mitm",
+    "mock-server",
+    "mocking-server",
+    "local-mocks"
   ],
   "repository": {
     "type": "git",
@@ -72,5 +81,9 @@
     "picocolors": "^1.0.0",
     "rechoir": "^0.8.0",
     "yargs": "^17.5.1"
-  }
+  },
+  "files": [
+    "dist",
+    "bin"
+  ]
 }
