@@ -48,64 +48,72 @@ async function create({
       });
 
       for (const useCase of useCases) {
-        const { name, iterations, browserProxy } = useCase;
+        const { name, iterations, browserProxy, nodeRequest } = useCase;
         onStartUseCase(useCase);
-
-        const context = await browser.newContext(
-          browserProxy
-            ? {
-                ignoreHTTPSErrors: true,
-                proxy: {
-                  server: `http://127.0.0.1:${proxyPort}`,
+        if (nodeRequest) {
+          for (let iteration = 0; iteration < iterations; iteration++) {
+            setCurrentContext(useCase, iteration);
+            onStartIteration(iteration);
+            const result = await nodeRequest({ iteration, proxyPort });
+            await pushClientResult({ useCase: name, iteration, data: result });
+          }
+        } else {
+          const context = await browser.newContext(
+            browserProxy
+              ? {
+                  ignoreHTTPSErrors: true,
+                  proxy: {
+                    server: `http://127.0.0.1:${proxyPort}`,
+                  },
+                }
+              : {
+                  proxy: {
+                    server: 'per-context',
+                    bypass: '*',
+                  },
                 },
-              }
-            : {
-                proxy: {
-                  server: 'per-context',
-                  bypass: '*',
-                },
-              },
-        );
-        const page = await context.newPage();
+          );
+          const page = await context.newPage();
 
-        // 2020-06-09T14:50:14+02:00 seems to be not working all the time
-        // page.on('console', message => (console[message.type()] || console.error)(message.text()));
+          // 2020-06-09T14:50:14+02:00 seems to be not working all the time
+          // page.on('console', message => (console[message.type()] || console.error)(message.text()));
 
-        //////////////////////////////////////////////////////////////////////////
-        // Load page
-        // (hooked with a dummy content just to have a base URI
-        // and avoid CORS issues)
-        //////////////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////////////
+          // Load page
+          // (hooked with a dummy content just to have a base URI
+          // and avoid CORS issues)
+          //////////////////////////////////////////////////////////////////////////
 
-        const urlPattern = '**/*';
+          const urlPattern = '**/*';
 
-        const routeHandler = (route) => {
-          route.fulfill({ status: 200, body: '<html></html>' });
-          page.unroute(urlPattern, routeHandler);
-        };
+          const routeHandler = (route) => {
+            route.fulfill({ status: 200, body: '<html></html>' });
+            page.unroute(urlPattern, routeHandler);
+          };
 
-        page.route(urlPattern, routeHandler);
+          page.route(urlPattern, routeHandler);
 
-        await page.goto(`http://127.0.0.1:${proxyPort}`);
+          await page.goto(`http://127.0.0.1:${proxyPort}`);
 
-        //////////////////////////////////////////////////////////////////////////
-        // Expose functions & inject data and scripts
-        //////////////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////////////
+          // Expose functions & inject data and scripts
+          //////////////////////////////////////////////////////////////////////////
 
-        await page.exposeFunction('pushClientData', pushClientData);
-        await page.exposeFunction('pushClientResult', pushClientResult);
-        await page.exposeFunction('log', console.log);
+          await page.exposeFunction('pushClientData', pushClientData);
+          await page.exposeFunction('pushClientResult', pushClientResult);
+          await page.exposeFunction('log', console.log);
 
-        const useCasesSource = await fs.readFile(localPath('../use-cases.js'), 'utf8');
-        await page.addScriptTag({
-          content: `(function(exports) {${useCasesSource}})(window.UseCases = {});`,
-        }),
-          await page.addScriptTag({ path: localPath('browser.js') });
+          const useCasesSource = await fs.readFile(localPath('../use-cases.js'), 'utf8');
+          await page.addScriptTag({
+            content: `(function(exports) {${useCasesSource}})(window.UseCases = {});`,
+          }),
+            await page.addScriptTag({ path: localPath('browser.js') });
 
-        for (let iteration = 0; iteration < iterations; iteration++) {
-          setCurrentContext(useCase, iteration);
-          onStartIteration(iteration);
-          await page.evaluate((spec) => execute(spec), { name, iteration });
+          for (let iteration = 0; iteration < iterations; iteration++) {
+            setCurrentContext(useCase, iteration);
+            onStartIteration(iteration);
+            await page.evaluate((spec) => execute(spec), { name, iteration });
+          }
         }
         onEndUseCase();
       }

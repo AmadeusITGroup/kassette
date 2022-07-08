@@ -1,16 +1,17 @@
 // ------------------------------------------------------------------------- std
 
-import { ServerResponse } from 'http';
+import { ServerResponse, IncomingHttpHeaders } from 'http';
 
 // ---------------------------------------------------------------------- common
 
+import { headersContainer } from '../../../lib/headers';
 import { stringifyPretty } from '../../../lib/json';
 import { UserProperty } from '../../../lib/user-property';
 import { logError } from '../../logger';
 
 // -------------------------------------------------------------------- internal
 
-import { Headers, Status } from '../model';
+import { Status } from '../model';
 
 import { IResponse } from './model';
 
@@ -37,7 +38,7 @@ export class Response implements IResponse {
   });
   public status: Partial<Readonly<Status>> | null = null;
 
-  private _headers: Headers = {};
+  private _headers = headersContainer();
 
   constructor(public readonly original: ServerResponse) {}
 
@@ -61,10 +62,10 @@ export class Response implements IResponse {
     this.body = data;
   }
 
-  get headers(): Readonly<Headers> {
+  get headers(): Readonly<IncomingHttpHeaders> {
     return this._headers;
   }
-  public setHeaders(headers: Readonly<Headers>): Readonly<Headers> {
+  public setHeaders(headers: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders> {
     return Object.assign(this._headers, headers);
   }
 

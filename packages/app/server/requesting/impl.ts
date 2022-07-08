@@ -12,6 +12,7 @@ import { performance } from 'perf_hooks';
 
 import { build as buildURL } from '../../../lib/url';
 import { readAll } from '../../../lib/stream';
+import { headersContainer } from '../../../lib/headers';
 
 // ------------------------------------------------------------------------- app
 
@@ -126,8 +127,8 @@ export async function sendRequest({
     url,
     method: original.method,
     body: original.body,
-    headers: Object.assign({}, original.headers, {
-      'accept-encoding': 'identity',
+    headers: Object.assign(headersContainer(), original.headers, {
+      'Accept-Encoding': 'identity',
     }),
   };
   delete requestOptions.headers.host;
