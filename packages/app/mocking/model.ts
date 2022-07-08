@@ -1,12 +1,13 @@
 // ---------------------------------------------------------------------- common
 
+import { IncomingHttpHeaders } from 'http';
 import { RecursiveArray } from '../../lib/array';
 
 // ------------------------------------------------------------------------- app
 
 import { IMergedConfiguration, Mode, Delay } from '../configuration';
 
-import { Headers, Status, IFetchedRequest, IResponse, RequestPayload } from '../server/model';
+import { Status, IFetchedRequest, IResponse, RequestPayload } from '../server/model';
 
 import { ConsoleSpec } from '../logger/model';
 import { ChecksumArgs } from './checksum/model';
@@ -339,14 +340,14 @@ export interface MockData {
   /**
    * Recorded headers to be served back, without the ignored ones.
    */
-  readonly headers: Readonly<Headers>;
+  readonly headers: Readonly<IncomingHttpHeaders>;
 
   /**
    * Ignored headers, which are recorded headers that should not be served back.
    * In practice, this is mainly the `content-length` header (because the `content-length` header that is
    * actually served back is computed based on the actual data to send).
    */
-  readonly ignoredHeaders: Readonly<Headers>;
+  readonly ignoredHeaders: Readonly<IncomingHttpHeaders>;
 
   /**
    * The name of the local file containing the body content (needed since the name is dynamic)

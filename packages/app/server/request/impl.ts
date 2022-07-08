@@ -8,6 +8,7 @@ import { URL } from 'url';
 
 import { CachedProperty } from '../../../lib/oop';
 import { fromPairs } from '../../../lib/object';
+import { processRawHeaders } from '../../../lib/headers';
 
 // -------------------------------------------------------------------- internal
 
@@ -45,7 +46,7 @@ export class Request implements IFetchedRequest {
 
   @CachedProperty()
   get headers(): IncomingHttpHeaders {
-    return this.original.headers;
+    return processRawHeaders(this.original.rawHeaders);
   }
 
   @CachedProperty()

@@ -4,6 +4,7 @@ import { IncomingMessage, IncomingHttpHeaders } from 'http';
 
 // ---------------------------------------------------------------------- common
 
+import { processRawHeaders } from '../../../lib/headers';
 import { CachedProperty } from '../../../lib/oop';
 
 // -------------------------------------------------------------------- internal
@@ -25,7 +26,7 @@ export class ServerResponse implements IFetchedServerResponse {
 
   @CachedProperty()
   get headers(): IncomingHttpHeaders {
-    return this.original.headers;
+    return processRawHeaders(this.original.rawHeaders);
   }
 
   @CachedProperty()

@@ -145,7 +145,7 @@ describe('requesting', () => {
       const sentRequest = JSON.parse(result.response.body.toString());
       expect(sentRequest.headers).toEqual({
         'x-original': 'original',
-        'accept-encoding': 'identity',
+        'Accept-Encoding': 'identity',
       });
       expect(sentRequest.method).toEqual('post');
       expect(sentRequest.url).toEqual('http://target:5000/original?original=original');
@@ -193,7 +193,7 @@ describe('requesting', () => {
       const sentRequest = JSON.parse(result.response.body.toString());
       expect(sentRequest.headers).toEqual({
         'x-original': 'original',
-        'accept-encoding': 'identity',
+        'Accept-Encoding': 'identity',
       });
       expect(sentRequest.method).toEqual('post');
       expect(sentRequest.hostname).toEqual('target');
@@ -242,7 +242,7 @@ describe('requesting', () => {
       const sentRequest = JSON.parse(result.response.body.toString());
       expect(sentRequest.headers).toEqual({
         'x-original': 'original',
-        'accept-encoding': 'identity',
+        'Accept-Encoding': 'identity',
       });
       expect(sentRequest.method).toEqual('post');
       expect(sentRequest.url).toEqual('http://target/original?original=original');

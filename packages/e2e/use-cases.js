@@ -628,6 +628,68 @@ const useCases = [
     },
   },
 
+  {
+    name: 'raw-headers',
+    description: 'check headers case and multiple headers behavior',
+    iterations: 1,
+
+    async nodeRequest({ proxyPort }) {
+      const http = require('http');
+      const request = http.get(`http://127.0.0.1:${proxyPort}`, {
+        headers: {
+          'Check-Request-Header-With-UPPER-CASE': 'value-1',
+          'Check-Request-Header-Duplicate': ['line-1', 'line-2'],
+        },
+      });
+      /** @type {import("http").IncomingMessage} */
+      const response = await new Promise((resolve) => request.on('response', resolve));
+      let data = '';
+      response.on('data', (chunk) => (data += chunk.toString('utf8')));
+      await new Promise((resolve) => response.on('end', resolve));
+      return {
+        data,
+        rawHeaders: response.rawHeaders,
+      };
+    },
+
+    serve: async ({ req, response }) => {
+      const output = {};
+      output.rawHeaders = req.rawHeaders;
+      response.set('Check-Response-Header-With-UPPER-CASE', ['value-2']);
+      response.set('Check-Response-Header-Duplicate', ['line-1', 'line-2']);
+      response.status = 200;
+      response.body = 'ok';
+      return output;
+    },
+
+    proxy: async ({ mock }) => {
+      mock.setMode('remote');
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('checks request headers', () => {
+        const { data } = getData(0);
+        expect(data.backend.rawHeaders[0]).to.equal('Check-Request-Header-With-UPPER-CASE');
+        expect(data.backend.rawHeaders[1]).to.equal('value-1');
+        expect(data.backend.rawHeaders[2]).to.equal('Check-Request-Header-Duplicate');
+        expect(data.backend.rawHeaders[3]).to.equal('line-1');
+        expect(data.backend.rawHeaders[4]).to.equal('Check-Request-Header-Duplicate');
+        expect(data.backend.rawHeaders[5]).to.equal('line-2');
+      });
+
+      it('checks response headers', () => {
+        const { data } = getData(0);
+        expect(data.client.data).to.equal('ok');
+        expect(data.client.rawHeaders[0]).to.equal('Check-Response-Header-With-UPPER-CASE');
+        expect(data.client.rawHeaders[1]).to.equal('value-2');
+        expect(data.client.rawHeaders[2]).to.equal('Check-Response-Header-Duplicate');
+        expect(data.client.rawHeaders[3]).to.equal('line-1');
+        expect(data.client.rawHeaders[4]).to.equal('Check-Response-Header-Duplicate');
+        expect(data.client.rawHeaders[5]).to.equal('line-2');
+      });
+    },
+  },
+
   //////////////////////////////////////////////////////////////////////////////
   // Custom file extension
   //////////////////////////////////////////////////////////////////////////////

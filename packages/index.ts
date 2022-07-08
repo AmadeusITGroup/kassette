@@ -16,7 +16,6 @@ export {
   Delay,
   FilterableSpec,
   GetConfigurationProps,
-  Headers,
   HookAPI,
   IConfigurationFile,
   IConfigurationProperty,
@@ -41,3 +40,4 @@ export {
   Status,
 } from './app';
 export { RecursiveArray } from './lib/array';
+export { Headers } from './lib/headers';

@@ -13,8 +13,23 @@ describe('response', () => {
       response.setHeaders({ second: '2nd' });
       expect(response.headers).toEqual({ first: '1st', second: '2nd' });
 
-      response.setHeaders({ first: null, second: '3rd' });
-      expect(response.headers).toEqual({ first: null, second: '3rd' });
+      response.setHeaders({ first: undefined, second: '3rd' });
+      expect(response.headers).toEqual({ first: undefined, second: '3rd' });
+    });
+
+    it('should merge headers in a case-insensitive way', () => {
+      const response = new Response(null as any);
+
+      expect(response.headers).toEqual({});
+
+      response.setHeaders({ First: '1st', Second: '1st' });
+      expect(response.headers).toEqual({ First: '1st', Second: '1st' });
+
+      response.setHeaders({ second: '2nd' });
+      expect(response.headers).toEqual({ First: '1st', second: '2nd' });
+
+      response.setHeaders({ first: undefined, Second: '3rd' });
+      expect(response.headers).toEqual({ first: undefined, Second: '3rd' });
     });
   });
 

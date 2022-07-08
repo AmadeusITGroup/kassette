@@ -15,7 +15,7 @@ describe('Request', () => {
       {
         socket,
         method: 'GET',
-        headers: {},
+        rawHeaders: [],
         url: 'http://localhost:8080/my/api',
       } as any,
       Buffer.from(''),
@@ -29,7 +29,7 @@ describe('Request', () => {
       {
         socket,
         method: 'GET',
-        headers: {},
+        rawHeaders: [],
         url: 'http://localhost:8080/my/api',
       } as any,
       Buffer.from(body),
@@ -38,15 +38,16 @@ describe('Request', () => {
   });
 
   it('should provide the headers', () => {
+    const rawHeaders = ['Accepts', 'application/json', 'x-header', 'custom value'];
     const headers = {
-      accepts: 'application/json',
+      Accepts: 'application/json',
       'x-header': 'custom value',
     };
     const request = new Request(
       {
         socket,
         method: 'GET',
-        headers,
+        rawHeaders,
         url: 'http://localhost:8080/my/api',
       } as any,
       Buffer.from(''),
@@ -67,7 +68,7 @@ describe('Request', () => {
       {
         socket,
         method: 'GET',
-        headers: {},
+        rawHeaders: [],
         url,
       } as any,
       Buffer.from(''),
@@ -97,7 +98,7 @@ describe('Request', () => {
       {
         socket,
         method: 'GET',
-        headers: {},
+        rawHeaders: [],
         url,
       } as any,
       Buffer.from(''),
@@ -119,7 +120,7 @@ describe('Request', () => {
       {
         socket,
         method: 'GET',
-        headers: {},
+        rawHeaders: [],
         url,
       } as any,
       Buffer.from(''),

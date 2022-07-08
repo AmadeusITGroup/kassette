@@ -17,13 +17,6 @@ export * from './proxy/model';
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * A map from strings to strings or array of strings
- *
- * @public
- */
-export type Headers = Record<string, string | string[] | number | null>;
-
-/**
  * The response status
  *
  * @public
