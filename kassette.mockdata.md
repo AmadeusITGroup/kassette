@@ -18,8 +18,8 @@ export interface MockData
 |  --- | --- | --- | --- |
 |  [bodyFileName](./kassette.mockdata.bodyfilename.md) | <code>readonly</code> | string | The name of the local file containing the body content (needed since the name is dynamic) |
 |  [creationDateTime](./kassette.mockdata.creationdatetime.md) | <code>readonly</code> | Date | Timestamp when the payload was created. |
-|  [headers](./kassette.mockdata.headers.md) | <code>readonly</code> | Readonly&lt;[Headers](./kassette.headers.md)<!-- -->&gt; | Recorded headers to be served back, without the ignored ones. |
-|  [ignoredHeaders](./kassette.mockdata.ignoredheaders.md) | <code>readonly</code> | Readonly&lt;[Headers](./kassette.headers.md)<!-- -->&gt; | Ignored headers, which are recorded headers that should not be served back. In practice, this is mainly the <code>content-length</code> header (because the <code>content-length</code> header that is actually served back is computed based on the actual data to send). |
+|  [headers](./kassette.mockdata.headers.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | Recorded headers to be served back, without the ignored ones. |
+|  [ignoredHeaders](./kassette.mockdata.ignoredheaders.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | Ignored headers, which are recorded headers that should not be served back. In practice, this is mainly the <code>content-length</code> header (because the <code>content-length</code> header that is actually served back is computed based on the actual data to send). |
 |  [status](./kassette.mockdata.status.md) | <code>readonly</code> | Readonly&lt;[Status](./kassette.status.md)<!-- -->&gt; | HTTP status. |
 |  [time](./kassette.mockdata.time.md) | <code>readonly</code> | number | Time used by the server to process the request. It is used to simulate the real processing time when mocking the server if the [delay](./kassette.cliconfigurationspec.delay.md) is set to <code>recorded</code>. |
 

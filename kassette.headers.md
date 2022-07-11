@@ -9,5 +9,5 @@ A map from strings to strings or array of strings
 <b>Signature:</b>
 
 ```typescript
-export declare type Headers = Record<string, string | string[] | number | null>;
+export declare type Headers = IncomingHttpHeaders;
 ```

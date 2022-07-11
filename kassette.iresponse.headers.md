@@ -9,5 +9,5 @@ The currently set headers. Use [setHeaders](./kassette.iresponse.setheaders.md) 
 <b>Signature:</b>
 
 ```typescript
-readonly headers: Readonly<Headers>;
+readonly headers: Readonly<IncomingHttpHeaders>;
 ```
