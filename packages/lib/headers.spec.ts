@@ -37,5 +37,22 @@ describe('headers', () => {
       };
       expect(processRawHeaders(rawHeaders)).toEqual(expectedHeaders);
     });
+
+    it('should keep the case of the last occurrence of the same header', () => {
+      const rawHeaders = [
+        'multi-case-header',
+        'a',
+        'Multi-Case-header',
+        'b',
+        'multi-Case-Header',
+        'c',
+        'Multi-Case-HEADER', // should keep the case of this one
+        'd',
+      ];
+      const expectedHeaders = {
+        'Multi-Case-HEADER': ['a', 'b', 'c', 'd'],
+      };
+      expect(processRawHeaders(rawHeaders)).toEqual(expectedHeaders);
+    });
   });
 });

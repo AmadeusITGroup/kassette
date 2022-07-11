@@ -60,15 +60,15 @@ export const processRawHeaders = (rawHeaders: string[]) => {
   const headers = headersContainer();
   for (let i = 0, l = rawHeaders.length; i < l; i += 2) {
     const headerName = rawHeaders[i];
-    const headerValue = rawHeaders[i + 1];
+    let headerValue: string | string[] = rawHeaders[i + 1];
     const existingHeader = headers[headerName];
     if (Array.isArray(existingHeader)) {
       existingHeader.push(headerValue);
+      headerValue = existingHeader;
     } else if (typeof existingHeader === 'string') {
-      headers[headerName] = [existingHeader, headerValue];
-    } else {
-      headers[headerName] = headerValue;
+      headerValue = [existingHeader, headerValue];
     }
+    headers[headerName] = headerValue;
   }
   return headers;
 };
