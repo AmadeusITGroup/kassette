@@ -26,6 +26,8 @@ npm-debug.log*
 yarn-error.log*
 yarn.lock
 coverage/
+coverage-e2e/
+.nyc_output/
 
 # Mac OSX Finder files.
 **/.DS_Store

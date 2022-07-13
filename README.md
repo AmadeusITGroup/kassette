@@ -1,5 +1,8 @@
 # kassette
 
+[![npm](https://img.shields.io/npm/v/@amadeus-it-group/kassette)](https://www.npmjs.com/package/@amadeus-it-group/kassette)
+[![codecov](https://codecov.io/gh/AmadeusITGroup/kassette/branch/master/graph/badge.svg)](https://codecov.io/gh/AmadeusITGroup/kassette)
+
 <p align="center">
   <img src="doc/assets/images/kassette-logo.png" alt="kassette-logo" width="200px" height="90px"/>
   <br>

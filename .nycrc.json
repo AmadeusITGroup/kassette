@@ -1,0 +1,6 @@
+{
+  "instrument": "false",
+  "reporter": "lcov",
+  "clean": true,
+  "report-dir": "./coverage-e2e"
+}
