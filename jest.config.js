@@ -1,9 +1,9 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
   coverageDirectory: 'coverage',
-  collectCoverageFrom: ['<rootDir>/packages/app/**/*.ts', '<rootDir>/packages/lib/**/*.ts'],
+  collectCoverageFrom: ['none'], // prevent instrumentation from jest
   transform: {
-    'packages[\\/\\\\].*\\.ts$': 'ts-jest',
+    'packages[\\/\\\\].*\\.ts$': '<rootDir>/packages/jestTransform.js',
   },
   globals: {
     'ts-jest': {

@@ -9,6 +9,8 @@
 /specifications.md
 
 /coverage
+/coverage-e2e
+/.nyc_output
 
 /doc/philosophy.md
 
