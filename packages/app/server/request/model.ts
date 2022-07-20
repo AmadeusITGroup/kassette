@@ -1,6 +1,7 @@
 // ------------------------------------------------------------------------- std
 
 import { IncomingMessage, IncomingHttpHeaders } from 'http';
+import { Http2ServerRequest } from 'http2';
 
 import { URL } from 'url';
 
@@ -15,7 +16,7 @@ import { URL } from 'url';
  */
 export interface IFetchedRequest {
   /** The original Node.js object representing the request */
-  readonly original: IncomingMessage;
+  readonly original: IncomingMessage | Http2ServerRequest;
   /** The connections stack */
   readonly connectionsStack: readonly Readonly<Connection>[];
   /** The last connection in connectionsStack */

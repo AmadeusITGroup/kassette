@@ -1,3 +1,4 @@
+import { ServerHttp2Stream } from 'http2';
 import { Socket } from 'net';
 import { URL } from 'url';
 import { Connection } from './request';
@@ -12,28 +13,33 @@ export const connectionToURL = (address: Connection) => {
   return url;
 };
 
-const _getSocketConnections = (socket: Socket) => {
-  let result = (socket as any)[connectionsSymbol];
+const _getSocketConnections = (socket: Socket | ServerHttp2Stream): Connection[] => {
+  let result: Connection[] = (socket as any)[connectionsSymbol];
   if (!result) {
-    result = [
-      {
-        hostname: socket.localAddress!,
-        port: socket.localPort!,
-        protocol: 'http',
-      },
-    ];
+    if ('session' in socket) {
+      const parentSocket = socket.session.socket;
+      result = _getSocketConnections(parentSocket).slice(0);
+    } else {
+      result = [
+        {
+          hostname: socket.localAddress!,
+          port: socket.localPort!,
+          protocol: 'http',
+        },
+      ];
+    }
     (socket as any)[connectionsSymbol] = result;
   }
   return result;
 };
 
-const _getSocketConnection = (socket: Socket) => {
+const _getSocketConnection = (socket: Socket | ServerHttp2Stream) => {
   const stack = _getSocketConnections(socket);
   return stack[stack.length - 1];
 };
 
 export const pushSocketConnection = (
-  socket: Socket,
+  socket: Socket | ServerHttp2Stream,
   hostname: string,
   port: number,
   protocol: string,
@@ -42,16 +48,21 @@ export const pushSocketConnection = (
   socketInfo.push({ hostname, port, protocol });
 };
 
-export const setConnectionProtocol = (socket: Socket, protocol: string) => {
+export const setConnectionProtocol = (socket: Socket | ServerHttp2Stream, protocol: string) => {
   _getSocketConnection(socket).protocol = protocol;
 };
 
-export const forwardSocketConnections = (parentSocket: Socket, childSocket: Socket) => {
+export const forwardSocketConnections = (
+  parentSocket: Socket | ServerHttp2Stream,
+  childSocket: Socket | ServerHttp2Stream,
+) => {
   const socketInfo = _getSocketConnections(parentSocket);
   (childSocket as any)[connectionsSymbol] = socketInfo;
 };
 
-export const getSocketConnections: (socket: Socket) => readonly Readonly<Connection>[] =
-  _getSocketConnections;
+export const getSocketConnections: (
+  socket: Socket | ServerHttp2Stream,
+) => readonly Readonly<Connection>[] = _getSocketConnections;
 
-export const getSocketConnection: (socket: Socket) => Readonly<Connection> = _getSocketConnection;
+export const getSocketConnection: (socket: Socket | ServerHttp2Stream) => Readonly<Connection> =
+  _getSocketConnection;

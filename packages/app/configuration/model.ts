@@ -331,6 +331,11 @@ export interface CLIConfigurationSpec {
    * Size in bits of generated RSA keys.
    */
   readonly tlsKeySize?: number;
+
+  /**
+   * Enables http/2.0 protocol in the kassette server.
+   */
+  readonly http2?: boolean;
 }
 
 /**

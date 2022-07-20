@@ -18,6 +18,7 @@ export default [
       'events',
       'fs',
       'http',
+      'http2',
       'https',
       'net',
       'path',

@@ -1,6 +1,7 @@
 // ------------------------------------------------------------------------- std
 
 import { ServerResponse, IncomingHttpHeaders } from 'http';
+import { Http2ServerResponse } from 'http2';
 
 // -------------------------------------------------------------------- internal
 
@@ -19,7 +20,7 @@ export interface IResponse {
   /**
    * The original Node.js object representing the response
    */
-  readonly original: ServerResponse;
+  readonly original: ServerResponse | Http2ServerResponse;
 
   /**
    * An object `{code, message}`, where each property is optional.

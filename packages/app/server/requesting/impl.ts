@@ -145,6 +145,12 @@ export async function sendRequest({
   };
   delete requestOptions.headers.host;
 
+  // remove any http/2.0-only header:
+  delete requestOptions.headers[':method'];
+  delete requestOptions.headers[':scheme'];
+  delete requestOptions.headers[':authority'];
+  delete requestOptions.headers[':path'];
+
   const timings = timingCollector();
   timings.start();
 

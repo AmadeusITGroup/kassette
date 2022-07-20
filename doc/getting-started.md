@@ -278,7 +278,7 @@ Run `kassette -h` or `kassette --help` to get help in the terminal.
 Example output:
 
 ```
-kassette version 1.4.0
+kassette version 1.5.0
 
 Options:
   -h, --help                             Show help  [boolean]
@@ -287,6 +287,7 @@ Options:
       --hostname, --host                 hostname on which to run the server  [string]
   -p, --port                             port on which to run the server  [number]
   -u, --url, --remote, --remote-url      remote server url  [string]
+      --http2, --h2                      enables http/2.0 in the kassette server (enabled by default, use --no-h2 to disable)  [boolean]
   -f, --folder, --mocks-folder           path to mocks base folder (if mocks-format is "folder")  [string]
       --har-file, --mocks-har-file       path to the har file containing mocks (if mocks-format is "har")  [string]
       --har-file-cache-time              time in milliseconds during which a har file is kept in memory after its last usage  [number]
