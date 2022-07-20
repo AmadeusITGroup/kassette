@@ -2,7 +2,7 @@ import { Socket } from 'net';
 import { URL } from 'url';
 import { Connection } from './request';
 
-const socketConnectionsMap = new WeakMap<Socket, Connection[]>();
+const connectionsSymbol = Symbol('connections');
 
 export const connectionToURL = (address: Connection) => {
   const url = new URL('http://127.0.0.1');
@@ -13,7 +13,7 @@ export const connectionToURL = (address: Connection) => {
 };
 
 const _getSocketConnections = (socket: Socket) => {
-  let result = socketConnectionsMap.get(socket);
+  let result = (socket as any)[connectionsSymbol];
   if (!result) {
     result = [
       {
@@ -22,7 +22,7 @@ const _getSocketConnections = (socket: Socket) => {
         protocol: 'http',
       },
     ];
-    socketConnectionsMap.set(socket, result);
+    (socket as any)[connectionsSymbol] = result;
   }
   return result;
 };
@@ -48,7 +48,7 @@ export const setConnectionProtocol = (socket: Socket, protocol: string) => {
 
 export const forwardSocketConnections = (parentSocket: Socket, childSocket: Socket) => {
   const socketInfo = _getSocketConnections(parentSocket);
-  socketConnectionsMap.set(childSocket, socketInfo);
+  (childSocket as any)[connectionsSymbol] = socketInfo;
 };
 
 export const getSocketConnections: (socket: Socket) => readonly Readonly<Connection>[] =
