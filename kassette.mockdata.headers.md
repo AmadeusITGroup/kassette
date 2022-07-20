@@ -9,5 +9,5 @@ Recorded headers to be served back, without the ignored ones.
 <b>Signature:</b>
 
 ```typescript
-readonly headers: Readonly<IncomingHttpHeaders>;
+readonly headers?: Readonly<IncomingHttpHeaders>;
 ```

@@ -17,9 +17,11 @@ export interface MockData
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [bodyFileName](./kassette.mockdata.bodyfilename.md) | <code>readonly</code> | string | The name of the local file containing the body content (needed since the name is dynamic) |
-|  [creationDateTime](./kassette.mockdata.creationdatetime.md) | <code>readonly</code> | Date | Timestamp when the payload was created. |
-|  [headers](./kassette.mockdata.headers.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | Recorded headers to be served back, without the ignored ones. |
-|  [ignoredHeaders](./kassette.mockdata.ignoredheaders.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | Ignored headers, which are recorded headers that should not be served back. In practice, this is mainly the <code>content-length</code> header (because the <code>content-length</code> header that is actually served back is computed based on the actual data to send). |
+|  [creationDateTime?](./kassette.mockdata.creationdatetime.md) | <code>readonly</code> | Date | <i>(Optional)</i> Timestamp when the payload was created. |
+|  [headers?](./kassette.mockdata.headers.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | <i>(Optional)</i> Recorded headers to be served back, without the ignored ones. |
+|  [httpVersion?](./kassette.mockdata.httpversion.md) | <code>readonly</code> | string | <i>(Optional)</i> Http version of the server when the mock was recorded. Will most likely be '1.1' or perhaps '1.0'. It is not used when replaying responses. |
+|  [ignoredHeaders?](./kassette.mockdata.ignoredheaders.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | <i>(Optional)</i> Ignored headers, which are recorded headers that should not be served back. In practice, this is mainly the <code>content-length</code> header (because the <code>content-length</code> header that is actually served back is computed based on the actual data to send). |
 |  [status](./kassette.mockdata.status.md) | <code>readonly</code> | Readonly&lt;[Status](./kassette.status.md)<!-- -->&gt; | HTTP status. |
 |  [time](./kassette.mockdata.time.md) | <code>readonly</code> | number | Time used by the server to process the request. It is used to simulate the real processing time when mocking the server if the [delay](./kassette.cliconfigurationspec.delay.md) is set to <code>recorded</code>. |
+|  [timings?](./kassette.mockdata.timings.md) | <code>readonly</code> | [RequestTimings](./kassette.requesttimings.md) | <i>(Optional)</i> Detailed timings recorded during the request. |
 

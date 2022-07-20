@@ -9,5 +9,5 @@ Ignored headers, which are recorded headers that should not be served back. In p
 <b>Signature:</b>
 
 ```typescript
-readonly ignoredHeaders: Readonly<IncomingHttpHeaders>;
+readonly ignoredHeaders?: Readonly<IncomingHttpHeaders>;
 ```

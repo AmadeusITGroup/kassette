@@ -24,6 +24,13 @@ kassette is a development server, used mainly for testing, which proxies request
 |  [ConsoleSpec](./kassette.consolespec.md) | Console with logging methods. |
 |  [FilterableSpec](./kassette.filterablespec.md) | Interface used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that can be filtered (i.e. modified) before it is included in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
 |  [GetConfigurationProps](./kassette.getconfigurationprops.md) | Parameter of the [getConfiguration](./kassette.iconfigurationfile.getconfiguration.md) function (which a kassette configuration file is supposed to export). |
+|  [HarFormatContent](./kassette.harformatcontent.md) | Information about the response body, as stored in a har file. |
+|  [HarFormatEntry](./kassette.harformatentry.md) | Detailed information about a request and its response, as stored in a har file. |
+|  [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md) | Information about a header or a query parameter, as stored in a har file. |
+|  [HarFormatPostData](./kassette.harformatpostdata.md) | Information about a request body, as stored in a har file. |
+|  [HarFormatRequest](./kassette.harformatrequest.md) | Detailed information about a request, as stored in a har file. |
+|  [HarFormatResponse](./kassette.harformatresponse.md) | Detailed information about a response, as stored in a har file. |
+|  [HarFormatTimings](./kassette.harformattimings.md) | Details about the time spent for each phase of a request-response round trip, as stored in a har file. |
 |  [HookAPI](./kassette.hookapi.md) | Parameter of the [hook](./kassette.configurationspec.hook.md) callback, that is called for every HTTP request that kassette receives. |
 |  [IConfigurationFile](./kassette.iconfigurationfile.md) | Interface that a kassette configuration file should export. |
 |  [IConfigurationProperty](./kassette.iconfigurationproperty.md) | Contains the value and origin of a configuration property. |
@@ -38,6 +45,7 @@ kassette is a development server, used mainly for testing, which proxies request
 |  [PayloadWithOrigin](./kassette.payloadwithorigin.md) | Contains the payload along with its origin. |
 |  [RemotePayload](./kassette.remotepayload.md) | Remote payload and the request that was made to get it. |
 |  [RequestPayload](./kassette.requestpayload.md) | Content of an HTTP request. |
+|  [RequestTimings](./kassette.requesttimings.md) | Details about the time spent for each phase of a request-response round trip. All times are specified in milliseconds. |
 |  [Status](./kassette.status.md) | The response status |
 
 ## Type Aliases
@@ -46,9 +54,11 @@ kassette is a development server, used mainly for testing, which proxies request
 |  --- | --- |
 |  [ConfigurationPropertySource](./kassette.configurationpropertysource.md) | The id of the source of the resolved value. |
 |  [Delay](./kassette.delay.md) | Delay that will be used to send the response to the client when the data is taken from the local mock. |
+|  [HarKeyManager](./kassette.harkeymanager.md) | Each entry in a har file is supposed to have a corresponding unique key (a string). The har key manager is both a getter and a setter for the key of an entry. |
 |  [Headers](./kassette.headers.md) | A map from strings to strings or array of strings |
 |  [IMergedConfiguration](./kassette.imergedconfiguration.md) | The resulting configuration that was merged from its different [sources](./kassette.configurationpropertysource.md)<!-- -->. |
 |  [ListOrFilter](./kassette.listorfilter.md) | Type used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that has a map structure, such as the query and headers, to specify if and how they are included in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
+|  [MocksFormat](./kassette.mocksformat.md) | Specifies the mocks format to use. It can be defined globally through the [mocksFormat](./kassette.cliconfigurationspec.mocksformat.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMocksFormat](./kassette.imock.setmocksformat.md)<!-- -->. |
 |  [Mode](./kassette.mode.md) | The main working mode of the proxy. It can be defined globally through the [mode](./kassette.cliconfigurationspec.mode.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMode](./kassette.imock.setmode.md)<!-- -->. |
 |  [PayloadOrigin](./kassette.payloadorigin.md) | Origin of the payload. |
 |  [ProxyConnectMode](./kassette.proxyconnectmode.md) | The mode describing how to process <code>CONNECT</code> requests. It can be defined globally through the [proxyConnectMode](./kassette.cliconfigurationspec.proxyconnectmode.md) setting or per-request from the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) method through [setMode](./kassette.iproxyconnectapi.setmode.md)<!-- -->. |

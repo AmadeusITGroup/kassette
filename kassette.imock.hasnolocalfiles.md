@@ -4,6 +4,11 @@
 
 ## IMock.hasNoLocalFiles() method
 
+> Warning: This API is now obsolete.
+> 
+> Use [IMock.hasNoLocalMock()](./kassette.imock.hasnolocalmock.md) instead.
+> 
+
 Returns true if the mock does not exist locally.
 
 <b>Signature:</b>

@@ -19,16 +19,27 @@ export interface IMock
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [checksumContent](./kassette.imock.checksumcontent.md) | <code>readonly</code> | string \| null | Content produced by the last call to the [checksum](./kassette.imock.checksum.md) method, as it was passed to the hash algorithm. |
-|  [defaultLocalPath](./kassette.imock.defaultlocalpath.md) | <code>readonly</code> | string | The default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder. |
+|  [defaultLocalPath](./kassette.imock.defaultlocalpath.md) | <code>readonly</code> | string | Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->, . It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder. |
+|  [defaultMockHarKey?](./kassette.imock.defaultmockharkey.md) | <code>readonly</code> | string | <i>(Optional)</i> Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', specifies the default mock har key to use in case [setMockHarKey](./kassette.imock.setmockharkey.md) is not called with a non-null value. It is computed by calling the [mocks har key manager](./kassette.imock.mocksharkeymanager.md) with the current request. |
 |  [delay](./kassette.imock.delay.md) | <code>readonly</code> | number | The currently computed delay that will be applied, configured either by a call to [setDelay](./kassette.imock.setdelay.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.delay.md)<!-- -->. Note that if the delay is set to <code>recorded</code> and the local mock to use is not yet loaded, the value returned by this getter will be the default delay and not the recorded delay. |
-|  [localPath](./kassette.imock.localpath.md) | <code>readonly</code> | string | The local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->. |
-|  [mockFolderFullPath](./kassette.imock.mockfolderfullpath.md) | <code>readonly</code> | string | The full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute. |
-|  [mocksFolder](./kassette.imock.mocksfolder.md) | <code>readonly</code> | string | The root folder of all mocks, from which specific mocks paths will be resolved (resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->) |
+|  [localPath](./kassette.imock.localpath.md) | <code>readonly</code> | string | Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->. |
+|  [mockFolderFullPath](./kassette.imock.mockfolderfullpath.md) | <code>readonly</code> | string | Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute. |
+|  [mockHarKey?](./kassette.imock.mockharkey.md) | <code>readonly</code> | string | <i>(Optional)</i> Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', specifies the key to use inside the har file to either read or write a mock. |
+|  [mocksFolder](./kassette.imock.mocksfolder.md) | <code>readonly</code> | string | Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the root folder of all mocks, from which specific mocks paths will be resolved (resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->). |
+|  [mocksFormat](./kassette.imock.mocksformat.md) | <code>readonly</code> | [MocksFormat](./kassette.mocksformat.md) | The mocks format used for this request. |
+|  [mocksHarFile](./kassette.imock.mocksharfile.md) | <code>readonly</code> | string | Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', contains the full path of the the har file to use. |
+|  [mocksHarKeyManager](./kassette.imock.mocksharkeymanager.md) | <code>readonly</code> | [HarKeyManager](./kassette.harkeymanager.md) | Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', specifies the [har key manager](./kassette.harkeymanager.md) to use. |
 |  [mode](./kassette.imock.mode.md) | <code>readonly</code> | [Mode](./kassette.mode.md) | The current mode, configured either by a call to [setMode](./kassette.imock.setmode.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.mode.md)<!-- -->. |
 |  [options](./kassette.imock.options.md) | <code>readonly</code> | [MockingOptions](./kassette.mockingoptions.md) | Link to global configuration options |
 |  [remoteURL](./kassette.imock.remoteurl.md) | <code>readonly</code> | string \| null | The current remote URL, configured either by a call to [setRemoteURL](./kassette.imock.setremoteurl.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.remoteurl.md)<!-- -->. |
 |  [request](./kassette.imock.request.md) | <code>readonly</code> | [IFetchedRequest](./kassette.ifetchedrequest.md) | The wrapper around the input request |
 |  [response](./kassette.imock.response.md) | <code>readonly</code> | [IResponse](./kassette.iresponse.md) | The wrapper around the output response |
+|  [saveChecksumContent](./kassette.imock.savechecksumcontent.md) | <code>readonly</code> | boolean | Whether to save the content used to create a checksum when creating a new mock with a checksum for this request. |
+|  [saveDetailedTimings](./kassette.imock.savedetailedtimings.md) | <code>readonly</code> | boolean | Whether to save [detailed timings](./kassette.requesttimings.md) when creating a new mock for this request. |
+|  [saveForwardedRequestBody](./kassette.imock.saveforwardedrequestbody.md) | <code>readonly</code> | boolean | Whether to save the forwarded request body when creating a new mock for this request. |
+|  [saveForwardedRequestData](./kassette.imock.saveforwardedrequestdata.md) | <code>readonly</code> | boolean | Whether to save the forwarded request data (headers, method, URL) when creating a new mock for this request. |
+|  [saveInputRequestBody](./kassette.imock.saveinputrequestbody.md) | <code>readonly</code> | boolean | Whether to save the content of the input request body when creating a new mock for this request. |
+|  [saveInputRequestData](./kassette.imock.saveinputrequestdata.md) | <code>readonly</code> | boolean | Whether to save the input request data (headers, method, URL) when creating a new mock for this request. |
 |  [sourcePayload](./kassette.imock.sourcepayload.md) |  | [PayloadWithOrigin](./kassette.payloadwithorigin.md) \| undefined | As soon as response is filled with a payload, this property holds the reference to that payload's wrapper. The wrapper is useful here to know where the payload comes from. Before that, this property is <code>undefined</code>. |
 
 ## Methods
@@ -42,7 +53,9 @@ export interface IMock
 |  [fillResponseFromPayload(payload)](./kassette.imock.fillresponsefrompayload.md) | Use data present in given wrapped payload to fill in the response. |
 |  [getPayloadAndFillResponse()](./kassette.imock.getpayloadandfillresponse.md) | Depending on the [mode](./kassette.imock.mode.md)<!-- -->, gets the payload (remote / local / default) and uses [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) with that payload. If [mode](./kassette.imock.mode.md) is <code>manual</code>, does nothing. |
 |  [hasLocalFiles()](./kassette.imock.haslocalfiles.md) | Returns true if the mock exists locally. |
+|  [hasLocalMock()](./kassette.imock.haslocalmock.md) | Returns true if the mock exists locally. |
 |  [hasNoLocalFiles()](./kassette.imock.hasnolocalfiles.md) | Returns true if the mock does not exist locally. |
+|  [hasNoLocalMock()](./kassette.imock.hasnolocalmock.md) | Returns true if the mock does not exist locally. |
 |  [persistPayload(payload)](./kassette.imock.persistpayload.md) | Take the given wrapped payload and persist it in local files. |
 |  [process()](./kassette.imock.process.md) | Combines [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md) and [sendResponse](./kassette.imock.sendresponse.md)<!-- -->. |
 |  [readLocalPayload()](./kassette.imock.readlocalpayload.md) | Returns a wrapped payload built from data persisted in local files. If no local file is present, returns <code>undefined</code>. |
@@ -52,8 +65,18 @@ export interface IMock
 |  [sendResponse()](./kassette.imock.sendresponse.md) | Sends the response back to the client, with the previously specified delay if the payload origin is not <code>remote</code>. |
 |  [setDelay(delay)](./kassette.imock.setdelay.md) | Sets the [delay](./kassette.imock.delay.md) that will be used to send the response to the client when the data is taken from the local mock. |
 |  [setLocalPath(pathParts)](./kassette.imock.setlocalpath.md) | Sets the [localPath](./kassette.imock.localpath.md) value. |
+|  [setMockHarKey(value)](./kassette.imock.setmockharkey.md) | Sets the [mockHarKey](./kassette.imock.mockharkey.md) value. |
 |  [setMocksFolder(value)](./kassette.imock.setmocksfolder.md) | Sets the [mocksFolder](./kassette.imock.mocksfolder.md) value. |
+|  [setMocksFormat(value)](./kassette.imock.setmocksformat.md) | Sets the [mocksFormat](./kassette.imock.mocksformat.md) value. |
+|  [setMocksHarFile(value)](./kassette.imock.setmocksharfile.md) | Sets the [mocksHarFile](./kassette.imock.mocksharfile.md) value. |
+|  [setMocksHarKeyManager(value)](./kassette.imock.setmocksharkeymanager.md) | Sets the [mocksHarKeyManager](./kassette.imock.mocksharkeymanager.md) value. |
 |  [setMode(mode)](./kassette.imock.setmode.md) | Sets the [mode](./kassette.imock.mode.md) for the current request. |
 |  [setPayload(payload)](./kassette.imock.setpayload.md) | Sets the current local payload, with a custom one you would have created. |
 |  [setRemoteURL(url)](./kassette.imock.setremoteurl.md) | Sets the [remote URL](./kassette.imock.remoteurl.md) for the current request. |
+|  [setSaveChecksumContent(value)](./kassette.imock.setsavechecksumcontent.md) | Sets the [saveChecksumContent](./kassette.imock.savechecksumcontent.md) value. |
+|  [setSaveDetailedTimings(value)](./kassette.imock.setsavedetailedtimings.md) | Sets the [saveDetailedTimings](./kassette.imock.savedetailedtimings.md) value. |
+|  [setSaveForwardedRequestBody(value)](./kassette.imock.setsaveforwardedrequestbody.md) | Sets the [saveForwardedRequestBody](./kassette.imock.saveforwardedrequestbody.md) value. |
+|  [setSaveForwardedRequestData(value)](./kassette.imock.setsaveforwardedrequestdata.md) | Sets the [saveForwardedRequestData](./kassette.imock.saveforwardedrequestdata.md) value. |
+|  [setSaveInputRequestBody(value)](./kassette.imock.setsaveinputrequestbody.md) | Sets the [saveInputRequestBody](./kassette.imock.saveinputrequestbody.md) value. |
+|  [setSaveInputRequestData(value)](./kassette.imock.setsaveinputrequestdata.md) | Sets the [saveInputRequestData](./kassette.imock.saveinputrequestdata.md) value. |
 

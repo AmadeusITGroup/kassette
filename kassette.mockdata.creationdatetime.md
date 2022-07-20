@@ -9,5 +9,5 @@ Timestamp when the payload was created.
 <b>Signature:</b>
 
 ```typescript
-readonly creationDateTime: Date;
+readonly creationDateTime?: Date;
 ```

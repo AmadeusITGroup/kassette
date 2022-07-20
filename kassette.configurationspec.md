@@ -18,6 +18,7 @@ export interface ConfigurationSpec extends CLIConfigurationSpec
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [console?](./kassette.configurationspec.console.md) | <code>readonly</code> | [ConsoleSpec](./kassette.consolespec.md) | <i>(Optional)</i> Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
+|  [mocksHarKeyManager?](./kassette.configurationspec.mocksharkeymanager.md) | <code>readonly</code> | [HarKeyManager](./kassette.harkeymanager.md) | <i>(Optional)</i> Function called to get or set the key of a mock in a har file, as explained in [HarKeyManager](./kassette.harkeymanager.md)<!-- -->. |
 
 ## Methods
 

@@ -9,14 +9,14 @@ Merge given `headers` map with the previously set headers (initial set is an emp
 <b>Signature:</b>
 
 ```typescript
-setHeaders(headers: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders>;
+setHeaders(headers?: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  headers | Readonly&lt;IncomingHttpHeaders&gt; | Headers to set. Each header value can be a number, a string, or an array of strings. Put a <code>null</code> value to suppress a header |
+|  headers | Readonly&lt;IncomingHttpHeaders&gt; | <i>(Optional)</i> Headers to set. Each header value can be a number, a string, or an array of strings. Put a <code>null</code> value to suppress a header |
 
 <b>Returns:</b>
 
