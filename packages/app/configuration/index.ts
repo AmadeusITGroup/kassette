@@ -169,6 +169,12 @@ export async function getConfiguration({
       apiValue: apiConfiguration.tlsKeySize,
       defaultValue: 2048,
     }),
+    http2: buildProperty({
+      cliValue: cliConfiguration.http2,
+      fileValue: fileConfiguration.http2,
+      apiValue: apiConfiguration.http2,
+      defaultValue: true,
+    }),
     delay: buildProperty({
       cliValue: cliConfiguration.delay,
       fileValue: fileConfiguration.delay,

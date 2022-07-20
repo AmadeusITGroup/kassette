@@ -29,6 +29,7 @@
     "mocking",
     "har",
     "http",
+    "http2",
     "https",
     "proxy",
     "proxy-server",

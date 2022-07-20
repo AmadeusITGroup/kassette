@@ -93,6 +93,7 @@ describe('server configuration', () => {
           port: { value: 8080, origin: 'cli' },
           tlsCAKeyPath: { value: 'dummy/tls/path', origin: 'cli' },
           tlsKeySize: { value: 1024, origin: 'cli' },
+          http2: { value: false, origin: 'cli' },
           proxyConnectMode: { value: 'intercept', origin: 'default' },
           onProxyConnect: { value: nop, origin: 'file' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
@@ -125,6 +126,7 @@ describe('server configuration', () => {
 - (cli | file | api | ${highlighted('default')}) hostname: ${highlighted('"127.0.0.1"')}
 - (${highlighted('cli')} | file | api | default) port: ${highlighted('8080')}
 - (cli | ${highlighted('file')} | api | default) URL: ${highlighted('"http://dummy.com:5555"')}
+- (${highlighted('cli')} | file | api | default) HTTP/2.0 server: ${highlighted('✗', 'red')}
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
 - (cli | file | api | ${highlighted('default')}) proxy connect mode: ${highlighted('"intercept"')}
 - (${highlighted('cli')} | file | api | default) CA key file path: ${highlighted(
@@ -159,6 +161,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
           port: { value: 8080, origin: 'cli' },
           tlsCAKeyPath: { value: null, origin: 'default' },
           tlsKeySize: { value: 2048, origin: 'default' },
+          http2: { value: true, origin: 'default' },
           proxyConnectMode: { value: 'forward', origin: 'cli' },
           onProxyConnect: { value: nop, origin: 'api' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
@@ -191,6 +194,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
 - (${highlighted('cli')} | file | api | default) hostname: ${highlighted('"127.0.0.2"')}
 - (${highlighted('cli')} | file | api | default) port: ${highlighted('8080')}
 - (cli | ${highlighted('file')} | api | default) URL: ${highlighted('"http://dummy.com:5555"')}
+- (cli | file | api | ${highlighted('default')}) HTTP/2.0 server: ${highlighted('✓')}
 - (cli | file | api | ${highlighted('default')}) proxy mode: ${highlighted('"remote"')}
 - (${highlighted('cli')} | file | api | default) proxy connect mode: ${highlighted('"forward"')}
 - (cli | file | api | ${highlighted('default')}) CA key file path: ${highlighted('null')}

@@ -33,13 +33,17 @@ import { RunOptions, ApplicationData } from '../model';
 export function logProperty(
   name: string,
   property: IConfigurationProperty<any>,
-  checkable = false,
+  checkable: boolean | 'boolValue' = false,
 ) {
   const greenIfFrom = (origin: ConfigurationPropertySource) =>
     property.origin === origin ? 'green' : null;
 
   return logInfo({
-    checked: !checkable ? undefined : property.origin !== 'default',
+    checked: !checkable
+      ? undefined
+      : checkable === 'boolValue'
+      ? property.value
+      : property.origin !== 'default',
     data: checkable ? undefined : stringifyPretty(property.value),
     message: buildString([
       '- (',
@@ -70,6 +74,7 @@ export function logApplicationData({ configuration, root }: ApplicationData) {
   logProperty('hostname', configuration.hostname);
   logProperty('port', configuration.port);
   logProperty('URL', configuration.remoteURL);
+  logProperty('HTTP/2.0 server', configuration.http2, 'boolValue');
   logProperty('proxy mode', configuration.mode);
   logProperty('proxy connect mode', configuration.proxyConnectMode);
   logProperty('CA key file path', configuration.tlsCAKeyPath);

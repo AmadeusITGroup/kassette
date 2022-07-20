@@ -59,6 +59,7 @@ Check [_Getting started_](./doc/getting-started.md) to learn more.
 - generate TLS certificates on the fly to intercept HTTPS communications (as a man-in-the-middle)
 - integrates nicely into your editor and source control: a simple hierarchy of files is generated in a clean way for inspection, edition, diffing, etc.
 - supports the [HAR format](http://www.softwareishard.com/blog/har-12-spec/) to record and replay mocks
+- supports HTTP/1.x and HTTP/2.0 both in client and server
 
 ## Installation
 

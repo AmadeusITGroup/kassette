@@ -1,4 +1,5 @@
 import { IncomingMessage } from 'http';
+import { ServerHttp2Stream, Http2ServerRequest } from 'http2';
 import { Socket } from 'net';
 import { ProxyConnectMode } from '../../configuration';
 import { Connection } from '../request';
@@ -12,12 +13,12 @@ export interface IProxyConnectAPI {
   /**
    * The original Node.js object representing the request
    */
-  readonly request: IncomingMessage;
+  readonly request: IncomingMessage | Http2ServerRequest;
 
   /**
    * The underlying socket
    */
-  readonly socket: Socket;
+  readonly socket: Socket | ServerHttp2Stream;
 
   /**
    * The connections stack

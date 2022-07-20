@@ -60,6 +60,12 @@ const { version } = require('../../package.json');
       describe: 'remote server url',
       string: true,
     })
+    .option('http2', {
+      alias: ['h2'],
+      describe:
+        'enables http/2.0 in the kassette server (enabled by default, use --no-h2 to disable)',
+      type: 'boolean',
+    })
     .option('f', {
       alias: ['folder', 'mocks-folder'],
       describe: 'path to mocks base folder (if mocks-format is "folder")',
@@ -142,6 +148,7 @@ const { version } = require('../../package.json');
   await runFromCLI({
     cliConfiguration: {
       remoteURL: options.u,
+      http2: options.http2,
       hostname: options.hostname,
       port: options.p,
       delay: delay as number | undefined,

@@ -1196,6 +1196,7 @@ const useCases = [
       } else {
         mock.setMode('local');
       }
+      mock.setSaveForwardedRequestData(true);
       return { harFile: mock.mocksHarFile };
     },
 
@@ -1213,6 +1214,7 @@ const useCases = [
           /** @type import("..").HarFormatEntry */
           const entry = data.postProcessing.harFile.log.entries[0];
           expect(entry.response.httpVersion).to.equal('HTTP/2.0');
+          expect(entry._kassetteForwardedRequest.httpVersion).to.equal('HTTP/2.0');
           expect(entry.response.headers).to.deep.contain({ name: ':status', value: '200' });
           if (iteration === 0) {
             // the first time, there is no existing connection:
@@ -1238,6 +1240,328 @@ const useCases = [
                 entry.timings.receive,
             );
           }
+        });
+      }
+    },
+  },
+
+  {
+    name: 'http2-server',
+    description: 'check http2 server',
+    iterations: 2,
+
+    async nodeRequest({ proxyPort, iteration }) {
+      const http2 = require('http2');
+      const connection = http2.connect(
+        `http${iteration === 0 ? '' : 's'}://localhost:${proxyPort}`,
+        { rejectUnauthorized: false },
+      );
+      const request = connection.request({
+        [http2.constants.HTTP2_HEADER_METHOD]: 'GET',
+        [http2.constants.HTTP2_HEADER_PATH]: '/',
+        'check-request-header': 'value-1',
+      });
+      request.end();
+      const response = await new Promise((resolve) => request.on('response', resolve));
+      let data = '';
+      request.on('data', (chunk) => (data += chunk.toString('utf8')));
+      await new Promise((resolve) => request.on('end', resolve));
+      await new Promise((resolve) => connection.close(resolve));
+      return {
+        proxyPort,
+        data,
+        headers: response,
+      };
+    },
+
+    serve: async ({ req, response }) => {
+      const output = {};
+      output.headers = req.headers;
+      response.set('check-response-header', 'value-2');
+      response.status = 200;
+      response.body = 'ok';
+      return output;
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+      mock.setMode('remote');
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
+      mock.setMode('download');
+      return { harFile: mock.mocksHarFile };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      for (const iteration of [0, 1]) {
+        it(`checks for iteration ${iteration}`, () => {
+          const { data } = getData(iteration);
+          expect(data.backend.headers['check-request-header']).to.equal('value-1');
+
+          /** @type import("..").HarFormatEntry */
+          const entry = data.postProcessing.harFile.log.entries[0];
+          expect(entry.request.httpVersion).to.equal('HTTP/2.0');
+          expect(entry.request.headers).to.deep.contain({
+            name: 'check-request-header',
+            value: 'value-1',
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':method',
+            value: 'GET',
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':scheme',
+            value: iteration === 0 ? 'http' : 'https',
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':authority',
+            value: `localhost:${data.client.proxyPort}`,
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':path',
+            value: '/',
+          });
+
+          expect(data.client.data).to.equal('ok');
+          expect(data.client.headers['check-response-header']).to.equal('value-2');
+        });
+      }
+    },
+  },
+
+  {
+    name: 'http2-proxy-server',
+    description: 'check http2 proxy server',
+    iterations: 4,
+
+    async nodeRequest({ proxyPort, backendPort, alternativeBackendPort, iteration }) {
+      const http2 = require('http2');
+      const connection = http2.connect(
+        `http${iteration === 0 ? '' : 's'}://localhost:${proxyPort}`,
+        { rejectUnauthorized: false },
+      );
+      const request = connection.request({
+        [http2.constants.HTTP2_HEADER_SCHEME]: iteration < 2 ? 'http' : 'https',
+        [http2.constants.HTTP2_HEADER_AUTHORITY]:
+          iteration < 2 ? `localhost:${backendPort}` : `localhost:${alternativeBackendPort}`,
+        [http2.constants.HTTP2_HEADER_METHOD]: 'GET',
+        [http2.constants.HTTP2_HEADER_PATH]: '/',
+        'check-request-header': 'value-1',
+      });
+      request.end();
+      const response = await new Promise((resolve) => request.on('response', resolve));
+      let data = '';
+      request.on('data', (chunk) => (data += chunk.toString('utf8')));
+      await new Promise((resolve) => request.on('end', resolve));
+      await new Promise((resolve) => connection.close(resolve));
+      return {
+        backendPort,
+        alternativeBackendPort,
+        data,
+        headers: response,
+      };
+    },
+
+    serve: async ({ req, response }) => {
+      const output = {};
+      output.headers = req.headers;
+      response.set('check-response-header', 'value-2');
+      response.status = 200;
+      response.body = 'server-ok';
+      return output;
+    },
+
+    alternativeServe: async ({ req, response }) => {
+      const output = {};
+      output.headers = req.headers;
+      response.set('check-response-header', 'value-2');
+      response.status = 200;
+      response.body = 'alt-server-ok';
+      return output;
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+      mock.setRemoteURL('*');
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
+      mock.setMode('download');
+      return { harFile: mock.mocksHarFile };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      for (let iteration = 0; iteration < 4; iteration++) {
+        it(`checks for iteration ${iteration}`, () => {
+          const { data } = getData(iteration);
+          if (iteration < 2) {
+            expect(data.backend.headers['check-request-header']).to.equal('value-1');
+          } else {
+            expect(data.alternativeBackend.headers['check-request-header']).to.equal('value-1');
+          }
+
+          /** @type import("..").HarFormatEntry */
+          const entry = data.postProcessing.harFile.log.entries[0];
+          expect(entry.request.httpVersion).to.equal('HTTP/2.0');
+          expect(entry.request.headers).to.deep.contain({
+            name: 'check-request-header',
+            value: 'value-1',
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':method',
+            value: 'GET',
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':scheme',
+            value: iteration < 2 ? 'http' : 'https',
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':authority',
+            value:
+              iteration < 2
+                ? `localhost:${data.client.backendPort}`
+                : `localhost:${data.client.alternativeBackendPort}`,
+          });
+          expect(entry.request.headers).to.deep.contain({
+            name: ':path',
+            value: '/',
+          });
+
+          expect(data.client.data).to.equal(iteration < 2 ? 'server-ok' : 'alt-server-ok');
+          expect(data.client.headers['check-response-header']).to.equal('value-2');
+        });
+      }
+    },
+  },
+
+  {
+    name: 'http2-connect-method-intercept',
+    description: 'check http2 connect method with intercept mode',
+    iterations: 1,
+
+    async nodeRequest({ proxyPort, alternativeBackendPort }) {
+      const { request } = require('https');
+      const http2 = require('http2-wrapper');
+
+      const agent = new http2.proxies.HttpsOverHttp2({
+        proxyOptions: {
+          url: `https://localhost:${proxyPort}`,
+          rejectUnauthorized: false,
+        },
+      });
+
+      /** @type {import("http").IncomingMessage} */
+      const response = await new Promise((resolve, reject) =>
+        request(
+          `https://localhost:${alternativeBackendPort}`,
+          {
+            agent,
+            rejectUnauthorized: false,
+          },
+          resolve,
+        )
+          .on('error', reject)
+          .end(),
+      );
+      let data = '';
+      response.on('data', (chunk) => (data += chunk.toString('utf8')));
+      await new Promise((resolve) => response.on('end', resolve));
+      agent.destroy();
+      http2.globalAgent.destroy();
+      return {
+        code: response.statusCode,
+        data,
+        headers: response.headers,
+      };
+    },
+
+    alternativeServe: async ({ response }) => {
+      const output = {};
+      response.body = output.body = 'from https server';
+      response.status = output.status = 200;
+      response.set('my-resp-header', 'my-value');
+      return output;
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }) => {
+      mock.setMode('remote');
+      mock.setRemoteURL('*');
+    },
+
+    onProxyConnect: async (/** @type {import("..").IProxyConnectAPI} */ request) => {
+      request.setMode('intercept');
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('checks response', () => {
+        const { data } = getData(0);
+        expect(data.client.code).to.equal(200);
+        expect(data.client.data).to.equal('from https server');
+        expect(data.client.headers['my-resp-header']).to.equal('my-value');
+      });
+    },
+  },
+
+  {
+    name: 'http2-connect-method-error',
+    description: 'check http2 connect method leading to an error',
+    iterations: 2,
+
+    async nodeRequest({ proxyPort }) {
+      const { request } = require('https');
+      const http2 = require('http2-wrapper');
+
+      const agent = new http2.proxies.HttpsOverHttp2({
+        proxyOptions: {
+          url: `https://localhost:${proxyPort}`,
+          rejectUnauthorized: false,
+        },
+      });
+
+      try {
+        /** @type {import("http").IncomingMessage} */
+        await new Promise((resolve, reject) =>
+          request(
+            // invalid url (port 1 is supposed not to be used):
+            `https://localhost:1`,
+            {
+              agent,
+              rejectUnauthorized: false,
+            },
+            resolve,
+          )
+            .on('error', reject)
+            .end(),
+        );
+      } catch (error) {
+        agent.destroy();
+        http2.globalAgent.destroy();
+        return {
+          error,
+        };
+      }
+      return {};
+    },
+
+    onProxyConnect: async (/** @type {import("..").IProxyConnectAPI} */ request, { iteration }) => {
+      if (iteration === 0) {
+        request.setMode('forward');
+      } else {
+        request.setMode('close');
+      }
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      for (const iteration of [0, 1]) {
+        it(`checks error for iteration ${iteration}`, () => {
+          const { data } = getData(iteration);
+          expect(data.client.error.code).to.equal('ERR_HTTP2_STREAM_ERROR');
+          expect(data.client.error.message).to.contain('NGHTTP2_CONNECT_ERROR');
         });
       }
     },

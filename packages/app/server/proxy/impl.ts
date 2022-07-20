@@ -4,6 +4,7 @@ import { IProxyConnectAPI } from './model';
 import { Socket, connect } from 'net';
 import { getSocketConnections, pushSocketConnection } from '../connection';
 import { Connection } from '../request';
+import { constants as http2Const, Http2ServerRequest, ServerHttp2Stream } from 'http2';
 
 const hostRegExp = /^(.*):(\d+)$/i;
 const parseHost = (host: string) => {
@@ -18,6 +19,25 @@ const parseHost = (host: string) => {
   return null;
 };
 
+const isHttp2Stream = (socket: Socket | ServerHttp2Stream): socket is ServerHttp2Stream =>
+  'session' in socket;
+
+const connectionEstablished = (socket: Socket | ServerHttp2Stream) => {
+  if (isHttp2Stream(socket)) {
+    socket.respond();
+  } else {
+    socket.write('HTTP/1.1 200 Connection established\r\n\r\n');
+  }
+};
+
+const connectionError = (socket: Socket | ServerHttp2Stream) => {
+  if (isHttp2Stream(socket)) {
+    socket.close(http2Const.NGHTTP2_CONNECT_ERROR);
+  } else {
+    socket.end('HTTP/1.1 500 Connection error\r\n\r\n');
+  }
+};
+
 export class ProxyConnectAPI implements IProxyConnectAPI {
   connectionsStack: readonly Readonly<Connection>[];
   readonly hostname: string;
@@ -27,12 +47,13 @@ export class ProxyConnectAPI implements IProxyConnectAPI {
   private _processed: boolean;
 
   constructor(
-    public readonly request: IncomingMessage,
+    public readonly request: IncomingMessage | Http2ServerRequest,
     public mode: ProxyConnectMode,
-    private _intercept: (socket: Socket) => void,
+    private _intercept: (socket: Socket | ServerHttp2Stream) => void,
   ) {
     this.connectionsStack = getSocketConnections(this.socket).slice(0);
-    const parsed = parseHost(request.url!);
+    const authority = request instanceof Http2ServerRequest ? request.authority : request.url!;
+    const parsed = parseHost(authority);
     if (!parsed) {
       this.mode = 'close';
     } else {
@@ -42,7 +63,7 @@ export class ProxyConnectAPI implements IProxyConnectAPI {
   }
 
   get socket() {
-    return this.request.socket;
+    return this.request instanceof Http2ServerRequest ? this.request.stream : this.request.socket;
   }
 
   get connection() {
@@ -66,19 +87,17 @@ export class ProxyConnectAPI implements IProxyConnectAPI {
     this._processed = true;
     const socket = this.socket;
     if (this.mode === 'close') {
-      this.socket.end();
+      connectionError(socket);
     } else if (this.mode === 'intercept') {
       pushSocketConnection(socket, this.hostname, this.port, '');
       this._intercept(socket);
-      socket.write('HTTP/1.1 200 Connection established\r\n\r\n');
+      connectionEstablished(socket);
     } else if (this.mode === 'forward') {
       const remoteSocket = connect(this.destinationPort, this.destinationHostname, () => {
-        socket.write('HTTP/1.1 200 Connection established\r\n\r\n');
+        connectionEstablished(socket);
         remoteSocket.pipe(socket);
         socket.pipe(remoteSocket);
-      }).on('error', () => {
-        socket.end('HTTP/1.1 500 Connection error\r\n\r\n');
-      });
+      }).on('error', () => connectionError(socket));
     }
   }
 }

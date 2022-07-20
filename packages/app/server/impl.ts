@@ -1,6 +1,7 @@
 // ------------------------------------------------------------------------- std
 
-import { createServer, IncomingMessage } from 'http';
+import { createServer as createHttp2Server, Http2ServerRequest, Http2ServerResponse } from 'http2';
+import { createServer as createHttp1Server, IncomingMessage, ServerResponse } from 'http';
 
 import { createServer as createNetServer, Server, Socket, AddressInfo } from 'net';
 
@@ -54,9 +55,14 @@ export * from './server-response';
 // they should be queued and processed one by one to avoid that
 ////////////////////////////////////////////////////////////////////////////////
 
+const http2Signature = Buffer.from('PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n', 'ascii');
+
 /** Spawns the server */
 export async function spawnServer({ configuration, root }: ApplicationData): Promise<Server> {
-  const server = createServer(async (request, response) => {
+  const requestListener = async (
+    request: Http2ServerRequest | IncomingMessage,
+    response: Http2ServerResponse | ServerResponse,
+  ) => {
     const mock = new Mock({
       options: { root, userConfiguration: configuration },
       request: new Request(request, await readAll(request)),
@@ -71,7 +77,10 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
 
     await configuration.hook.value({ mock, console: getConsole() });
     await mock.process();
-  });
+  };
+  const http1Server = createHttp1Server(requestListener);
+  const http2Server = configuration.http2.value ? createHttp2Server(requestListener) : null;
+  const alpnProtocols = http2Server ? ['h2', 'http/1.1'] : ['http/1.1'];
 
   const tlsManager = new TLSManager({
     tlsCAKeyPath: configuration.tlsCAKeyPath.value,
@@ -87,31 +96,48 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
       // cf https://github.com/mscdex/httpolyglot/issues/3#issuecomment-173680155
       // HTTPS:
       if (data.readUInt8(0) === 22) {
-        const tlsSocket = await tlsManager.process(socket, ['http/1.1']);
+        const tlsSocket = await tlsManager.process(socket, alpnProtocols);
         handleSocket(tlsSocket);
       } else {
         await Promise.resolve();
-        setConnectionProtocol(socket, socket instanceof TLSSocket ? 'https' : 'http');
-        server.emit('connection', socket);
+        const isTLS = socket instanceof TLSSocket;
+        const isHttp2 =
+          http2Server &&
+          ((isTLS && socket.alpnProtocol === 'h2') ||
+            http2Signature.equals(data.subarray(0, http2Signature.length)));
+        if (isHttp2) {
+          // this is a hack that makes node.js correctly initialize the http/2.0 socket
+          // without it, node.js plans to initialize the socket in the secureConnect event that is never emitted,
+          // and later crashes because initialization was not done
+          (socket as any).secureConnecting = false;
+        }
+        setConnectionProtocol(socket, isTLS ? 'https' : 'http');
+        (isHttp2 ? http2Server : http1Server).emit('connection', socket);
       }
       socket.resume();
     });
     socket.on('error', (exception) => logError({ message: CONF.messages.socketError, exception }));
   };
 
-  server.on('connect', async (request: IncomingMessage, socket: Socket, data: Buffer) => {
-    if (data.length > 0) {
+  const connectListener = async (
+    request: IncomingMessage | Http2ServerRequest,
+    socket: Socket,
+    data?: Buffer,
+  ) => {
+    if (data && data.length > 0) {
       socket.unshift(data);
     }
     const api = new ProxyConnectAPI(request, configuration.proxyConnectMode.value, handleSocket);
     logInfo({
       timestamp: true,
       message: CONF.messages.handlingRequest,
-      data: `${request.method} ${request.url}`,
+      data: `${request.method} ${api.hostname}:${api.port}`,
     });
     await configuration.onProxyConnect.value(api);
     api.process();
-  });
+  };
+  http1Server.on('connect', connectListener);
+  http2Server?.on('connect', connectListener);
 
   // server that can receive both http and https connections
   const netServer = createNetServer(handleSocket);

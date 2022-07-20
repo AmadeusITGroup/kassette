@@ -18,6 +18,7 @@ import { IResponse } from './model';
 // ------------------------------------------------------------------------ conf
 
 import CONF from './conf';
+import { Http2ServerResponse } from 'http2';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Model: Response
@@ -40,7 +41,7 @@ export class Response implements IResponse {
 
   private _headers = headersContainer();
 
-  constructor(public readonly original: ServerResponse) {}
+  constructor(public readonly original: ServerResponse | Http2ServerResponse) {}
 
   set body(value: any) {
     this._body = value;
@@ -117,7 +118,11 @@ export class Response implements IResponse {
           });
         }
       });
-    response.writeHead(code, message);
+    if (response instanceof Http2ServerResponse) {
+      response.writeHead(code);
+    } else {
+      response.writeHead(code, message);
+    }
   }
 
   public async send() {

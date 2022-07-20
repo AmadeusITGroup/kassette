@@ -113,6 +113,7 @@ describe('configuration', () => {
       expect(configuration.mode.value).toEqual('local_or_download');
       expect(configuration.delay.value).toEqual('recorded');
       expect(configuration.remoteURL.value).toEqual('*');
+      expect(configuration.http2.value).toEqual(true);
       expect(configuration.onListen.value(undefined as any)).toBeUndefined();
       expect(configuration.onExit.value()).toBeUndefined();
       expect(configuration.hook.value(undefined as any)).toBeUndefined();

@@ -107,6 +107,7 @@ export class TLSManager {
       SNICallback,
       secureContext,
     });
+    socket.on('close', () => tlsSocket.destroy());
     forwardSocketConnections(socket, tlsSocket);
     return tlsSocket;
   }

@@ -684,7 +684,7 @@ export class Mock implements IMock {
         entry._kassetteForwardedRequest = {
           method: payload.requestOptions.method.toUpperCase(),
           url: payload.requestOptions.url,
-          httpVersion: toHarHttpVersion(),
+          httpVersion: entry.response?.httpVersion,
           headers: toHarHeaders(payload.requestOptions.headers),
           cookies: [], // cookies parsing is not implemented
           queryString: toHarQueryString(new URL(payload.requestOptions.url).searchParams),
