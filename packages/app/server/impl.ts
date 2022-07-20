@@ -4,6 +4,8 @@ import { createServer, IncomingMessage } from 'http';
 
 import { createServer as createNetServer, Server, Socket, AddressInfo } from 'net';
 
+import { TLSSocket } from 'tls';
+
 // ---------------------------------------------------------------------- common
 
 import { readAll } from '../../lib/stream';
@@ -85,13 +87,13 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
       // cf https://github.com/mscdex/httpolyglot/issues/3#issuecomment-173680155
       // HTTPS:
       if (data.readUInt8(0) === 22) {
-        socket = await tlsManager.process(socket);
-        setConnectionProtocol(socket, 'https');
+        const tlsSocket = await tlsManager.process(socket, ['http/1.1']);
+        handleSocket(tlsSocket);
       } else {
         await Promise.resolve();
-        setConnectionProtocol(socket, 'http');
+        setConnectionProtocol(socket, socket instanceof TLSSocket ? 'https' : 'http');
+        server.emit('connection', socket);
       }
-      server.emit('connection', socket);
       socket.resume();
     });
     socket.on('error', (exception) => logError({ message: CONF.messages.socketError, exception }));

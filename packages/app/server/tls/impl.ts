@@ -90,6 +90,7 @@ export class TLSManager {
 
   public async process(
     socket: Socket,
+    ALPNProtocols: string[],
     hostname = getSocketConnection(socket).hostname,
   ): Promise<Socket> {
     const secureContext = await this._getSecureContext(hostname);
@@ -102,6 +103,7 @@ export class TLSManager {
     };
     const tlsSocket = new TLSSocket(socket, {
       isServer: true,
+      ALPNProtocols,
       SNICallback,
       secureContext,
     });
