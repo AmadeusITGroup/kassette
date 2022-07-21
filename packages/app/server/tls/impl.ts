@@ -60,6 +60,7 @@ export class TLSManager {
     if (!this._caObject) {
       const ca = await createCertificate(['DO NOT TRUST kassette TLS interception certificate'], {
         keySize: this._config.tlsKeySize,
+        ca: true,
       });
       this._caObject = ca.object;
       this._caPem = ca.cert;
@@ -75,7 +76,6 @@ export class TLSManager {
       res = (async () => {
         const certificate = await createCertificate([host], {
           issuer: this._caObject,
-          ca: false,
           keySize: this._config.tlsKeySize,
         });
         return createSecureContext({
