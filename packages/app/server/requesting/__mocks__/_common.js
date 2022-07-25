@@ -30,9 +30,13 @@ exports.FakeResponse = function ({ headers, code, message, body }) {
   };
 };
 
-exports.FakeRequester = function (callback, buildResponse) {
+exports.FakeRequester = function (buildResponse) {
+  let callback;
   return {
     on: function (event, handler) {
+      if (event === 'response') {
+        callback = handler;
+      }
       return this;
     },
     end: async (body) => {

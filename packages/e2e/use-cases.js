@@ -1175,6 +1175,75 @@ const useCases = [
   },
 
   {
+    name: 'http2-client',
+    description: 'http2 client test',
+    iterations: 3,
+
+    http2Serve: async ({ req, response }) => {
+      const output = {};
+      response.body = output.body = `from http2 backend with http version = ${req.httpVersion}`;
+      response.status = output.status = 200;
+      response.set('my-response-header', 'my-value');
+      return output;
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { context, iteration }) => {
+      mock.setRemoteURL(context.http2RemoteURL);
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har']);
+      if (iteration <= 1) {
+        mock.setMode('download');
+      } else {
+        mock.setMode('local');
+      }
+      return { harFile: mock.mocksHarFile };
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      for (let iteration = 0; iteration < 3; iteration++) {
+        it(`should get the data from the http2 backend (iteration ${iteration})`, async () => {
+          const { data } = getData(iteration);
+          expect(data.client.status.code).to.equal(200);
+          expect(data.client.body).to.equal('from http2 backend with http version = 2.0');
+          expect(data.client.headers['my-response-header']).to.equal('my-value');
+          /** @type import("..").HarFormatEntry */
+          const entry = data.postProcessing.harFile.log.entries[0];
+          expect(entry.response.httpVersion).to.equal('HTTP/2.0');
+          expect(entry.response.headers).to.deep.contain({ name: ':status', value: '200' });
+          if (iteration === 0) {
+            // the first time, there is no existing connection:
+            expect(entry.timings.connect).to.be.above(0);
+            expect(entry.timings.ssl).to.be.above(0);
+            expect(entry.timings.ssl).to.be.below(entry.timings.connect);
+            expect(entry.time).to.equal(
+              entry.timings.wait +
+                entry.timings.connect +
+                entry.timings.send +
+                entry.timings.blocked +
+                entry.timings.receive,
+            );
+          } else {
+            // the second time, the first connection is reused,
+            // so there is no need to connect and do the SSL handshake:
+            expect(entry.timings.connect).to.equal(-1);
+            expect(entry.timings.ssl).to.equal(-1);
+            expect(entry.time).to.equal(
+              entry.timings.wait +
+                entry.timings.send +
+                entry.timings.blocked +
+                entry.timings.receive,
+            );
+          }
+        });
+      }
+    },
+  },
+
+  {
     name: 'save-request-parts-folder',
     description: 'checks the behavior of setSaveXXX',
     iterations: 8,

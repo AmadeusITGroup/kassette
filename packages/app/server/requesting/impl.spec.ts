@@ -1,11 +1,9 @@
-jest.mock('https');
-jest.mock('http');
+jest.mock('http2-wrapper');
 
 import picocolors from 'picocolors';
 
-import { requestHTTP, requestHTTPS, sendRequest } from './impl';
+import { sendRequest } from './impl';
 
-import { readAll } from '../../../lib/stream';
 import { IFetchedRequest } from '../request/model';
 import { URL } from 'url';
 import { createGlobalLogger } from '../../logger';
@@ -34,64 +32,6 @@ function highlighted(text: string, color = 'green'): string {
 ////////////////////////////////////////////////////////////////////////////////
 
 describe('requesting', () => {
-  describe('requestHTTP', () => {
-    it('should send HTTP request and get raw response', async () => {
-      const url = 'http://remote.dev/my/api';
-      const method = 'GET';
-      const headers = {
-        'x-custom': 'custom',
-      };
-      const body = 'Hello';
-
-      const rawResponse = await requestHTTP({ url, method, headers, body });
-
-      expect(rawResponse.statusCode).toBe(200);
-      expect(rawResponse.statusMessage).toBe('OK');
-      expect(rawResponse.headers).toEqual({
-        'content-type': 'application/json',
-      });
-      expect(JSON.parse((await readAll(rawResponse)).toString())).toEqual({
-        url,
-        method,
-        headers,
-        body,
-        secure: false,
-      });
-    });
-  });
-
-  describe('requestHTTPS', () => {
-    it('should send HTTPS request and get raw response', async () => {
-      const hostname = 'remote.dev';
-      const port = '9999';
-      const path = '/my/api';
-      const url = `https://${hostname}:${port}${path}`;
-
-      const method = 'GET';
-      const headers = {
-        'x-custom': 'custom',
-      };
-      const body = 'Hello';
-
-      const rawResponse = await requestHTTPS({ url, method, headers, body });
-
-      expect(rawResponse.statusCode).toBe(200);
-      expect(rawResponse.statusMessage).toBe('OK');
-      expect(rawResponse.headers).toEqual({
-        'content-type': 'application/json',
-      });
-      expect(JSON.parse((await readAll(rawResponse)).toString())).toEqual({
-        method,
-        headers,
-        body,
-        hostname,
-        port,
-        path,
-        secure: true,
-      });
-    });
-  });
-
   describe('sendRequest', () => {
     it('should copy input data and send request', async () => {
       const { output } = createLogger();
@@ -164,11 +104,8 @@ describe('requesting', () => {
         'Accept-Encoding': 'identity',
       });
       expect(sentRequest.method).toEqual('post');
-      expect(sentRequest.hostname).toEqual('target');
-      expect(sentRequest.port).toEqual('5000');
-      expect(sentRequest.path).toEqual('/original?original=original');
+      expect(sentRequest.url).toEqual('https://target:5000/original?original=original');
       expect(sentRequest.body).toEqual('Original');
-      expect(sentRequest.secure).toBeTruthy();
     });
 
     it('should be able to skip log', async () => {

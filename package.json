@@ -84,6 +84,7 @@
   },
   "dependencies": {
     "date-fns": "^2.28.0",
+    "http2-wrapper": "^2.1.11",
     "interpret": "^3.1.1",
     "istextorbinary": "^6.0.0",
     "mime-types": "^2.1.35",

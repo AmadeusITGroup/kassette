@@ -137,6 +137,19 @@ async function run() {
   groupEnd();
 
   //////////////////////////////////////////////////////////////////////////////
+  // http2 backend launch
+  //////////////////////////////////////////////////////////////////////////////
+
+  groupStart(`launching ${highlightEntity('http2 backend')}`);
+
+  const http2Backend = await backendsHandler.launchHttp2Backend({
+    pushResult: results.pusher('http2Backend'),
+  });
+
+  log(`http2 backend started and ready, listening on port ${highlight(http2Backend.port)}`);
+  groupEnd();
+
+  //////////////////////////////////////////////////////////////////////////////
   // Proxy launch
   //////////////////////////////////////////////////////////////////////////////
 
@@ -145,6 +158,7 @@ async function run() {
   const proxy = await proxyHandler.launch({
     backendPort: backend.port,
     alternativeBackendPort: alternativeBackend.port,
+    http2BackendPort: http2Backend.port,
 
     pushResult: results.pusher('proxy'),
   });
@@ -191,6 +205,7 @@ async function run() {
     proxyPort: proxy.port,
     backendPort: backend.port,
     alternativeBackendPort: alternativeBackend.port,
+    http2Backend: http2Backend.port,
 
     pushClientData: results.pusher('clientData'),
     pushClientResult,
@@ -231,6 +246,11 @@ async function run() {
   groupStart(`closing ${highlightEntity('alternative backend')}`);
   await alternativeBackend.close();
   log('alternative backend closed');
+  groupEnd();
+
+  groupStart(`closing ${highlightEntity('http2 backend')}`);
+  await http2Backend.close();
+  log('http2 backend closed');
   groupEnd();
 
   groupStart(`closing ${highlightEntity('client')}`);
