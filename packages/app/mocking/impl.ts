@@ -65,6 +65,7 @@ import {
   HarFormatRequest,
 } from '../../lib/har/harTypes';
 import { callKeyManager, getHarFile, HarFile, HarKeyManager } from '../../lib/har/harFile';
+import { headersContainer } from '../../lib/headers';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -80,7 +81,9 @@ const splitFromHarHeaders = (
   const mainHeaders: HarFormatNameValuePair[] = [];
   const ignoredHeaders: HarFormatNameValuePair[] = [];
   for (const header of headers ?? []) {
-    (CONF.ignoredHeaders.includes(header.name) ? ignoredHeaders : mainHeaders).push(header);
+    (CONF.ignoredHeaders.has(header.name.toLowerCase()) ? ignoredHeaders : mainHeaders).push(
+      header,
+    );
   }
   return { headers: fromHarHeaders(mainHeaders), ignoredHeaders: fromHarHeaders(ignoredHeaders) };
 };
@@ -708,13 +711,13 @@ export class Mock implements IMock {
   //////////////////////////////////////////////////////////////////////////////
 
   private _createPayloadFromResponse({ response, time, timings }: SendRequestOutput): Payload {
-    const headers = {};
-    const ignoredHeaders = {};
+    const headers = headersContainer();
+    const ignoredHeaders = headersContainer();
     Object.entries(response.headers).forEach(([header, value]) => {
       if (value == null) {
         return;
       }
-      const container = CONF.ignoredHeaders.includes(header) ? ignoredHeaders : headers;
+      const container = CONF.ignoredHeaders.has(header.toLowerCase()) ? ignoredHeaders : headers;
       (container as any)[header] = value;
     });
 
