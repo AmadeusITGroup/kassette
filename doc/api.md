@@ -343,6 +343,7 @@ A payload is considered read-only, so all of the properties below are read-only.
   - `headers`: map of registered headers, excluding the ignored headers
   - `ignoredHeaders`: map of ignored headers
     - `'content-length'`: because the modification of the response body will change the content length anyways
+    - `'connection'`, `'keep-alive'`, `'transfer-encoding'`: because connection-specific headers are managed internally
   - `status`: an object `{code, message}`, containing the status code as a number and the status message as a string
   - `bodyFileName`: the path to the file containing the `body` content, relative to the mock's `mockFolderFullPath`
   - `time`: the time it took to receive the response from the backend, in milliseconds
