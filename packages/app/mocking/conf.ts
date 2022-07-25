@@ -11,7 +11,13 @@ export default {
   checksumFilename: 'checksum',
 
   /** A static list of headers to ignore when serving the mock */
-  ignoredHeaders: new Set(['content-length', 'transfer-encoding', 'connection', 'keep-alive']),
+  ignoredHeaders: new Set([
+    'content-length',
+    'transfer-encoding',
+    'connection',
+    'keep-alive',
+    ':status',
+  ]),
 
   /** Default values for an empty mock payload */
   emptyPayload: {

@@ -22,7 +22,7 @@ function buildRemoteURL(port, secure = false) {
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-async function launch({ backendPort, alternativeBackendPort, pushResult }) {
+async function launch({ backendPort, alternativeBackendPort, http2BackendPort, pushResult }) {
   return launchServer({
     name: 'proxy',
     run: async function ({ onStart, onExit, console }) {
@@ -31,6 +31,7 @@ async function launch({ backendPort, alternativeBackendPort, pushResult }) {
         fileConfigurationContext: {
           pushResult,
           alternativeRemoteURL: buildRemoteURL(alternativeBackendPort, true),
+          http2RemoteURL: buildRemoteURL(http2BackendPort, true),
         },
         apiConfiguration: {
           onListen: onStart,

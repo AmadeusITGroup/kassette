@@ -2,6 +2,7 @@
 
 const http = require('http');
 const https = require('https');
+const http2 = require('http2');
 
 // ------------------------------------------------------------------------- 3rd
 
@@ -30,7 +31,7 @@ async function readBody({ req, request }, next) {
 }
 exports.readBody = readBody;
 
-function createServer({ registerRoutes, onStart, onExit, secure = false }) {
+function createServer({ registerRoutes, onStart, onExit, secure = false, http2Server = false }) {
   const application = new Koa();
 
   application.use(readBody);
@@ -40,8 +41,12 @@ function createServer({ registerRoutes, onStart, onExit, secure = false }) {
   application.use(router.routes());
 
   const createServer = !secure
-    ? http.createServer
-    : (callback) => https.createServer({ cert: CERTIFICATE, key: KEY }, callback);
+    ? (http2Server ? http2 : http).createServer
+    : (callback) =>
+        (http2Server ? http2.createSecureServer : https.createServer)(
+          { cert: CERTIFICATE, key: KEY },
+          callback,
+        );
   const server = createServer(application.callback());
 
   server.on('listening', function () {

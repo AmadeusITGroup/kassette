@@ -9,7 +9,7 @@ const { createServer } = require('./server');
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-function Launcher({ processName, hookName, secure }) {
+function Launcher({ processName, hookName, secure, http2Server }) {
   return async function launch({ pushResult }) {
     return await launchServer({
       name: processName,
@@ -18,6 +18,7 @@ function Launcher({ processName, hookName, secure }) {
           onStart,
           onExit,
           secure,
+          http2Server,
           registerRoutes: (router) => registerRoutes({ router, console, pushResult, hookName }),
         });
       },

@@ -1,7 +1,7 @@
 const { FakeRequester, FakeResponse } = require('./_common');
 
-exports.request = function (url, { method, headers }, callback) {
-  return FakeRequester(callback, ({ body }) =>
+exports.auto = async function (url, { method, headers }) {
+  return FakeRequester(({ body }) =>
     FakeResponse({
       headers: { 'content-type': 'application/json' },
       code: 200,
@@ -11,8 +11,9 @@ exports.request = function (url, { method, headers }, callback) {
         method,
         url,
         body,
-        secure: false,
       }),
     }),
   );
 };
+
+exports.globalAgent = {};

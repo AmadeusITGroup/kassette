@@ -11,3 +11,10 @@ exports.launchAlternativeBackend = Launcher({
   hookName: 'alternativeServe',
   secure: true,
 });
+
+exports.launchHttp2Backend = Launcher({
+  processName: 'http2-backend',
+  hookName: 'http2Serve',
+  secure: true,
+  http2Server: true,
+});

@@ -1,8 +1,8 @@
 // ------------------------------------------------------------------------- std
 
-import { IncomingMessage, request as httpRequest } from 'http';
-
-import { request as httpsRequest } from 'https';
+import { IncomingMessage, globalAgent as httpAgent } from 'http';
+import { auto as httpRequest, globalAgent as http2Agent } from 'http2-wrapper';
+import { globalAgent as httpsAgent } from 'https';
 
 import { URL } from 'url';
 
@@ -28,65 +28,9 @@ import { ServerResponse } from '../server-response';
 
 import CONF from '../conf';
 import { Socket } from 'net';
+import { TLSSocket } from 'tls';
+import { SecureClientSessionOptions } from 'http2';
 import { RequestTimings } from '../../../lib/har/harTypes';
-
-////////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////////
-
-const noop = () => {};
-
-export interface RequestEvents {
-  socket?: (socket: Socket) => void;
-  finish?: () => void;
-}
-
-export async function requestHTTP(
-  { url, method, headers, body }: RequestPayload,
-  { socket = noop, finish = noop }: RequestEvents = {},
-): Promise<IncomingMessage> {
-  return new Promise<IncomingMessage>((resolve, reject) =>
-    httpRequest(url, { method, headers }, (message) => resolve(message))
-      .on('error', reject)
-      .on('finish', finish)
-      .on('socket', socket)
-      .end(body),
-  );
-}
-
-export async function requestHTTPS(
-  { url, method, headers, body }: RequestPayload,
-  { socket = noop, finish = noop }: RequestEvents = {},
-): Promise<IncomingMessage> {
-  const { hostname, port, pathname, search, hash } = new URL(url);
-  return new Promise<IncomingMessage>((resolve, reject) =>
-    httpsRequest(
-      // url,
-      // {rejectUnauthorized: false, method, headers},
-
-      // XXX 2018-12-17T11:57:56+01:00
-      // This is to make it compatible with older versions of Node.js
-      // as well as some 3rd-party dependencies used in e2e testing
-      // see https://github.com/TooTallNate/node-agent-base/issues/24
-      // agent-base is indirectly used by puppeteer
-      // and patches this Node.js core API
-      {
-        rejectUnauthorized: false,
-        method,
-        headers,
-
-        hostname,
-        port,
-        path: [pathname, search, hash].join(''),
-      },
-      (message) => resolve(message),
-    )
-      .on('error', reject)
-      .on('finish', finish)
-      .on('socket', socket)
-      .end(body && body.length > 0 ? body : undefined),
-  );
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -127,20 +71,27 @@ const timingCollector = () => {
   const timeSendComplete = timestamp();
   const timeReceiveResponse = timestamp();
   const timeEnd = timestamp();
-  const requestEvents: RequestEvents = {
-    socket(socket) {
-      timeInit.trigger();
-      socket.once('lookup', timeLookup.trigger);
-      socket.once('connect', timeConnect.trigger);
-      socket.once('secureConnect', timeTlsConnect.trigger);
-    },
-    finish: timeSendComplete.trigger,
-  };
   return {
     start: timeStart.trigger,
+    socket(socket: Socket) {
+      if (timeInit.defined) {
+        // note: with HTTP/2, this method is called twice:
+        // once for the underlying socket (for which we need the timings)
+        // and the second time for the http/2 stream (that we can ignore)
+        return;
+      }
+      timeInit.trigger();
+      if (socket.connecting) {
+        socket.once('lookup', timeLookup.trigger);
+        socket.once('connect', timeConnect.trigger);
+        if (socket instanceof TLSSocket) {
+          socket.once('secureConnect', timeTlsConnect.trigger);
+        }
+      }
+    },
+    finish: timeSendComplete.trigger,
     response: timeReceiveResponse.trigger,
     end: timeEnd.trigger,
-    requestEvents,
     total() {
       return timeEnd.value! - timeStart.value!;
     },
@@ -184,10 +135,7 @@ export async function sendRequest({
     logInfo({ timestamp: true, message: CONF.messages.sendingRequest, data: url });
   }
 
-  const request =
-    targetURL.protocol.slice(0, -1).toLowerCase() === 'http' ? requestHTTP : requestHTTPS;
-
-  const requestOptions = {
+  const requestOptions: RequestPayload = {
     url,
     method: original.method,
     body: original.body,
@@ -199,7 +147,35 @@ export async function sendRequest({
 
   const timings = timingCollector();
   timings.start();
-  const response = await request(requestOptions, timings.requestEvents);
+
+  const request = await httpRequest(requestOptions.url, {
+    rejectUnauthorized: false,
+    method: requestOptions.method,
+    headers: requestOptions.headers,
+    agent: {
+      http: httpAgent,
+      https: httpsAgent,
+      http2: Object.create(http2Agent, {
+        createConnection: {
+          async value(origin: URL, options: SecureClientSessionOptions): Promise<TLSSocket> {
+            const res = await http2Agent.createConnection.call(this, origin, options);
+            timings.socket(res);
+            return res;
+          },
+        },
+      }),
+    },
+  });
+
+  const response = await new Promise<IncomingMessage>((resolve, reject) =>
+    request
+      .on('response', resolve)
+      .on('error', reject)
+      .on('finish', timings.finish)
+      .on('socket', timings.socket)
+      .end(requestOptions.body && requestOptions.body.length > 0 ? requestOptions.body : undefined),
+  );
+
   timings.response();
   const body = await readAll(response);
   timings.end();
