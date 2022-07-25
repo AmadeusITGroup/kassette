@@ -686,7 +686,7 @@ export class Mock implements IMock {
           cookies: [], // cookies parsing is not implemented
           queryString: toHarQueryString(new URL(payload.requestOptions.url).searchParams),
           headersSize: -1,
-          bodySize: payload.requestOptions.body.length,
+          bodySize: payload.requestOptions.body?.length ?? 0,
         };
       }
       if (this.saveForwardedRequestBody) {
@@ -876,7 +876,7 @@ export class Mock implements IMock {
         message: CONF.messages.writingForwardedRequestBody,
         data: nodePath.relative(this.mocksFolder, forwardedRequestBodyFile.path),
       });
-      await forwardedRequestBodyFile.write(remotePayload.requestOptions.body.toString());
+      await forwardedRequestBodyFile.write(remotePayload.requestOptions.body?.toString());
     }
   }
 

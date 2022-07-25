@@ -84,7 +84,7 @@ export async function requestHTTPS(
       .on('error', reject)
       .on('finish', finish)
       .on('socket', socket)
-      .end(body),
+      .end(body && body.length > 0 ? body : undefined),
   );
 }
 

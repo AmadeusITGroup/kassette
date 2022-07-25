@@ -35,7 +35,7 @@ export interface RequestPayload {
   /**
    * HTTP request body
    */
-  body: string | Buffer;
+  body?: string | Buffer;
 }
 
 export interface SendRequestSpec {
