@@ -91,10 +91,10 @@ export const fromHarContent = (content?: HarFormatContent) => {
 };
 
 export const toHarPostData = (
-  body: string | Buffer,
+  body?: string | Buffer,
   mimeType?: string,
 ): HarFormatPostData | undefined =>
-  body.length > 0
+  body && body.length > 0
     ? {
         mimeType: mimeType,
         text: body.toString('binary'),
