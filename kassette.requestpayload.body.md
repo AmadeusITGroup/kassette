@@ -9,5 +9,5 @@ HTTP request body
 <b>Signature:</b>
 
 ```typescript
-body: string | Buffer;
+body?: string | Buffer;
 ```

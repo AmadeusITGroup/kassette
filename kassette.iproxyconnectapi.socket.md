@@ -9,5 +9,5 @@ The underlying socket
 <b>Signature:</b>
 
 ```typescript
-readonly socket: Socket;
+readonly socket: Socket | ServerHttp2Stream;
 ```

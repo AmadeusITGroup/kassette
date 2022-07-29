@@ -23,8 +23,8 @@ export interface IProxyConnectAPI
 |  [hostname](./kassette.iproxyconnectapi.hostname.md) | <code>readonly</code> | string | The target hostname in the CONNECT request |
 |  [mode](./kassette.iproxyconnectapi.mode.md) | <code>readonly</code> | [ProxyConnectMode](./kassette.proxyconnectmode.md) | The currently selected mode, configured either by a call to [setMode](./kassette.iproxyconnectapi.setmode.md) or by [the global setting](./kassette.cliconfigurationspec.proxyconnectmode.md) |
 |  [port](./kassette.iproxyconnectapi.port.md) | <code>readonly</code> | number | The target port in the CONNECT request |
-|  [request](./kassette.iproxyconnectapi.request.md) | <code>readonly</code> | IncomingMessage | The original Node.js object representing the request |
-|  [socket](./kassette.iproxyconnectapi.socket.md) | <code>readonly</code> | Socket | The underlying socket |
+|  [request](./kassette.iproxyconnectapi.request.md) | <code>readonly</code> | IncomingMessage \| Http2ServerRequest | The original Node.js object representing the request |
+|  [socket](./kassette.iproxyconnectapi.socket.md) | <code>readonly</code> | Socket \| ServerHttp2Stream | The underlying socket |
 
 ## Methods
 

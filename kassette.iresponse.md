@@ -19,7 +19,7 @@ export interface IResponse
 |  [body](./kassette.iresponse.body.md) |  | any | The body of the response. |
 |  [headers](./kassette.iresponse.headers.md) | <code>readonly</code> | Readonly&lt;IncomingHttpHeaders&gt; | The currently set headers. Use [setHeaders](./kassette.iresponse.setheaders.md) to change them. |
 |  [json](./kassette.iresponse.json.md) |  | boolean | Whether the [body](./kassette.iresponse.body.md) field should be serialized into JSON (and <code>content-type</code> header should be set to <code>application/json</code>). |
-|  [original](./kassette.iresponse.original.md) | <code>readonly</code> | ServerResponse | The original Node.js object representing the response |
+|  [original](./kassette.iresponse.original.md) | <code>readonly</code> | ServerResponse \| Http2ServerResponse | The original Node.js object representing the response |
 |  [status](./kassette.iresponse.status.md) |  | Partial&lt;Readonly&lt;[Status](./kassette.status.md)<!-- -->&gt;&gt; \| null | An object <code>{code, message}</code>, where each property is optional. If <code>code</code> is never given, a default value of <code>200</code> is applied. |
 
 ## Methods

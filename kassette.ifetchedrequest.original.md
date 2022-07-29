@@ -9,5 +9,5 @@ The original Node.js object representing the request
 <b>Signature:</b>
 
 ```typescript
-readonly original: IncomingMessage;
+readonly original: IncomingMessage | Http2ServerRequest;
 ```

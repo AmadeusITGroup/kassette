@@ -22,7 +22,7 @@ export interface IFetchedRequest
 |  [headers](./kassette.ifetchedrequest.headers.md) | <code>readonly</code> | IncomingHttpHeaders | The headers |
 |  [hostname](./kassette.ifetchedrequest.hostname.md) | <code>readonly</code> | string | The hostname part of the URL |
 |  [method](./kassette.ifetchedrequest.method.md) | <code>readonly</code> | string | The HTTP method |
-|  [original](./kassette.ifetchedrequest.original.md) | <code>readonly</code> | IncomingMessage | The original Node.js object representing the request |
+|  [original](./kassette.ifetchedrequest.original.md) | <code>readonly</code> | IncomingMessage \| Http2ServerRequest | The original Node.js object representing the request |
 |  [pathname](./kassette.ifetchedrequest.pathname.md) | <code>readonly</code> | string | The path part of the URL |
 |  [port](./kassette.ifetchedrequest.port.md) | <code>readonly</code> | string | The port part of the URL |
 |  [protocol](./kassette.ifetchedrequest.protocol.md) | <code>readonly</code> | string | The protocol part of the URL, without the trailing <code>:</code> |

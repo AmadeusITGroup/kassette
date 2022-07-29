@@ -16,7 +16,7 @@ export interface RequestPayload
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [body](./kassette.requestpayload.body.md) |  | string \| Buffer | HTTP request body |
+|  [body?](./kassette.requestpayload.body.md) |  | string \| Buffer | <i>(Optional)</i> HTTP request body |
 |  [headers](./kassette.requestpayload.headers.md) |  | IncomingHttpHeaders | HTTP headers |
 |  [method](./kassette.requestpayload.method.md) |  | string | HTTP method |
 |  [url](./kassette.requestpayload.url.md) |  | string | HTTP url |
