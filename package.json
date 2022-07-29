@@ -17,6 +17,7 @@
     "e2e": "npm run build && mocha packages/e2e/run.js",
     "e2e:coverage": "npm run build:coverage && nyc mocha packages/e2e/run.js"
   },
+  "license": "MIT",
   "main": "dist/index.js",
   "bin": "./bin/index.js",
   "keywords": [
