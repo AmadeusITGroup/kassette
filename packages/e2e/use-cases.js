@@ -59,7 +59,20 @@ async function getHarFile({ file }) {
   try {
     const fileContent = await fs.readFile(file);
     return {
-      harFile: JSON.parse(fileContent),
+      harFile: JSON.parse(fileContent.toString('utf8')),
+    };
+  } catch (exception) {
+    if (exception.code !== 'ENOENT') throw exception;
+    return null;
+  }
+}
+
+async function getHarYamlFile({ file }) {
+  const { promises: fs } = require('fs');
+  try {
+    const fileContent = await fs.readFile(file);
+    return {
+      harFile: require('yaml').parse(fileContent.toString('utf8')),
     };
   } catch (exception) {
     if (exception.code !== 'ENOENT') throw exception;
@@ -635,6 +648,216 @@ const useCases = [
 
     postProcess: async ({ data }) => {
       return getHarFile({ file: data.proxy.harFile });
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should not persist any data if mode is remote', async () => {
+        const { data } = getData(0);
+        expect(
+          data.postProcessing.harFile,
+          'When working in "remote" mode, the proxy should not create local files',
+        ).to.be.undefined;
+        expect(data.proxy.wrappedPayload.origin).to.equal('remote');
+      });
+
+      it('should persist data in local or remote mode', async () => {
+        const expectedBody = 'from backend: 1';
+        let iterationData;
+
+        iterationData = getData(1).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'When proxy works in "local_or_download" mode, it should create an entry in the har mock file',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'Getting the current payload during the iteration where the proxy is creating the local files should indicate the payload comes from the "remote" source (the backend)',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 1, when it was stored',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock stored at iteration 1',
+        );
+
+        iterationData = getData(2).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'Entry in the har mock file should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'local',
+          'Getting the current payload during the iteration where the proxy has already local files available should indicate the payload comes from the "local" source',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 1, when it was stored',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock stored at iteration 1',
+        );
+      });
+
+      it('should update mock unconditionally in download mode', async () => {
+        let expectedBody = 'from backend: 3';
+        let iterationData;
+
+        iterationData = getData(3).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'When proxy works in "download" mode, it should create/update an entry in the har mock file',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'In "download" mode, the data forwarded to the client comes from the remote backend.',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
+
+        iterationData = getData(4).data;
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'Entry in the har mock file should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal('local');
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
+
+        iterationData = getData(5).data;
+        expect(iterationData.proxy.harFile).to.include('iteration-5.har');
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'Entry in the har mock file should remain present in subsequent iterations',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal('local');
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 4, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 4',
+        );
+
+        expectedBody = 'from backend: 6';
+        iterationData = getData(6).data;
+        expect(iterationData.proxy.harFile).to.include('iteration-6.har');
+        expect(iterationData.postProcessing.harFile.log.entries).to.have.lengthOf(
+          1,
+          'When proxy works in "download" mode, it should create/update an entry in the har mock file',
+        );
+        expect(iterationData.proxy.wrappedPayload.origin).to.equal(
+          'remote',
+          'In "download" mode, the data forwarded to the client comes from the remote backend.',
+        );
+        expect(iterationData.postProcessing.harFile.log.entries[0].response.content.text).to.equal(
+          expectedBody,
+          'Mock content must come from iteration 6, when it was updated',
+        );
+        expect(iterationData.client.body).to.equal(
+          expectedBody,
+          'Received body must come from the mock updated at iteration 6',
+        );
+      });
+    },
+  },
+
+  {
+    name: 'generate-files-har-yaml',
+    description: 'mock har files generation in yaml format',
+    iterations: 7,
+
+    request: async ({ iteration }) => {
+      return { request: { headers: { 'x-iteration': iteration } } };
+    },
+
+    serve: async ({ response, request }) => {
+      const output = {};
+      const iteration = request.headers['x-iteration'];
+      response.body = output.body = `from backend: ${iteration}`;
+      response.status = output.status = 200;
+      return output;
+    },
+
+    proxy: async ({ mock }, { iteration }) => {
+      mock.setMocksFormat('har');
+      mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har.yaml']);
+      if (iteration >= 5) {
+        // from the 6th iteration, copy the har file to a new location to force testing the loading process:
+        const oldMockFile = mock.mocksHarFile;
+        mock.setMocksHarFile(
+          oldMockFile.replace(/mocks\.har\.yaml$/, `iteration-${iteration}.har.yaml`),
+        );
+        await copyFile(oldMockFile, mock.mocksHarFile);
+      }
+      const harFile = mock.mocksHarFile;
+
+      if (iteration === 0) {
+        mock.setMode('remote');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 1) {
+        mock.setMode('local_or_download');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return {
+          harFile,
+          wrappedPayload,
+        };
+      } else if (iteration === 2) {
+        mock.setMode('local_or_download');
+
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        // TODO 2018-12-11T11:18:31+01:00
+        // Alter the data read from the files to check it's feasible,
+        // and then verify that the client side received the altered data
+        return {
+          harFile,
+          wrappedPayload,
+          // alteredData: ...,
+        };
+      } else if (iteration === 3) {
+        mock.setMode('download');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 4) {
+        mock.setMode('local');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 5) {
+        mock.setMode('local');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      } else if (iteration === 6) {
+        mock.setMode('download');
+        await mock.process();
+        const wrappedPayload = mock.sourcePayload;
+        return { harFile, wrappedPayload };
+      }
+    },
+
+    postProcess: async ({ data }) => {
+      return getHarYamlFile({ file: data.proxy.harFile });
     },
 
     defineAssertions: ({ it, getData, expect }) => {

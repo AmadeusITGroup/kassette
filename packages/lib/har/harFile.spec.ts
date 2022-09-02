@@ -1,5 +1,6 @@
 import { rm, writeFile } from 'fs/promises';
 import path from 'path';
+import { jsonFormat } from './formats';
 import { defaultHarKeyManager, getHarFile, harFileMap } from './harFile';
 import { emptyHar } from './harUtils';
 
@@ -13,7 +14,7 @@ describe('harFile', () => {
 
   it('should work with multiple concurrent read or write operations', async () => {
     const harFile = path.join(tmpDir, 'concurrent.har');
-    const myHarFile = getHarFile(harFile, 100);
+    const myHarFile = getHarFile(harFile, 100, jsonFormat);
     const entry1 = myHarFile.setEntry('1', { comment: 'entry1' }, defaultHarKeyManager);
     const entry2 = myHarFile.setEntry('2', { comment: 'entry2' }, defaultHarKeyManager);
     await entry1;

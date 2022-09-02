@@ -66,6 +66,7 @@ import {
 } from '../../lib/har/harTypes';
 import { callKeyManager, getHarFile, HarFile, HarKeyManager } from '../../lib/har/harFile';
 import { headersContainer } from '../../lib/headers';
+import { detectHarFormat } from '../../lib/har/formats';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -540,7 +541,11 @@ export class Mock implements IMock {
 
   @CachedProperty()
   private get _harFmtFile(): HarFile {
-    return getHarFile(this.mocksHarFile, this.options.userConfiguration.harFileCacheTime.value);
+    return getHarFile(
+      this.mocksHarFile,
+      this.options.userConfiguration.harFileCacheTime.value,
+      detectHarFormat(this.mocksHarFile),
+    );
   }
 
   @CachedProperty()

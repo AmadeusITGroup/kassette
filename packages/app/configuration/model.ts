@@ -276,7 +276,8 @@ export interface CLIConfigurationSpec {
 
   /**
    * When the {@link CLIConfigurationSpec.mocksFormat|mocks format} is 'har', specifies
-   * the default har file to use.
+   * the default har file to use. If the file name has the `.yml` or `.yaml` extension, the YAML format
+   * is used instead of the standard JSON format to read and write the file.
    *
    * @remarks
    *
