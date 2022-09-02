@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
-import { stringifyPretty } from '../json';
 import { FileHandler } from '../fs';
+import { FileFormat } from './formats';
 
-export abstract class JsonFile<T> extends EventEmitter {
+export abstract class StructuredFile<T> extends EventEmitter {
   protected _fileContent: T | null;
   private _modified = false;
   private _readingPromise: Promise<void> | null = null;
@@ -12,7 +12,7 @@ export abstract class JsonFile<T> extends EventEmitter {
   private _lastReadSize = 0;
   private _busyState = false;
 
-  constructor(private _fileHandler: FileHandler) {
+  constructor(private _fileHandler: FileHandler, private _fileFormat: FileFormat) {
     super();
   }
 
@@ -48,7 +48,7 @@ export abstract class JsonFile<T> extends EventEmitter {
           const content = await this._fileHandler.read();
           this._lastReadModifiedTime = stat.mtime;
           this._lastReadSize = content?.length ?? 0;
-          this._fileContent = JSON.parse(content?.toString('utf8') ?? 'null');
+          this._fileContent = content ? this._fileFormat.parse(content) : null;
           this._afterRead();
         }
       } else {
@@ -77,7 +77,7 @@ export abstract class JsonFile<T> extends EventEmitter {
     try {
       this._markBusy();
       this._nextWritingPromise = null;
-      const content = Buffer.from(stringifyPretty(this._fileContent), 'utf8');
+      const content = this._fileFormat.stringify(this._fileContent);
       this._modified = false;
       await this._fileHandler.write(content);
       // after the file is written, let's read back the modification time

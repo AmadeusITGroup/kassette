@@ -3,13 +3,14 @@ import { FileHandler } from '../fs';
 import { HarFormatEntry, HarFormat } from './harTypes';
 import { emptyHar } from './harUtils';
 import { joinPath } from '../path';
-import { JsonFile } from './jsonFile';
+import { StructuredFile } from './structuredFile';
+import { FileFormat } from './formats';
 
 export const harFileMap = new Map<string, HarFile>();
 
-const createHarFile = (path: string, keepDelay: number) => {
+const createHarFile = (path: string, keepDelay: number, format: FileFormat) => {
   let timeout: NodeJS.Timeout | null = null;
-  const harFile = new HarFile(new FileHandler(path));
+  const harFile = new HarFile(new FileHandler(path), format);
   const removeFromMap = () => {
     const item = harFileMap.get(path);
     if (item === harFile) {
@@ -34,8 +35,8 @@ const createHarFile = (path: string, keepDelay: number) => {
   return harFile;
 };
 
-export const getHarFile = (path: string, keepDelay: number) =>
-  harFileMap.get(path) ?? createHarFile(path, keepDelay);
+export const getHarFile = (path: string, keepDelay: number, format: FileFormat) =>
+  harFileMap.get(path) ?? createHarFile(path, keepDelay, format);
 
 /**
  * Each entry in a har file is supposed to have a corresponding unique key (a string).
@@ -109,7 +110,7 @@ export const callKeyManager = (
   return res;
 };
 
-export class HarFile extends JsonFile<HarFormat> {
+export class HarFile extends StructuredFile<HarFormat> {
   protected _keysMaps = new WeakMap<HarKeyManager, Map<string, number>>();
 
   protected _afterRead(): void {

@@ -75,6 +75,7 @@ You likely won't have to change that, since most of the time you will want to ke
 When `mocksFormat` is `har`, kassette can store several requests/responses in the same har file.
 
 kassette mostly follows the [har format specification](http://www.softwareishard.com/blog/har-12-spec/).
+If the har file name has the `.yml` or `.yaml` extension, kassette uses the YAML format instead of the standard JSON format to read and write the file.
 
 Some parts of the specification are not implemented and some custom fields are added, as described in the [API reference](https://amadeusitgroup.github.io/kassette/kassette.harformatentry.html).
 
@@ -89,7 +90,7 @@ As with the `folder` format, it is possible to control what is included in the h
 
 #### har file location
 
-- `mocksHarFile`: contains the full path to the har file to use
+- `mocksHarFile`: contains the full path to the har file to use. If the file name has the `.yml` or `.yaml` extension, kassette uses the YAML format instead of the standard JSON format to read and write the file.
 - `setMocksHarFile(value)`: sets the `mocksHarFile` value by providing any combination of arrays of path parts, as for `setMocksFolder`. You can pass an absolute path, or a relative one which will be resolved against `options.root`.
 
 #### key inside the har file
