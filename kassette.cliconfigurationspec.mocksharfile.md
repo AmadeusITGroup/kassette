@@ -4,7 +4,7 @@
 
 ## CLIConfigurationSpec.mocksHarFile property
 
-When the [mocks format](./kassette.cliconfigurationspec.mocksformat.md) is 'har', specifies the default har file to use.
+When the [mocks format](./kassette.cliconfigurationspec.mocksformat.md) is 'har', specifies the default har file to use. If the file name has the `.yml` or `.yaml` extension, the YAML format is used instead of the standard JSON format to read and write the file.
 
 <b>Signature:</b>
 
