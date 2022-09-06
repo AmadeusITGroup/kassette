@@ -88,8 +88,10 @@ export function isFilter(value: any): value is FilterableSpec<any> {
   return value.filter != null;
 }
 
-export function isListing(value: any): value is ListOrFilter & { keys: string[] } {
-  return value.keys != null;
+export function isListing(
+  value: ListOrFilter,
+): value is { mode?: 'whitelist' | 'blacklist'; keys: string[] } {
+  return (value as any).keys != null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
