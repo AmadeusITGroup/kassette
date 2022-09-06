@@ -158,7 +158,7 @@ export async function processList(
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function processSpec<SpecType>(
+export async function processSpec<SpecType extends IncludableSpec>(
   spec: SpecType | boolean | undefined,
   includedByDefault: DefaultInclude,
   process: (spec: SpecType) => string | Promise<string>,
