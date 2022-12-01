@@ -10,6 +10,7 @@ module.exports = [
       {
         file: path.join(__dirname, '../dist/index.js'),
         format: 'cjs',
+        dynamicImportInCjs: false,
       },
     ],
     input: path.join(__dirname, './index.ts'),
