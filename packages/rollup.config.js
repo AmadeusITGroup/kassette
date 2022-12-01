@@ -4,7 +4,7 @@ const dependencies = Object.keys(pkg.dependencies);
 const typescript = require('@rollup/plugin-typescript');
 const replace = require('@rollup/plugin-replace');
 
-export default [
+module.exports = [
   {
     output: [
       {
