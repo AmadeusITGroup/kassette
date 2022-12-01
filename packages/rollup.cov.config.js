@@ -20,6 +20,4 @@ fs.readFileSync = (...args) => {
   return code;
 };
 
-import config from './rollup.config';
-
-export default config;
+module.exports = require('./rollup.config');
