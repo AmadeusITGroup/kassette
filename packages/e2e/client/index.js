@@ -42,11 +42,8 @@ async function create({
       // Start instance
       //////////////////////////////////////////////////////////////////////////
 
-      browser = await playwright.chromium.launch({
+      browser = await playwright.webkit.launch({
         headless: true,
-        proxy: {
-          server: 'per-context',
-        },
       });
 
       for (const useCase of useCases) {
@@ -67,14 +64,13 @@ async function create({
         } else {
           const context = await browser.newContext({
             ignoreHTTPSErrors: true,
-            proxy: browserProxy
+            ...(browserProxy
               ? {
-                  server: `http://127.0.0.1:${proxyPort}`,
+                  proxy: {
+                    server: `http://127.0.0.1:${proxyPort}`,
+                  },
                 }
-              : {
-                  server: 'per-context',
-                  bypass: '*',
-                },
+              : {}),
           });
           const page = await context.newPage();
 
@@ -123,6 +119,7 @@ async function create({
               alternativeBackendPort,
             });
           }
+          await context.close();
         }
         onEndUseCase();
       }
