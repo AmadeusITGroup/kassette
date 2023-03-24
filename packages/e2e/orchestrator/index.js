@@ -1,6 +1,5 @@
 // ------------------------------------------------------------------------- std
 
-const util = require('util');
 const { promises: fs } = require('fs');
 
 // ------------------------------------------------------------------------- 3rd
@@ -58,13 +57,12 @@ function highlightEntity(string) {
 // Workspace reset
 ////////////////////////////////////////////////////////////////////////////////
 
-const rmrf = util.promisify(rimraf);
 async function mkdir(path) {
   return fs.mkdir(path, { recursive: true });
 }
 
 async function resetWorkspace() {
-  await rmrf(PATHS.workspace);
+  await rimraf(PATHS.workspace);
   await mkdir(PATHS.outputs);
   await mkdir(PATHS.resultsFolder);
 }
