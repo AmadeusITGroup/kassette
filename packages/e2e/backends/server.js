@@ -40,14 +40,23 @@ function createServer({ registerRoutes, onStart, onExit, secure = false, http2Se
   registerRoutes(router);
   application.use(router.routes());
 
-  const createServer = !secure
-    ? (http2Server ? http2 : http).createServer
-    : (callback) =>
-        (http2Server ? http2.createSecureServer : https.createServer)(
-          { cert: CERTIFICATE, key: KEY },
-          callback,
-        );
-  const server = createServer(application.callback());
+  const options = {};
+  const createServer = secure
+    ? http2Server
+      ? http2.createSecureServer
+      : https.createServer
+    : (http2Server ? http2 : http).createServer;
+
+  if (secure) {
+    options.cert = CERTIFICATE;
+    options.key = KEY;
+
+    if (http2Server) {
+      options.allowHTTP1 = true;
+    }
+  }
+
+  const server = createServer(options, application.callback());
 
   server.on('listening', function () {
     onStart({ port: this.address().port });

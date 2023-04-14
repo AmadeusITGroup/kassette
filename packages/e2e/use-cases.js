@@ -1402,11 +1402,21 @@ const useCases = [
     description: 'http2 client test',
     iterations: 3,
 
+    request: async ({ proxyPort }) => {
+      return {
+        request: {
+          url: `https://127.0.0.1:${proxyPort}`,
+        },
+      };
+    },
+
     http2Serve: async ({ req, response }) => {
       const output = {};
       response.body = output.body = `from http2 backend with http version = ${req.httpVersion}`;
       response.status = output.status = 200;
       response.set('my-response-header', 'my-value');
+      response.set('Access-Control-Allow-Origin', '*');
+      response.set('Access-Control-Expose-Headers', '*');
       return output;
     },
 
@@ -1465,6 +1475,50 @@ const useCases = [
           }
         });
       }
+    },
+  },
+
+  {
+    name: 'do-not-upgrade-to-http2',
+    description: 'http1 request from client should reach the server as http1',
+    iterations: 1,
+
+    http2Serve: async ({ req, response }) => {
+      const output = {
+        body: `using http ${req.httpVersion}`,
+        statusCode: 200,
+      };
+      response.status = output.statusCode;
+      response.body = output.body;
+      return output;
+    },
+
+    async nodeRequest({ proxyPort }) {
+      const https = require('https');
+      const request = https.get(`https://localhost:${proxyPort}`, { rejectUnauthorized: false });
+      const response = await new Promise((resolve) => request.on('response', resolve));
+      let body = '';
+      response.on('data', (chunk) => (body += chunk.toString('utf8')));
+      await new Promise((resolve) => response.on('end', resolve));
+      return {
+        body,
+        statusCode: response.statusCode,
+      };
+    },
+
+    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { context }) => {
+      mock.setMode('remote');
+      mock.setRemoteURL(context.http2RemoteURL);
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('should use http/1.1 when connecting to the server', () => {
+        const { data } = getData(0);
+        expect(data.http2Backend.statusCode).to.equal(200);
+        expect(data.http2Backend.body).to.equal('using http 1.1');
+        expect(data.client.statusCode).to.equal(200);
+        expect(data.client.body).to.equal('using http 1.1');
+      });
     },
   },
 

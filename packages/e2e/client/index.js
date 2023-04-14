@@ -65,21 +65,17 @@ async function create({
             await pushClientResult({ useCase: name, iteration, data: result });
           }
         } else {
-          const context = await browser.newContext(
-            browserProxy
+          const context = await browser.newContext({
+            ignoreHTTPSErrors: true,
+            proxy: browserProxy
               ? {
-                  ignoreHTTPSErrors: true,
-                  proxy: {
-                    server: `http://127.0.0.1:${proxyPort}`,
-                  },
+                  server: `http://127.0.0.1:${proxyPort}`,
                 }
               : {
-                  proxy: {
-                    server: 'per-context',
-                    bypass: '*',
-                  },
+                  server: 'per-context',
+                  bypass: '*',
                 },
-          );
+          });
           const page = await context.newPage();
 
           // 2020-06-09T14:50:14+02:00 seems to be not working all the time
@@ -122,6 +118,7 @@ async function create({
             await page.evaluate((spec) => execute(spec), {
               name,
               iteration,
+              proxyPort,
               backendPort,
               alternativeBackendPort,
             });

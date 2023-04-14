@@ -113,6 +113,11 @@ const timingCollector = () => {
   };
 };
 
+const forceHttp1: Pick<Parameters<typeof httpRequest>[0], 'ALPNProtocols' | 'resolveProtocol'> = {
+  ALPNProtocols: ['http/1.1'],
+  resolveProtocol: async () => ({ alpnProtocol: 'http/1.1' }),
+};
+
 /** Returns a server response with a fetched body, as well as timing information */
 export async function sendRequest({
   baseUrl,
@@ -155,6 +160,8 @@ export async function sendRequest({
   timings.start();
 
   const request = await httpRequest(requestOptions.url, {
+    // forces the use of http/1.x in case http/1.x is used in the original request:
+    ...(original.original?.httpVersionMajor < 2 ? forceHttp1 : {}),
     rejectUnauthorized: false,
     method: requestOptions.method,
     headers: requestOptions.headers,
