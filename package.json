@@ -1,6 +1,6 @@
 {
   "name": "@amadeus-it-group/kassette",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Development server, used mainly for testing, which proxies requests and is able to easily manage local mocks.",
   "scripts": {
     "prepare": "husky install && npm run build && npm run apidoc",
