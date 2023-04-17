@@ -6,7 +6,7 @@
 
 Sets the destination [hostname](./kassette.iproxyconnectapi.destinationhostname.md) and [port](./kassette.iproxyconnectapi.destinationport.md) that will be used when the [process](./kassette.iproxyconnectapi.process.md) method is called. Also changes the [mode](./kassette.iproxyconnectapi.mode.md) to `forward`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setDestination(hostname: string, port: number): void;
@@ -19,7 +19,7 @@ setDestination(hostname: string, port: number): void;
 |  hostname | string | Destination hostname |
 |  port | number | Destination port |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

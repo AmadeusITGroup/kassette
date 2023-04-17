@@ -6,7 +6,7 @@
 
 Whether to save the forwarded request body when creating a new mock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly saveForwardedRequestBody?: boolean | null;

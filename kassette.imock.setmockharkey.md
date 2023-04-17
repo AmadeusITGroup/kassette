@@ -6,7 +6,7 @@
 
 Sets the [mockHarKey](./kassette.imock.mockharkey.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMockHarKey(value: RecursiveArray<string | null | undefined> | null): void;
@@ -18,7 +18,7 @@ setMockHarKey(value: RecursiveArray<string | null | undefined> | null): void;
 |  --- | --- | --- |
 |  value | [RecursiveArray](./kassette.recursivearray.md)<!-- -->&lt;string \| null \| undefined&gt; \| null | specifies the key to use inside the har file to either read or write a mock. If an array is set (which can be nested), it is flattened with null items removed, and joined with forward slashes to produce a string. Passing null resets the value to [the default value](./kassette.imock.defaultmockharkey.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

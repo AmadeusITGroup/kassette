@@ -6,7 +6,7 @@
 
 Information about a request body, as stored in a har file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HarFormatPostData 
@@ -16,8 +16,8 @@ export interface HarFormatPostData
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [comment?](./kassette.harformatpostdata.comment.md) |  | string | <i>(Optional)</i> Any comment as a string. This is not used by kassette. |
-|  [mimeType?](./kassette.harformatpostdata.mimetype.md) |  | string | <i>(Optional)</i> Value of the <code>Content-Type</code> request header, if present. |
-|  [params?](./kassette.harformatpostdata.params.md) |  | any\[\] | <i>(Optional)</i> List of posted parameters. This is not implemented in kassette. |
-|  [text?](./kassette.harformatpostdata.text.md) |  | string | <i>(Optional)</i> Posted data, as a (binary) string. |
+|  [comment?](./kassette.harformatpostdata.comment.md) |  | string | _(Optional)_ Any comment as a string. This is not used by kassette. |
+|  [mimeType?](./kassette.harformatpostdata.mimetype.md) |  | string | _(Optional)_ Value of the <code>Content-Type</code> request header, if present. |
+|  [params?](./kassette.harformatpostdata.params.md) |  | any\[\] | _(Optional)_ List of posted parameters. This is not implemented in kassette. |
+|  [text?](./kassette.harformatpostdata.text.md) |  | string | _(Optional)_ Posted data, as a (binary) string. |
 

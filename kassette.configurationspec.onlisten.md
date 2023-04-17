@@ -6,7 +6,7 @@
 
 Callback called when the proxy is started and listening.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 onListen?(parameters: {
@@ -20,7 +20,7 @@ onListen?(parameters: {
 |  --- | --- | --- |
 |  parameters | { port: number; } | the port property contains the port on which the proxy is listening. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

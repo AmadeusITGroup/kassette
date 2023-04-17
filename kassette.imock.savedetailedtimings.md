@@ -6,7 +6,7 @@
 
 Whether to save [detailed timings](./kassette.requesttimings.md) when creating a new mock for this request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly saveDetailedTimings: boolean;

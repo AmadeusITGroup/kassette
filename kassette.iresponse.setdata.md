@@ -6,7 +6,7 @@
 
 A convenient method to set the [body](./kassette.iresponse.body.md) value and set [json](./kassette.iresponse.json.md) to `true`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setData(data: any): void;
@@ -18,7 +18,7 @@ setData(data: any): void;
 |  --- | --- | --- |
 |  data | any | json object to use as the response body |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

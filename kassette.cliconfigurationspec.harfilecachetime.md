@@ -6,7 +6,7 @@
 
 Time in milliseconds during which a har file is kept in memory after its last usage.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly harFileCacheTime?: number;

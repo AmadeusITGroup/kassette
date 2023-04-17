@@ -6,7 +6,7 @@
 
 The name of the local file containing the body content (needed since the name is dynamic)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly bodyFileName: string;

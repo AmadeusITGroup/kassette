@@ -6,7 +6,7 @@
 
 The hostname on which the proxy should listen. Uses `127.0.0.1` by default, which only allows local connections. To allow remote connections, use the ip address of the specific network interface that should be allowed to connect or the unspecified IPv4 (`0.0.0.0`<!-- -->) or IPv6 (`::`<!-- -->) address.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly hostname?: string;

@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->. It is either the one set by the user through [setLocalPath](./kassette.imock.setlocalpath.md) or [defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly localPath: string;

@@ -6,7 +6,7 @@
 
 The original Node.js object representing the request
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly request: IncomingMessage | Http2ServerRequest;

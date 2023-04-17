@@ -6,7 +6,7 @@
 
 Callback called for every HTTP request that kassette receives (with the exception of `CONNECT` requests, which trigger the call of [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) instead).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hook?(parameters: HookAPI): void | Promise<void>;
@@ -18,7 +18,7 @@ hook?(parameters: HookAPI): void | Promise<void>;
 |  --- | --- | --- |
 |  parameters | [HookAPI](./kassette.hookapi.md) | exposes the API to control how to process the request |
 
-<b>Returns:</b>
+**Returns:**
 
 void \| Promise&lt;void&gt;
 

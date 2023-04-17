@@ -6,7 +6,7 @@
 
 Detailed timings recorded during the request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly timings?: RequestTimings;

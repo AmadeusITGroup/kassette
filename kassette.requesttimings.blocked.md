@@ -6,7 +6,7 @@
 
 Time spent in a queue waiting for a network connection. Can be -1 if the timing does not apply to the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 blocked?: number;

@@ -6,7 +6,7 @@
 
 The console object as specified in the [configuration](./kassette.configurationspec.console.md)<!-- -->, otherwise it is the global console object (usually the one of the platform).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 console: ConsoleSpec;

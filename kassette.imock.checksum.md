@@ -6,7 +6,7 @@
 
 Compute a checksum using content from the request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 checksum(spec: ChecksumArgs): Promise<string>;
@@ -18,7 +18,7 @@ checksum(spec: ChecksumArgs): Promise<string>;
 |  --- | --- | --- |
 |  spec | [ChecksumArgs](./kassette.checksumargs.md) | specifies which data from the request to include in the checksum |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;string&gt;
 

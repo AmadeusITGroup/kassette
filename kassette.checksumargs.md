@@ -6,7 +6,7 @@
 
 Type of the argument expected by [checksum](./kassette.imock.checksum.md)<!-- -->. It specifies which data from the request to include in the checksum.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface ChecksumArgs 
@@ -20,15 +20,15 @@ To include or exclude data, not every kind of data from the request has the same
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [body?](./kassette.checksumargs.body.md) |  | [FilterableSpec](./kassette.filterablespec.md)<!-- -->&lt;Buffer, Buffer \| string&gt; \| boolean | <i>(Optional)</i> Specifies whether and how to include the body of the request in the hash. The default value is <code>true</code>. |
-|  [customData?](./kassette.checksumargs.customdata.md) |  | any \| null | <i>(Optional)</i> Any custom value (which can be JSON stringified) to be added in the content to be hashed. |
-|  [format?](./kassette.checksumargs.format.md) |  | crypto.BinaryToTextEncoding | <i>(Optional)</i> Specifies the output format. Default value is <code>hex</code>. Check Node.js API for more information: [hash.digest(format)](https://nodejs.org/api/crypto.html#crypto_hash_digest_encoding)<!-- -->. |
-|  [headers?](./kassette.checksumargs.headers.md) |  | [ListOrFilter](./kassette.listorfilter.md) \| boolean | <i>(Optional)</i> Specifies whether and how to include the headers in the hash. The default value is <code>false</code>. |
-|  [hostname?](./kassette.checksumargs.hostname.md) |  | [FilterableSpec](./kassette.filterablespec.md)<!-- -->&lt;string&gt; \| boolean | <i>(Optional)</i> Specifies whether and how to include the hostname in the hash. The default value is <code>false</code>. |
-|  [method?](./kassette.checksumargs.method.md) |  | [IncludableSpec](./kassette.includablespec.md) \| boolean | <i>(Optional)</i> Specifies whether to include the method in the hash. The default value is <code>false</code>. |
-|  [pathname?](./kassette.checksumargs.pathname.md) |  | [FilterableSpec](./kassette.filterablespec.md)<!-- -->&lt;string&gt; \| boolean | <i>(Optional)</i> Specifies whether and how to include the pathname part of the url in the hash. The default value is <code>false</code>. |
-|  [port?](./kassette.checksumargs.port.md) |  | [IncludableSpec](./kassette.includablespec.md) \| boolean | <i>(Optional)</i> Specifies whether to include the port in the hash. The default value is <code>false</code>. |
-|  [protocol?](./kassette.checksumargs.protocol.md) |  | [IncludableSpec](./kassette.includablespec.md) \| boolean | <i>(Optional)</i> Specifies whether to include the protocol in the hash. The default value is <code>false</code>. |
-|  [query?](./kassette.checksumargs.query.md) |  | [ListOrFilter](./kassette.listorfilter.md) \| boolean | <i>(Optional)</i> Specifies whether and how to include the query part of the url in the hash. The default value is <code>true</code>. |
-|  [type?](./kassette.checksumargs.type.md) |  | string | <i>(Optional)</i> Specifies the hash algorithm. Default value is <code>sha256</code>. Check Node.js API for more information: [crypto.createHash(type)](https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm_options)<!-- -->. |
+|  [body?](./kassette.checksumargs.body.md) |  | [FilterableSpec](./kassette.filterablespec.md)<!-- -->&lt;Buffer, Buffer \| string&gt; \| boolean | _(Optional)_ Specifies whether and how to include the body of the request in the hash. The default value is <code>true</code>. |
+|  [customData?](./kassette.checksumargs.customdata.md) |  | any \| null | _(Optional)_ Any custom value (which can be JSON stringified) to be added in the content to be hashed. |
+|  [format?](./kassette.checksumargs.format.md) |  | crypto.BinaryToTextEncoding | _(Optional)_ Specifies the output format. Default value is <code>hex</code>. Check Node.js API for more information: [hash.digest(format)](https://nodejs.org/api/crypto.html#crypto_hash_digest_encoding)<!-- -->. |
+|  [headers?](./kassette.checksumargs.headers.md) |  | [ListOrFilter](./kassette.listorfilter.md) \| boolean | _(Optional)_ Specifies whether and how to include the headers in the hash. The default value is <code>false</code>. |
+|  [hostname?](./kassette.checksumargs.hostname.md) |  | [FilterableSpec](./kassette.filterablespec.md)<!-- -->&lt;string&gt; \| boolean | _(Optional)_ Specifies whether and how to include the hostname in the hash. The default value is <code>false</code>. |
+|  [method?](./kassette.checksumargs.method.md) |  | [IncludableSpec](./kassette.includablespec.md) \| boolean | _(Optional)_ Specifies whether to include the method in the hash. The default value is <code>false</code>. |
+|  [pathname?](./kassette.checksumargs.pathname.md) |  | [FilterableSpec](./kassette.filterablespec.md)<!-- -->&lt;string&gt; \| boolean | _(Optional)_ Specifies whether and how to include the pathname part of the url in the hash. The default value is <code>false</code>. |
+|  [port?](./kassette.checksumargs.port.md) |  | [IncludableSpec](./kassette.includablespec.md) \| boolean | _(Optional)_ Specifies whether to include the port in the hash. The default value is <code>false</code>. |
+|  [protocol?](./kassette.checksumargs.protocol.md) |  | [IncludableSpec](./kassette.includablespec.md) \| boolean | _(Optional)_ Specifies whether to include the protocol in the hash. The default value is <code>false</code>. |
+|  [query?](./kassette.checksumargs.query.md) |  | [ListOrFilter](./kassette.listorfilter.md) \| boolean | _(Optional)_ Specifies whether and how to include the query part of the url in the hash. The default value is <code>true</code>. |
+|  [type?](./kassette.checksumargs.type.md) |  | string | _(Optional)_ Specifies the hash algorithm. Default value is <code>sha256</code>. Check Node.js API for more information: [crypto.createHash(type)](https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm_options)<!-- -->. |
 

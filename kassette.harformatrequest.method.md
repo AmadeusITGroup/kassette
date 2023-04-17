@@ -6,7 +6,7 @@
 
 Request method, such as "GET" or "POST".
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 method?: string;

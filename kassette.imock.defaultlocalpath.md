@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the default local path of the mock, relative to [mocksFolder](./kassette.imock.mocksfolder.md)<!-- -->, . It uses the URL pathname to build an equivalent folders hierarchy, and appends the HTTP method as a leaf folder.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly defaultLocalPath: string;

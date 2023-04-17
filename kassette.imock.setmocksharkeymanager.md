@@ -6,7 +6,7 @@
 
 Sets the [mocksHarKeyManager](./kassette.imock.mocksharkeymanager.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMocksHarKeyManager(value: HarKeyManager | null): void;
@@ -18,7 +18,7 @@ setMocksHarKeyManager(value: HarKeyManager | null): void;
 |  --- | --- | --- |
 |  value | [HarKeyManager](./kassette.harkeymanager.md) \| null | the [har key manager](./kassette.harkeymanager.md) to use for this request. Passing null resets the value to the default coming from [the global setting](./kassette.configurationspec.mocksharkeymanager.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

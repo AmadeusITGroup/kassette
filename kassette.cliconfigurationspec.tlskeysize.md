@@ -6,7 +6,7 @@
 
 Size in bits of generated RSA keys.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly tlsKeySize?: number;

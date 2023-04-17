@@ -6,7 +6,7 @@
 
 A connection intercepted by kassette
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Connection 

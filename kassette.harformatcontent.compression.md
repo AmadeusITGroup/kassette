@@ -6,7 +6,7 @@
 
 Number of bytes saved by compression. This is not implemented by kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 compression?: number;

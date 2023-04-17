@@ -6,7 +6,7 @@
 
 The payload represents the content of an HTTP response from the backend, no matter if it actually comes from it or if it was created manually.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Payload 

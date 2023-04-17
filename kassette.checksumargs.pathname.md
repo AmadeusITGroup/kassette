@@ -6,7 +6,7 @@
 
 Specifies whether and how to include the pathname part of the url in the hash. The default value is `false`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 pathname?: FilterableSpec<string> | boolean;

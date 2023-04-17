@@ -6,16 +6,16 @@
 
 Interface used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that can be filtered (i.e. modified) before it is included in the hash computed by the [checksum](./kassette.imock.checksum.md) method.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface FilterableSpec<I, O = I> extends IncludableSpec 
 ```
-<b>Extends:</b> [IncludableSpec](./kassette.includablespec.md)
+**Extends:** [IncludableSpec](./kassette.includablespec.md)
 
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
-|  [filter(input)?](./kassette.filterablespec.filter.md) | <i>(Optional)</i> A function used to filter (i.e. modify) the piece of data before it is included in the hash. If no function is given, the unmodified piece of data is used. |
+|  [filter(input)?](./kassette.filterablespec.filter.md) | _(Optional)_ A function used to filter (i.e. modify) the piece of data before it is included in the hash. If no function is given, the unmodified piece of data is used. |
 

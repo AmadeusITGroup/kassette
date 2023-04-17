@@ -6,7 +6,7 @@
 
 Path to a configuration file, if the configuration should be loaded from a configuration file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly configurationPath?: string;

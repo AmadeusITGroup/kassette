@@ -6,10 +6,10 @@
 
 Specifies the mocks format to use. It can be defined globally through the [mocksFormat](./kassette.cliconfigurationspec.mocksformat.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMocksFormat](./kassette.imock.setmocksformat.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type MocksFormat = 'folder' | 'har';
+export type MocksFormat = 'folder' | 'har';
 ```
 
 ## Remarks

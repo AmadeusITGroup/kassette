@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', specifies the key to use inside the har file to either read or write a mock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mockHarKey?: string;

@@ -6,10 +6,10 @@
 
 Delay that will be used to send the response to the client when the data is taken from the local mock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Delay = 'recorded' | number;
+export type Delay = 'recorded' | number;
 ```
 
 ## Remarks

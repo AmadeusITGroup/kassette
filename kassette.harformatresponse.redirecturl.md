@@ -6,7 +6,7 @@
 
 Content of the `Location` response header if present.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 redirectURL?: string;

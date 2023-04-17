@@ -6,12 +6,12 @@
 
 Combines [fetchPayload](./kassette.imock.fetchpayload.md) and [persistPayload](./kassette.imock.persistpayload.md) and returns the wrapped payload.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 downloadPayload(): Promise<RemotePayload>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[RemotePayload](./kassette.remotepayload.md)<!-- -->&gt;
 

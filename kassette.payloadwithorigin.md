@@ -6,7 +6,7 @@
 
 Contains the payload along with its origin.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface PayloadWithOrigin<Origin extends PayloadOrigin = PayloadOrigin> 

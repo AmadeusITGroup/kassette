@@ -6,7 +6,7 @@
 
 The body of the response.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 body: any;

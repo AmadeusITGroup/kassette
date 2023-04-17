@@ -6,7 +6,7 @@
 
 Content of the payload.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 payload: Payload;

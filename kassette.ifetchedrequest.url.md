@@ -6,7 +6,7 @@
 
 The URL
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly url: URL;

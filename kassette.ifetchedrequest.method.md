@@ -6,7 +6,7 @@
 
 The HTTP method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly method: string;

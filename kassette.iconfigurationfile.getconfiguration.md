@@ -6,7 +6,7 @@
 
 Function returning the configuration to be used by kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getConfiguration(arg: GetConfigurationProps): ConfigurationSpec | Promise<ConfigurationSpec>;
@@ -18,7 +18,7 @@ getConfiguration(arg: GetConfigurationProps): ConfigurationSpec | Promise<Config
 |  --- | --- | --- |
 |  arg | [GetConfigurationProps](./kassette.getconfigurationprops.md) | contains information that can be used to build the configuration. |
 
-<b>Returns:</b>
+**Returns:**
 
 [ConfigurationSpec](./kassette.configurationspec.md) \| Promise&lt;[ConfigurationSpec](./kassette.configurationspec.md)<!-- -->&gt;
 

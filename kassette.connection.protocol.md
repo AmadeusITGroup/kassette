@@ -6,7 +6,7 @@
 
 protocol such as `http` or `https`<!-- -->, without the trailing `:`
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 protocol: string;

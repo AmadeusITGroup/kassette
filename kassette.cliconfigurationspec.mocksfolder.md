@@ -6,7 +6,7 @@
 
 When the [mocks format](./kassette.cliconfigurationspec.mocksformat.md) is 'folder', specifies the default root folder of all mocks, from which specific mocks paths will be resolved.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mocksFolder?: string;

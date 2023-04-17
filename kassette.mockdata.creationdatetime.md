@@ -6,7 +6,7 @@
 
 Timestamp when the payload was created.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly creationDateTime?: Date;

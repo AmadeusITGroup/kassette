@@ -6,7 +6,7 @@
 
 Body of the HTTP response.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 body: Buffer | string | null;

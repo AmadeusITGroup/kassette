@@ -6,7 +6,7 @@
 
 The wrapper around the input request
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly request: IFetchedRequest;

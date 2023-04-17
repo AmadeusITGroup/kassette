@@ -6,12 +6,12 @@
 
 Sends the response back to the client, with the previously specified delay if the payload origin is not `remote`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sendResponse(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

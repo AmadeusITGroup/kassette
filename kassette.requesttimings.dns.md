@@ -6,7 +6,7 @@
 
 The time required to resolve a host name. Can be -1 if the timing does not apply to the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dns?: number;

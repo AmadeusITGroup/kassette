@@ -6,7 +6,7 @@
 
 Use data present in given wrapped payload to fill in the response.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fillResponseFromPayload(payload: PayloadWithOrigin): void;
@@ -18,7 +18,7 @@ fillResponseFromPayload(payload: PayloadWithOrigin): void;
 |  --- | --- | --- |
 |  payload | [PayloadWithOrigin](./kassette.payloadwithorigin.md) | payload to use to fill the response. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

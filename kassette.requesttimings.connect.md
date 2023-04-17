@@ -6,7 +6,7 @@
 
 Time required to create TCP connection. Can be -1 if the timing does not apply to the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 connect?: number;

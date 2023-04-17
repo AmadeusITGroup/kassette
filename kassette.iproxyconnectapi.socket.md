@@ -6,7 +6,7 @@
 
 The underlying socket
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly socket: Socket | ServerHttp2Stream;

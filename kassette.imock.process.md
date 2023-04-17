@@ -6,12 +6,12 @@
 
 Combines [getPayloadAndFillResponse](./kassette.imock.getpayloadandfillresponse.md) and [sendResponse](./kassette.imock.sendresponse.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 process(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

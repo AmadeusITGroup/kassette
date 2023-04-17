@@ -6,7 +6,7 @@
 
 Interface that a kassette configuration file should export.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IConfigurationFile 

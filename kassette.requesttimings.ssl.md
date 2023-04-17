@@ -6,7 +6,7 @@
 
 Time required for SSL/TLS negotiation. This time is also included in the [RequestTimings.connect](./kassette.requesttimings.connect.md) field. Can be -1 if the timing does not apply to the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ssl?: number;

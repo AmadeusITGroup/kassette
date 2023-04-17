@@ -6,7 +6,7 @@
 
 Sets the [saveInputRequestBody](./kassette.imock.saveinputrequestbody.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSaveInputRequestBody(value: boolean | null): void;
@@ -18,7 +18,7 @@ setSaveInputRequestBody(value: boolean | null): void;
 |  --- | --- | --- |
 |  value | boolean \| null | whether to save the content of the input request body when creating a new mock for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.saveinputrequestbody.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

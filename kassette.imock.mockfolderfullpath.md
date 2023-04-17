@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the full, absolute path of the mock, built from [localPath](./kassette.imock.localpath.md)<!-- -->/[defaultLocalPath](./kassette.imock.defaultlocalpath.md)<!-- -->, [mocksFolder](./kassette.imock.mocksfolder.md) and possibly [options.root](./kassette.mockingoptions.root.md) if [mocksFolder](./kassette.imock.mocksfolder.md) is not absolute.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mockFolderFullPath: string;

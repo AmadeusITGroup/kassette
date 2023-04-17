@@ -6,7 +6,7 @@
 
 Size of the response body in bytes, or -1 if it is unknown.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bodySize?: number;

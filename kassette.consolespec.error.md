@@ -6,7 +6,7 @@
 
 Logs an error message.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 error(message: any): void;
@@ -18,7 +18,7 @@ error(message: any): void;
 |  --- | --- | --- |
 |  message | any | error message to log |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

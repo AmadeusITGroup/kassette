@@ -6,7 +6,7 @@
 
 Link to global configuration options
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly options: MockingOptions;

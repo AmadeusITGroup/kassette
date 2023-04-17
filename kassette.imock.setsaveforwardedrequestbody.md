@@ -6,7 +6,7 @@
 
 Sets the [saveForwardedRequestBody](./kassette.imock.saveforwardedrequestbody.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSaveForwardedRequestBody(value: boolean | null): void;
@@ -18,7 +18,7 @@ setSaveForwardedRequestBody(value: boolean | null): void;
 |  --- | --- | --- |
 |  value | boolean \| null | whether to save the forwarded request body when creating a new mock for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.saveforwardedrequestbody.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

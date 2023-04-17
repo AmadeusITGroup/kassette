@@ -6,7 +6,7 @@
 
 kassette configuration passed through the API.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly apiConfiguration?: ConfigurationSpec;

@@ -6,12 +6,12 @@
 
 Returns a wrapped payload built from data persisted in local files. If no local file is present, returns `undefined`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readLocalPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | undefined>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'local' \| 'user'&gt; \| undefined&gt;
 

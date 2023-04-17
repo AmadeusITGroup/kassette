@@ -6,7 +6,7 @@
 
 Detailed information about the input request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 request?: HarFormatRequest;

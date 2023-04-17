@@ -6,12 +6,12 @@
 
 Remote payload and the request that was made to get it.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface RemotePayload extends PayloadWithOrigin<'remote'> 
 ```
-<b>Extends:</b> [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'remote'&gt;
+**Extends:** [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'remote'&gt;
 
 ## Properties
 

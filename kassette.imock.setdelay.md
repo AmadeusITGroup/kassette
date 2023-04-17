@@ -6,7 +6,7 @@
 
 Sets the [delay](./kassette.imock.delay.md) that will be used to send the response to the client when the data is taken from the local mock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setDelay(delay: Delay | null): void;
@@ -18,7 +18,7 @@ setDelay(delay: Delay | null): void;
 |  --- | --- | --- |
 |  delay | [Delay](./kassette.delay.md) \| null | can be either a number (to directly specify the delay in milliseconds), <code>'recorded'</code> (to read the delay from the [time](./kassette.mockdata.time.md) property of an already recorded mock if any) or <code>null</code> (to remove the effect of any previous call of <code>setDelay</code> and use the default value from [the global setting](./kassette.cliconfigurationspec.delay.md) instead). |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

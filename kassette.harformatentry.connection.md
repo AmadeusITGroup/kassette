@@ -6,7 +6,7 @@
 
 Unique ID of the TCP/IP connection. This is not implemented in kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 connection?: string;

@@ -6,7 +6,7 @@
 
 The target hostname in the CONNECT request
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly hostname: string;

@@ -6,7 +6,7 @@
 
 A handier wrapper around a request
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IFetchedRequest 

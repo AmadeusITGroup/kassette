@@ -6,7 +6,7 @@
 
 Information about a header or a query parameter, as stored in a har file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HarFormatNameValuePair 
@@ -16,7 +16,7 @@ export interface HarFormatNameValuePair
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [comment?](./kassette.harformatnamevaluepair.comment.md) |  | string | <i>(Optional)</i> Any comment as a string. This is not used by kassette. |
+|  [comment?](./kassette.harformatnamevaluepair.comment.md) |  | string | _(Optional)_ Any comment as a string. This is not used by kassette. |
 |  [name](./kassette.harformatnamevaluepair.name.md) |  | string | Name of the header or query parameter. |
 |  [value](./kassette.harformatnamevaluepair.value.md) |  | string | Value of the header or the query parameter. |
 

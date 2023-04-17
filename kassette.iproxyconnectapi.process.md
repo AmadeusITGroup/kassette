@@ -6,12 +6,12 @@
 
 Processes the socket according to the mode stored in [mode](./kassette.iproxyconnectapi.mode.md)<!-- -->. This method is called automatically when the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) function finishes, but it can also be called manually before.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 process(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

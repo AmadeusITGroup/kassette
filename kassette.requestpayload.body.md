@@ -6,7 +6,7 @@
 
 HTTP request body
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 body?: string | Buffer;

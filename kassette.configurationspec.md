@@ -6,26 +6,26 @@
 
 Augments the CLI spec to add all pure runtime properties, that can be defined through the configuration file only
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface ConfigurationSpec extends CLIConfigurationSpec 
 ```
-<b>Extends:</b> [CLIConfigurationSpec](./kassette.cliconfigurationspec.md)
+**Extends:** [CLIConfigurationSpec](./kassette.cliconfigurationspec.md)
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [console?](./kassette.configurationspec.console.md) | <code>readonly</code> | [ConsoleSpec](./kassette.consolespec.md) | <i>(Optional)</i> Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
-|  [mocksHarKeyManager?](./kassette.configurationspec.mocksharkeymanager.md) | <code>readonly</code> | [HarKeyManager](./kassette.harkeymanager.md) | <i>(Optional)</i> Function called to get or set the key of a mock in a har file, as explained in [HarKeyManager](./kassette.harkeymanager.md)<!-- -->. |
+|  [console?](./kassette.configurationspec.console.md) | <code>readonly</code> | [ConsoleSpec](./kassette.consolespec.md) | _(Optional)_ Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
+|  [mocksHarKeyManager?](./kassette.configurationspec.mocksharkeymanager.md) | <code>readonly</code> | [HarKeyManager](./kassette.harkeymanager.md) | _(Optional)_ Function called to get or set the key of a mock in a har file, as explained in [HarKeyManager](./kassette.harkeymanager.md)<!-- -->. |
 
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
-|  [hook(parameters)?](./kassette.configurationspec.hook.md) | <i>(Optional)</i> Callback called for every HTTP request that kassette receives (with the exception of <code>CONNECT</code> requests, which trigger the call of [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) instead). |
-|  [onExit()?](./kassette.configurationspec.onexit.md) | <i>(Optional)</i> Callback called when the proxy is programmatically closed (which can be done by using the callback returned from [runFromAPI()](./kassette.runfromapi.md)<!-- -->) |
-|  [onListen(parameters)?](./kassette.configurationspec.onlisten.md) | <i>(Optional)</i> Callback called when the proxy is started and listening. |
-|  [onProxyConnect(parameters)?](./kassette.configurationspec.onproxyconnect.md) | <i>(Optional)</i> Callback called when kassette receives a request with the [HTTP CONNECT method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT)<!-- -->, which usually happens when kassette is used as a browser proxy and the browser is trying to connect to a secure web site with the https protocol. |
+|  [hook(parameters)?](./kassette.configurationspec.hook.md) | _(Optional)_ Callback called for every HTTP request that kassette receives (with the exception of <code>CONNECT</code> requests, which trigger the call of [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) instead). |
+|  [onExit()?](./kassette.configurationspec.onexit.md) | _(Optional)_ Callback called when the proxy is programmatically closed (which can be done by using the callback returned from [runFromAPI()](./kassette.runfromapi.md)<!-- -->) |
+|  [onListen(parameters)?](./kassette.configurationspec.onlisten.md) | _(Optional)_ Callback called when the proxy is started and listening. |
+|  [onProxyConnect(parameters)?](./kassette.configurationspec.onproxyconnect.md) | _(Optional)_ Callback called when kassette receives a request with the [HTTP CONNECT method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT)<!-- -->, which usually happens when kassette is used as a browser proxy and the browser is trying to connect to a secure web site with the https protocol. |
 

@@ -6,7 +6,7 @@
 
 Value of the `Content-Type` request header, if present.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mimeType?: string;

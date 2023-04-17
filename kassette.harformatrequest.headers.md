@@ -6,7 +6,7 @@
 
 List of request headers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 headers?: HarFormatNameValuePair[];

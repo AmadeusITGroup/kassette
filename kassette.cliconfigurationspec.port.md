@@ -6,7 +6,7 @@
 
 The port on which the proxy should listen. Note that kassette accepts both http and https connections on this port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly port?: number;

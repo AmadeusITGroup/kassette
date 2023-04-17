@@ -6,7 +6,7 @@
 
 The port part of the URL
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly port: string;

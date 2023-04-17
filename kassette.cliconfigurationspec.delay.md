@@ -6,7 +6,7 @@
 
 The default delay.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly delay?: Delay;

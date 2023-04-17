@@ -6,7 +6,7 @@
 
 Time required to send HTTP request to the server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 send?: number;

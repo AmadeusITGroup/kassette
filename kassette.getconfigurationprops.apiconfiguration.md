@@ -6,7 +6,7 @@
 
 If run from the API, this is the configuration coming from the [runFromAPI()](./kassette.runfromapi.md) call. Otherwise it is an empty object.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 apiConfiguration: ConfigurationSpec;

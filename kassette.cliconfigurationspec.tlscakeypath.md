@@ -6,7 +6,7 @@
 
 Path to a PEM-encoded CA (Certificate Authority) certificate and key file, created if it does not exist. If not provided, the certificate and key are generated but only kept in memory. This certificate and key are used as needed to sign certificates generated on the fly for any HTTPS connection intercepted by kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly tlsCAKeyPath?: string | null;

@@ -6,7 +6,7 @@
 
 Whether to include this piece of data in the hash. It is `true` by default (if an object is passed).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 include?: boolean;

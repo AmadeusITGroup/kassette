@@ -6,12 +6,12 @@
 
 Returns true if the mock does not exist locally.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasNoLocalMock(): Promise<boolean>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;boolean&gt;
 

@@ -6,7 +6,7 @@
 
 The protocol part of the URL, without the trailing `:`
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly protocol: string;

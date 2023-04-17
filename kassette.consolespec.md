@@ -6,7 +6,7 @@
 
 Console with logging methods.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface ConsoleSpec 

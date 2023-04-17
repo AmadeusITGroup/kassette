@@ -6,7 +6,7 @@
 
 The resolved value of the property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly value: PropertyType;

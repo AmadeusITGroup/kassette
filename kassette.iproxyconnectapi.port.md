@@ -6,7 +6,7 @@
 
 The target port in the CONNECT request
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly port: number;

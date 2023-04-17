@@ -6,7 +6,7 @@
 
 The current mode, configured either by a call to [setMode](./kassette.imock.setmode.md)<!-- -->, or by [the global setting](./kassette.cliconfigurationspec.mode.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mode: Mode;

@@ -6,12 +6,12 @@
 
 Combines [readLocalPayload](./kassette.imock.readlocalpayload.md) and [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) if there is a local payload then returns `true`<!-- -->, otherwise does nothing and return `false`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readLocalPayloadAndFillResponse(): Promise<boolean>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;boolean&gt;
 

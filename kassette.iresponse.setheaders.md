@@ -6,7 +6,7 @@
 
 Merge given `headers` map with the previously set headers (initial set is an empty map).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setHeaders(headers?: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeaders>;
@@ -16,9 +16,9 @@ setHeaders(headers?: Readonly<IncomingHttpHeaders>): Readonly<IncomingHttpHeader
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  headers | Readonly&lt;IncomingHttpHeaders&gt; | <i>(Optional)</i> Headers to set. Each header value can be a number, a string, or an array of strings. Put a <code>null</code> value to suppress a header |
+|  headers | Readonly&lt;IncomingHttpHeaders&gt; | _(Optional)_ Headers to set. Each header value can be a number, a string, or an array of strings. Put a <code>null</code> value to suppress a header |
 
-<b>Returns:</b>
+**Returns:**
 
 Readonly&lt;IncomingHttpHeaders&gt;
 

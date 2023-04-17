@@ -6,7 +6,7 @@
 
 Function called to get or set the key of a mock in a har file, as explained in [HarKeyManager](./kassette.harkeymanager.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mocksHarKeyManager?: HarKeyManager;

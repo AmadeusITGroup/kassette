@@ -6,7 +6,7 @@
 
 Total number of bytes from the start of the HTTP response message until (and including) the double CRLF before the body, or -1 if it is unknown. kassette always sets -1 for this field.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 headersSize?: number;

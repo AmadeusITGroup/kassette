@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', contains the full path of the the har file to use. If the file name has the `.yml` or `.yaml` extension, the YAML format is used instead of the standard JSON format to read and write the file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mocksHarFile: string;

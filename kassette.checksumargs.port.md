@@ -6,7 +6,7 @@
 
 Specifies whether to include the port in the hash. The default value is `false`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 port?: IncludableSpec | boolean;

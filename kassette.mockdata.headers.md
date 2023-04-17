@@ -6,7 +6,7 @@
 
 Recorded headers to be served back, without the ignored ones.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly headers?: Readonly<IncomingHttpHeaders>;

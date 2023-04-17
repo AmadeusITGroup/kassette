@@ -6,7 +6,7 @@
 
 Sets the [mocksHarFile](./kassette.imock.mocksharfile.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMocksHarFile(value: RecursiveArray<string | null | undefined> | null): void;
@@ -18,7 +18,7 @@ setMocksHarFile(value: RecursiveArray<string | null | undefined> | null): void;
 |  --- | --- | --- |
 |  value | [RecursiveArray](./kassette.recursivearray.md)<!-- -->&lt;string \| null \| undefined&gt; \| null | any combination of arrays of path parts. You can pass an absolute path, or a relative one which will be resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.mocksharfile.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

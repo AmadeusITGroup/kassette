@@ -6,8 +6,8 @@
 
 A map from strings to strings or array of strings
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Headers = IncomingHttpHeaders;
+export type Headers = IncomingHttpHeaders;
 ```

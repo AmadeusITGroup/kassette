@@ -6,12 +6,12 @@
 
 Callback called when the proxy is programmatically closed (which can be done by using the callback returned from [runFromAPI()](./kassette.runfromapi.md)<!-- -->)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 onExit?(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

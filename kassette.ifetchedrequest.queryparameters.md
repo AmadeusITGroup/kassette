@@ -6,7 +6,7 @@
 
 The query parameters taken from the URL, as a read-only map of strings
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly queryParameters: Readonly<Record<string, string>>;

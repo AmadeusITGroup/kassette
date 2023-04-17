@@ -6,7 +6,7 @@
 
 Detailed timing information about request/response round trip.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 timings?: HarFormatTimings;

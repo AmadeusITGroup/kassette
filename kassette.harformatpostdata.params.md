@@ -6,7 +6,7 @@
 
 List of posted parameters. This is not implemented in kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 params?: any[];

@@ -6,7 +6,7 @@
 
 Parameter of the [hook](./kassette.configurationspec.hook.md) callback, that is called for every HTTP request that kassette receives.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HookAPI 

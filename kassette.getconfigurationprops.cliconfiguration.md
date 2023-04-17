@@ -6,7 +6,7 @@
 
 If run from the CLI, this is the configuration coming from the CLI. Otherwise it is an empty object.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cliConfiguration: CLIConfigurationSpec;

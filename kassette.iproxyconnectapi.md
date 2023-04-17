@@ -6,7 +6,7 @@
 
 A handier wrapper around a CONNECT request
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IProxyConnectAPI 

@@ -6,7 +6,7 @@
 
 The headers
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly headers: IncomingHttpHeaders;

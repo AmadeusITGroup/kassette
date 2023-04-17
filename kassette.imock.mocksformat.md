@@ -6,7 +6,7 @@
 
 The mocks format used for this request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mocksFormat: MocksFormat;

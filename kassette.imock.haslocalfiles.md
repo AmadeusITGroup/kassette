@@ -11,12 +11,12 @@
 
 Returns true if the mock exists locally.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasLocalFiles(): Promise<boolean>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;boolean&gt;
 

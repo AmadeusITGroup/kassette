@@ -6,7 +6,7 @@
 
 The body content
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly body: Buffer;

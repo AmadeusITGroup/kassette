@@ -6,12 +6,12 @@
 
 Depending on the [mode](./kassette.imock.mode.md)<!-- -->, gets the payload (remote / local / default) and uses [fillResponseFromPayload](./kassette.imock.fillresponsefrompayload.md) with that payload. If [mode](./kassette.imock.mode.md) is `manual`<!-- -->, does nothing.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPayloadAndFillResponse(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

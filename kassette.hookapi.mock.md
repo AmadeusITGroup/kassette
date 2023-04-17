@@ -6,7 +6,7 @@
 
 Provides the API to specify how to handle the HTTP request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mock: IMock;

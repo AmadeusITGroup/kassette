@@ -6,7 +6,7 @@
 
 Sets the [saveInputRequestData](./kassette.imock.saveinputrequestdata.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSaveInputRequestData(value: boolean | null): void;
@@ -18,7 +18,7 @@ setSaveInputRequestData(value: boolean | null): void;
 |  --- | --- | --- |
 |  value | boolean \| null | whether to save the input request data (headers, method, URL) when creating a new mock for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.saveinputrequestdata.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

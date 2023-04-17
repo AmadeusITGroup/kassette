@@ -6,16 +6,16 @@
 
 Details about the time spent for each phase of a request-response round trip, as stored in a har file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HarFormatTimings extends RequestTimings 
 ```
-<b>Extends:</b> [RequestTimings](./kassette.requesttimings.md)
+**Extends:** [RequestTimings](./kassette.requesttimings.md)
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [comment?](./kassette.harformattimings.comment.md) |  | string | <i>(Optional)</i> Any comment as a string. This is not used by kassette. |
+|  [comment?](./kassette.harformattimings.comment.md) |  | string | _(Optional)_ Any comment as a string. This is not used by kassette. |
 

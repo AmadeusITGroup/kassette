@@ -6,7 +6,7 @@
 
 The URL of the remote backend, from which only the protocol, hostname and port are used. Can be left `null`<!-- -->, in which case anything leading to sending the request to the remote backend will trigger an exception. Can also contain the special `"*"` value, which means reading from the request the remote backend to target. This is useful when using kassette as a browser proxy.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly remoteURL?: string | null;

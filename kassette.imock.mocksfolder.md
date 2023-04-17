@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'folder', specifies the root folder of all mocks, from which specific mocks paths will be resolved (resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mocksFolder: string;

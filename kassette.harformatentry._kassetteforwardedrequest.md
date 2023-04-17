@@ -6,7 +6,7 @@
 
 Detailed information about the request forwarded to the remote server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 _kassetteForwardedRequest?: HarFormatRequest;

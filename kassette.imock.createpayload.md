@@ -6,7 +6,7 @@
 
 Create a wrapped payload (with `user` origin) from the given payload data.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createPayload(payload: Payload): PayloadWithOrigin<'user'>;
@@ -18,7 +18,7 @@ createPayload(payload: Payload): PayloadWithOrigin<'user'>;
 |  --- | --- | --- |
 |  payload | [Payload](./kassette.payload.md) | payload data |
 
-<b>Returns:</b>
+**Returns:**
 
 [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'user'&gt;
 

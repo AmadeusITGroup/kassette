@@ -6,7 +6,7 @@
 
 Detailed information about a response, as stored in a har file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HarFormatResponse 
@@ -16,14 +16,14 @@ export interface HarFormatResponse
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [bodySize?](./kassette.harformatresponse.bodysize.md) |  | number | <i>(Optional)</i> Size of the response body in bytes, or -1 if it is unknown. |
-|  [comment?](./kassette.harformatresponse.comment.md) |  | string | <i>(Optional)</i> Any comment as a string. This is not used by kassette. |
-|  [content?](./kassette.harformatresponse.content.md) |  | [HarFormatContent](./kassette.harformatcontent.md) | <i>(Optional)</i> Information about the response body. |
-|  [cookies?](./kassette.harformatresponse.cookies.md) |  | any\[\] | <i>(Optional)</i> Information about cookies. This is not implemented in kassette. |
-|  [headers?](./kassette.harformatresponse.headers.md) |  | [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md)<!-- -->\[\] | <i>(Optional)</i> List of response headers. |
-|  [headersSize?](./kassette.harformatresponse.headerssize.md) |  | number | <i>(Optional)</i> Total number of bytes from the start of the HTTP response message until (and including) the double CRLF before the body, or -1 if it is unknown. kassette always sets -1 for this field. |
-|  [httpVersion?](./kassette.harformatresponse.httpversion.md) |  | string | <i>(Optional)</i> Response HTTP version, such as "HTTP/1.1". |
-|  [redirectURL?](./kassette.harformatresponse.redirecturl.md) |  | string | <i>(Optional)</i> Content of the <code>Location</code> response header if present. |
-|  [status?](./kassette.harformatresponse.status.md) |  | number | <i>(Optional)</i> Response status. |
-|  [statusText?](./kassette.harformatresponse.statustext.md) |  | string | <i>(Optional)</i> Response status text. |
+|  [bodySize?](./kassette.harformatresponse.bodysize.md) |  | number | _(Optional)_ Size of the response body in bytes, or -1 if it is unknown. |
+|  [comment?](./kassette.harformatresponse.comment.md) |  | string | _(Optional)_ Any comment as a string. This is not used by kassette. |
+|  [content?](./kassette.harformatresponse.content.md) |  | [HarFormatContent](./kassette.harformatcontent.md) | _(Optional)_ Information about the response body. |
+|  [cookies?](./kassette.harformatresponse.cookies.md) |  | any\[\] | _(Optional)_ Information about cookies. This is not implemented in kassette. |
+|  [headers?](./kassette.harformatresponse.headers.md) |  | [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md)<!-- -->\[\] | _(Optional)_ List of response headers. |
+|  [headersSize?](./kassette.harformatresponse.headerssize.md) |  | number | _(Optional)_ Total number of bytes from the start of the HTTP response message until (and including) the double CRLF before the body, or -1 if it is unknown. kassette always sets -1 for this field. |
+|  [httpVersion?](./kassette.harformatresponse.httpversion.md) |  | string | _(Optional)_ Response HTTP version, such as "HTTP/1.1". |
+|  [redirectURL?](./kassette.harformatresponse.redirecturl.md) |  | string | _(Optional)_ Content of the <code>Location</code> response header if present. |
+|  [status?](./kassette.harformatresponse.status.md) |  | number | _(Optional)_ Response status. |
+|  [statusText?](./kassette.harformatresponse.statustext.md) |  | string | _(Optional)_ Response status text. |
 

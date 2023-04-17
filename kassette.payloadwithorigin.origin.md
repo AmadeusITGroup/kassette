@@ -6,7 +6,7 @@
 
 Origin of the payload.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 origin: Origin;

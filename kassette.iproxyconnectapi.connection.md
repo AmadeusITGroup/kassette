@@ -6,7 +6,7 @@
 
 The last connection in [connectionsStack](./kassette.iproxyconnectapi.connectionsstack.md)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly connection: Readonly<Connection>;

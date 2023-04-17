@@ -6,7 +6,7 @@
 
 Changes the [mode](./kassette.iproxyconnectapi.mode.md) that will be used when the [process](./kassette.iproxyconnectapi.process.md) method is called.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMode(mode: ProxyConnectMode): void;
@@ -18,7 +18,7 @@ setMode(mode: ProxyConnectMode): void;
 |  --- | --- | --- |
 |  mode | [ProxyConnectMode](./kassette.proxyconnectmode.md) | mode to set |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Sets the [remote URL](./kassette.imock.remoteurl.md) for the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setRemoteURL(url: string | null): void;
@@ -18,7 +18,7 @@ setRemoteURL(url: string | null): void;
 |  --- | --- | --- |
 |  url | string \| null | the URL to set, or null to use the default value from [the global setting](./kassette.cliconfigurationspec.remoteurl.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Specifies whether to include the method in the hash. The default value is `false`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 method?: IncludableSpec | boolean;

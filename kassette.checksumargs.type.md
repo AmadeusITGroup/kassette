@@ -6,7 +6,7 @@
 
 Specifies the hash algorithm. Default value is `sha256`<!-- -->. Check Node.js API for more information: [crypto.createHash(type)](https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm_options)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type?: string;

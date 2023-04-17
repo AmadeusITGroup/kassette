@@ -6,7 +6,7 @@
 
 Encoding used for the [text](./kassette.harformatcontent.text.md) field, such as "base64".
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 encoding?: string;

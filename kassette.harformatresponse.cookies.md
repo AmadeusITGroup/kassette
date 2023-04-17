@@ -6,7 +6,7 @@
 
 Information about cookies. This is not implemented in kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cookies?: any[];

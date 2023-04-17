@@ -6,7 +6,7 @@
 
 A function used to filter (i.e. modify) the piece of data before it is included in the hash. If no function is given, the unmodified piece of data is used.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 filter?(input: I): O | Promise<O>;
@@ -18,7 +18,7 @@ filter?(input: I): O | Promise<O>;
 |  --- | --- | --- |
 |  input | I | piece of data to filter |
 
-<b>Returns:</b>
+**Returns:**
 
 O \| Promise&lt;O&gt;
 

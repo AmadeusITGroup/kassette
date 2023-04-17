@@ -6,7 +6,7 @@
 
 The root folder from which to resolve given relative paths
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly root: string;

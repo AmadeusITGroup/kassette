@@ -6,7 +6,7 @@
 
 List of query parameters.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 queryString?: HarFormatNameValuePair[];

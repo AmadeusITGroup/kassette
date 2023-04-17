@@ -6,12 +6,12 @@
 
 Each entry in a har file is supposed to have a corresponding unique key (a string). The har key manager is both a getter and a setter for the key of an entry.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type HarKeyManager = (entry: HarFormatEntry, key?: string) => RecursiveArray<string | null | undefined>;
+export type HarKeyManager = (entry: HarFormatEntry, key?: string) => RecursiveArray<string | null | undefined>;
 ```
-<b>References:</b> [HarFormatEntry](./kassette.harformatentry.md)<!-- -->, [RecursiveArray](./kassette.recursivearray.md)
+**References:** [HarFormatEntry](./kassette.harformatentry.md)<!-- -->, [RecursiveArray](./kassette.recursivearray.md)
 
 ## Remarks
 

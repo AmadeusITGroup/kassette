@@ -6,7 +6,7 @@
 
 Sets the [mode](./kassette.imock.mode.md) for the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMode(mode: Mode | null): void;
@@ -18,7 +18,7 @@ setMode(mode: Mode | null): void;
 |  --- | --- | --- |
 |  mode | [Mode](./kassette.mode.md) \| null | mode to set, or null to use the default value from [the global setting](./kassette.cliconfigurationspec.mode.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

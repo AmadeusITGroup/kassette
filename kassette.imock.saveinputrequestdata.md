@@ -6,7 +6,7 @@
 
 Whether to save the input request data (headers, method, URL) when creating a new mock for this request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly saveInputRequestData: boolean;

@@ -6,7 +6,7 @@
 
 The current global user configuration
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly userConfiguration: IMergedConfiguration;

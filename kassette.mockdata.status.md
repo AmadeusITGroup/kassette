@@ -6,7 +6,7 @@
 
 HTTP status.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly status: Readonly<Status>;

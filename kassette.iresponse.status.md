@@ -6,7 +6,7 @@
 
 An object `{code, message}`<!-- -->, where each property is optional. If `code` is never given, a default value of `200` is applied.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 status: Partial<Readonly<Status>> | null;

@@ -6,8 +6,8 @@
 
 The id of the source of the resolved value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ConfigurationPropertySource = 'cli' | 'file' | 'api' | 'default';
+export type ConfigurationPropertySource = 'cli' | 'file' | 'api' | 'default';
 ```

@@ -6,7 +6,7 @@
 
 The connections stack
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly connectionsStack: readonly Readonly<Connection>[];

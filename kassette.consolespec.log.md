@@ -6,7 +6,7 @@
 
 Logs a message.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 log(message: any): void;
@@ -18,7 +18,7 @@ log(message: any): void;
 |  --- | --- | --- |
 |  message | any | message to log |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

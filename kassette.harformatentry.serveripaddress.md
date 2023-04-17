@@ -6,7 +6,7 @@
 
 Server IP address. This is not implemented in kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 serverIPAddress?: string;

@@ -6,7 +6,7 @@
 
 target port
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 port: number;

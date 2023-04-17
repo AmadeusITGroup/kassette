@@ -6,7 +6,7 @@
 
 Information about the response body.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 content?: HarFormatContent;

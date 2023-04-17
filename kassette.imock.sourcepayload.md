@@ -6,7 +6,7 @@
 
 As soon as response is filled with a payload, this property holds the reference to that payload's wrapper. The wrapper is useful here to know where the payload comes from. Before that, this property is `undefined`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sourcePayload: PayloadWithOrigin | undefined;

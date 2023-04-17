@@ -6,7 +6,7 @@
 
 Whether the [body](./kassette.iresponse.body.md) field should be serialized into JSON (and `content-type` header should be set to `application/json`<!-- -->).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 json: boolean;

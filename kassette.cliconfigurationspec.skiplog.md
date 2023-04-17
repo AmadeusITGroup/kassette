@@ -6,7 +6,7 @@
 
 If true, will simplify the logging output, logging only one line when the request is received but nothing else afterwards.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly skipLog?: boolean;

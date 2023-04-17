@@ -6,7 +6,7 @@
 
 The last connection in connectionsStack
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly connection: Readonly<Connection>;

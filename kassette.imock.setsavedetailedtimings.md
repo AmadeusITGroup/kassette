@@ -6,7 +6,7 @@
 
 Sets the [saveDetailedTimings](./kassette.imock.savedetailedtimings.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSaveDetailedTimings(value: boolean | null): void;
@@ -18,7 +18,7 @@ setSaveDetailedTimings(value: boolean | null): void;
 |  --- | --- | --- |
 |  value | boolean \| null | whether to save [detailed timings](./kassette.requesttimings.md) when creating a new mock with a checksum for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.savedetailedtimings.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

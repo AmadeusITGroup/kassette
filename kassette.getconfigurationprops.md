@@ -6,7 +6,7 @@
 
 Parameter of the [getConfiguration](./kassette.iconfigurationfile.getconfiguration.md) function (which a kassette configuration file is supposed to export).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface GetConfigurationProps 

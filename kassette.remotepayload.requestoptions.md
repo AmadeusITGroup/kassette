@@ -6,7 +6,7 @@
 
 Request used to get this remote payload.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 requestOptions: RequestPayload;

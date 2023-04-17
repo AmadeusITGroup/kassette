@@ -6,7 +6,7 @@
 
 Whether to save the content of the input request body when creating a new mock for this request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly saveInputRequestBody: boolean;

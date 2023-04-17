@@ -6,7 +6,7 @@
 
 The original Node.js object representing the response
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly original: ServerResponse | Http2ServerResponse;

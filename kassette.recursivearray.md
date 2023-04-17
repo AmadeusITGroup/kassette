@@ -6,10 +6,10 @@
 
 A single value or a virtually unlimitedly nested array of this type of value
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type RecursiveArray<T> = T | Array<RecursiveArray<T>>;
+export type RecursiveArray<T> = T | Array<RecursiveArray<T>>;
 ```
-<b>References:</b> [RecursiveArray](./kassette.recursivearray.md)
+**References:** [RecursiveArray](./kassette.recursivearray.md)
 

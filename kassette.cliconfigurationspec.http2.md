@@ -6,7 +6,7 @@
 
 Enables http/2.0 protocol in the kassette server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly http2?: boolean;

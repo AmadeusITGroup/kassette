@@ -6,10 +6,10 @@
 
 The mode describing how to process `CONNECT` requests. It can be defined globally through the [proxyConnectMode](./kassette.cliconfigurationspec.proxyconnectmode.md) setting or per-request from the [onProxyConnect](./kassette.configurationspec.onproxyconnect.md) method through [setMode](./kassette.iproxyconnectapi.setmode.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
+export type ProxyConnectMode = 'close' | 'intercept' | 'forward' | 'manual';
 ```
 
 ## Remarks

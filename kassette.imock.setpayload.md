@@ -6,7 +6,7 @@
 
 Sets the current local payload, with a custom one you would have created.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setPayload(payload: PayloadWithOrigin<'local' | 'user'>): void;
@@ -18,7 +18,7 @@ setPayload(payload: PayloadWithOrigin<'local' | 'user'>): void;
 |  --- | --- | --- |
 |  payload | [PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'local' \| 'user'&gt; | payload to set |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

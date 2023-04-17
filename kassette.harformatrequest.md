@@ -6,7 +6,7 @@
 
 Detailed information about a request, as stored in a har file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HarFormatRequest 
@@ -16,14 +16,14 @@ export interface HarFormatRequest
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [bodySize?](./kassette.harformatrequest.bodysize.md) |  | number | <i>(Optional)</i> Size of the request body in bytes or -1 if it is unknown. |
-|  [comment?](./kassette.harformatrequest.comment.md) |  | string | <i>(Optional)</i> Any comment as a string. This is not used by kassette. |
-|  [cookies?](./kassette.harformatrequest.cookies.md) |  | any\[\] | <i>(Optional)</i> Information about cookies. This is not implemented in kassette. |
-|  [headers?](./kassette.harformatrequest.headers.md) |  | [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md)<!-- -->\[\] | <i>(Optional)</i> List of request headers. |
-|  [headersSize?](./kassette.harformatrequest.headerssize.md) |  | number | <i>(Optional)</i> Total number of bytes from the start of the HTTP request message until (and including) the double CRLF before the body, or -1 if it is unknown. kassette always sets -1 for this field. |
-|  [httpVersion?](./kassette.harformatrequest.httpversion.md) |  | string | <i>(Optional)</i> Request HTTP version, such as "HTTP/1.1". |
-|  [method?](./kassette.harformatrequest.method.md) |  | string | <i>(Optional)</i> Request method, such as "GET" or "POST". |
-|  [postData?](./kassette.harformatrequest.postdata.md) |  | [HarFormatPostData](./kassette.harformatpostdata.md) | <i>(Optional)</i> Information about the request body. |
-|  [queryString?](./kassette.harformatrequest.querystring.md) |  | [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md)<!-- -->\[\] | <i>(Optional)</i> List of query parameters. |
-|  [url?](./kassette.harformatrequest.url.md) |  | string | <i>(Optional)</i> Request URL. |
+|  [bodySize?](./kassette.harformatrequest.bodysize.md) |  | number | _(Optional)_ Size of the request body in bytes or -1 if it is unknown. |
+|  [comment?](./kassette.harformatrequest.comment.md) |  | string | _(Optional)_ Any comment as a string. This is not used by kassette. |
+|  [cookies?](./kassette.harformatrequest.cookies.md) |  | any\[\] | _(Optional)_ Information about cookies. This is not implemented in kassette. |
+|  [headers?](./kassette.harformatrequest.headers.md) |  | [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md)<!-- -->\[\] | _(Optional)_ List of request headers. |
+|  [headersSize?](./kassette.harformatrequest.headerssize.md) |  | number | _(Optional)_ Total number of bytes from the start of the HTTP request message until (and including) the double CRLF before the body, or -1 if it is unknown. kassette always sets -1 for this field. |
+|  [httpVersion?](./kassette.harformatrequest.httpversion.md) |  | string | _(Optional)_ Request HTTP version, such as "HTTP/1.1". |
+|  [method?](./kassette.harformatrequest.method.md) |  | string | _(Optional)_ Request method, such as "GET" or "POST". |
+|  [postData?](./kassette.harformatrequest.postdata.md) |  | [HarFormatPostData](./kassette.harformatpostdata.md) | _(Optional)_ Information about the request body. |
+|  [queryString?](./kassette.harformatrequest.querystring.md) |  | [HarFormatNameValuePair](./kassette.harformatnamevaluepair.md)<!-- -->\[\] | _(Optional)_ List of query parameters. |
+|  [url?](./kassette.harformatrequest.url.md) |  | string | _(Optional)_ Request URL. |
 

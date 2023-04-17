@@ -6,7 +6,7 @@
 
 Date and time of the request start, as a string in ISO format (YYYY-MM-DDThh:mm:ss.sTZD).
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 startedDateTime?: string;

@@ -6,7 +6,7 @@
 
 Value of the `Content-Type` response header.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mimeType?: string;

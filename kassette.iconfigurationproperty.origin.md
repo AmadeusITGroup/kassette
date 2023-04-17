@@ -6,7 +6,7 @@
 
 The id of the source of the resolved value of the property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly origin: ConfigurationPropertySource;

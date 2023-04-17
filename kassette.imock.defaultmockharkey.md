@@ -6,7 +6,7 @@
 
 Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', specifies the default mock har key to use in case [setMockHarKey](./kassette.imock.setmockharkey.md) is not called with a non-null value. It is computed by calling the [mocks har key manager](./kassette.imock.mocksharkeymanager.md) with the current request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly defaultMockHarKey?: string;

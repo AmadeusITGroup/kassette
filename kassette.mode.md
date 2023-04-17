@@ -6,10 +6,10 @@
 
 The main working mode of the proxy. It can be defined globally through the [mode](./kassette.cliconfigurationspec.mode.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMode](./kassette.imock.setmode.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Mode = 'local' | 'remote' | 'download' | 'local_or_remote' | 'local_or_download' | 'manual';
+export type Mode = 'local' | 'remote' | 'download' | 'local_or_remote' | 'local_or_download' | 'manual';
 ```
 
 ## Remarks

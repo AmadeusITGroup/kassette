@@ -6,7 +6,7 @@
 
 Content used to create a checksum
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 _kassetteChecksumContent?: string;

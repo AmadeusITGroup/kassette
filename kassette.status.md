@@ -6,7 +6,7 @@
 
 The response status
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Status 

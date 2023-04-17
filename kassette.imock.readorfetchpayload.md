@@ -6,12 +6,12 @@
 
 Returns the wrapped local payload using [readLocalPayload](./kassette.imock.readlocalpayload.md) if it exists, otherwise use [fetchPayload](./kassette.imock.fetchpayload.md) and returns this wrapped payload.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readOrFetchPayload(): Promise<PayloadWithOrigin<'local' | 'user'> | RemotePayload>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[PayloadWithOrigin](./kassette.payloadwithorigin.md)<!-- -->&lt;'local' \| 'user'&gt; \| [RemotePayload](./kassette.remotepayload.md)<!-- -->&gt;
 

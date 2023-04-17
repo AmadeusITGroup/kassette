@@ -6,7 +6,7 @@
 
 The status code
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 code: number;

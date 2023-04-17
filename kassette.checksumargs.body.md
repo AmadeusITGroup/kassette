@@ -6,7 +6,7 @@
 
 Specifies whether and how to include the body of the request in the hash. The default value is `true`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 body?: FilterableSpec<Buffer, Buffer | string> | boolean;

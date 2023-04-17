@@ -6,7 +6,7 @@
 
 Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly console?: ConsoleSpec;

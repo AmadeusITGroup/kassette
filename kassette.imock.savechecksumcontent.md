@@ -6,7 +6,7 @@
 
 Whether to save the content used to create a checksum when creating a new mock with a checksum for this request.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly saveChecksumContent: boolean;

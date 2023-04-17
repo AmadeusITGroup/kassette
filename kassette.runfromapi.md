@@ -6,7 +6,7 @@
 
 Launch the proxy programmatically.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function runFromAPI(options: APIOptions): Promise<() => void>;
@@ -18,7 +18,7 @@ export declare function runFromAPI(options: APIOptions): Promise<() => void>;
 |  --- | --- | --- |
 |  options | [APIOptions](./kassette.apioptions.md) | kassette configuration options |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;() =&gt; void&gt;
 

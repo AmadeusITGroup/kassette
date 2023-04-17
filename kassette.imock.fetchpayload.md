@@ -6,12 +6,12 @@
 
 Forward the client request to the remote backend and get a wrapped payload from the response in output.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fetchPayload(): Promise<RemotePayload>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[RemotePayload](./kassette.remotepayload.md)<!-- -->&gt;
 

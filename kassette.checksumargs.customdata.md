@@ -6,7 +6,7 @@
 
 Any custom value (which can be JSON stringified) to be added in the content to be hashed.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 customData?: any | null;

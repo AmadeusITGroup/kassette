@@ -6,7 +6,7 @@
 
 Request HTTP version, such as "HTTP/1.1".
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 httpVersion?: string;

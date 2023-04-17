@@ -6,7 +6,7 @@
 
 Posted data, as a (binary) string.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 text?: string;

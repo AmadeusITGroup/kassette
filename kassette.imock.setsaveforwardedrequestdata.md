@@ -6,7 +6,7 @@
 
 Sets the [saveForwardedRequestData](./kassette.imock.saveforwardedrequestdata.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSaveForwardedRequestData(value: boolean | null): void;
@@ -18,7 +18,7 @@ setSaveForwardedRequestData(value: boolean | null): void;
 |  --- | --- | --- |
 |  value | boolean \| null | whether to save the forwarded request data (headers, method, URL) when creating a new mock for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.saveforwardedrequestdata.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,10 +6,10 @@
 
 Origin of the payload.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type PayloadOrigin = 'local' | 'proxy' | 'remote' | 'user';
+export type PayloadOrigin = 'local' | 'proxy' | 'remote' | 'user';
 ```
 
 ## Remarks

@@ -6,17 +6,17 @@
 
 Type used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that has a map structure, such as the query and headers, to specify if and how they are included in the hash computed by the [checksum](./kassette.imock.checksum.md) method.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListOrFilter = FilterableSpec<Record<string, any>, any> | (IncludableSpec & {
+export type ListOrFilter = FilterableSpec<Record<string, any>, any> | (IncludableSpec & {
     caseSensitive?: boolean;
 } & ({} | {
     mode?: 'whitelist' | 'blacklist';
     keys: string[];
 }));
 ```
-<b>References:</b> [FilterableSpec](./kassette.filterablespec.md)<!-- -->, [IncludableSpec](./kassette.includablespec.md)
+**References:** [FilterableSpec](./kassette.filterablespec.md)<!-- -->, [IncludableSpec](./kassette.includablespec.md)
 
 ## Remarks
 

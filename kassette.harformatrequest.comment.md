@@ -6,7 +6,7 @@
 
 Any comment as a string. This is not used by kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 comment?: string;

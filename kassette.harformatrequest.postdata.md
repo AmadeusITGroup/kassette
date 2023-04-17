@@ -6,7 +6,7 @@
 
 Information about the request body.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 postData?: HarFormatPostData;

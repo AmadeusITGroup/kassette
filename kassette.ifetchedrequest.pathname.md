@@ -6,7 +6,7 @@
 
 The path part of the URL
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly pathname: string;

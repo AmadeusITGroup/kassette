@@ -6,7 +6,7 @@
 
 Sets the [localPath](./kassette.imock.localpath.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setLocalPath(pathParts: RecursiveArray<string | null | undefined>): void;
@@ -18,7 +18,7 @@ setLocalPath(pathParts: RecursiveArray<string | null | undefined>): void;
 |  --- | --- | --- |
 |  pathParts | [RecursiveArray](./kassette.recursivearray.md)<!-- -->&lt;string \| null \| undefined&gt; | Any combination of values and array of values, which will eventually all be flattened, converted to strings and joined to build a path. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

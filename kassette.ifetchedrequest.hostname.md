@@ -6,7 +6,7 @@
 
 The hostname part of the URL
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly hostname: string;

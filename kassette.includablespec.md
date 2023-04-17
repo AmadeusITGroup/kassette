@@ -6,7 +6,7 @@
 
 Base interface used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that can be included or not in the hash computed by the [checksum](./kassette.imock.checksum.md) method.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IncludableSpec 
@@ -16,5 +16,5 @@ export interface IncludableSpec
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [include?](./kassette.includablespec.include.md) |  | boolean | <i>(Optional)</i> Whether to include this piece of data in the hash. It is <code>true</code> by default (if an object is passed). |
+|  [include?](./kassette.includablespec.include.md) |  | boolean | _(Optional)_ Whether to include this piece of data in the hash. It is <code>true</code> by default (if an object is passed). |
 

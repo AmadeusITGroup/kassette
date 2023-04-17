@@ -6,7 +6,7 @@
 
 The default mode.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly mode?: Mode;

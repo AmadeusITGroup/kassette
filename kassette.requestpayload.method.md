@@ -6,7 +6,7 @@
 
 HTTP method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 method: string;

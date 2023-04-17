@@ -6,7 +6,7 @@
 
 Callback called when kassette receives a request with the [HTTP CONNECT method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT)<!-- -->, which usually happens when kassette is used as a browser proxy and the browser is trying to connect to a secure web site with the https protocol.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 onProxyConnect?(parameters: IProxyConnectAPI): void | Promise<void>;
@@ -18,7 +18,7 @@ onProxyConnect?(parameters: IProxyConnectAPI): void | Promise<void>;
 |  --- | --- | --- |
 |  parameters | [IProxyConnectAPI](./kassette.iproxyconnectapi.md) | exposes the API to control how to process the request |
 
-<b>Returns:</b>
+**Returns:**
 
 void \| Promise&lt;void&gt;
 

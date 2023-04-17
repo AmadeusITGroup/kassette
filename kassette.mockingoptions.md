@@ -6,7 +6,7 @@
 
 Configuration options, including the root folder used to resolve relative paths and the current global configuration.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface MockingOptions 

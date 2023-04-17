@@ -6,7 +6,7 @@
 
 Sets the [saveChecksumContent](./kassette.imock.savechecksumcontent.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSaveChecksumContent(value: boolean | null): void;
@@ -18,7 +18,7 @@ setSaveChecksumContent(value: boolean | null): void;
 |  --- | --- | --- |
 |  value | boolean \| null | whether to save the content used to create a checksum when creating a new mock with a checksum for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.savechecksumcontent.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 The destination port that will be used in `forward` mode. By default, it is equal to [port](./kassette.iproxyconnectapi.port.md)<!-- -->. Can be changed with [setDestination](./kassette.iproxyconnectapi.setdestination.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly destinationPort: number;

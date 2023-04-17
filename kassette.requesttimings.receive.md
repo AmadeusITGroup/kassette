@@ -6,7 +6,7 @@
 
 Time required to read entire response from the server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 receive?: number;

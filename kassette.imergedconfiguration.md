@@ -6,16 +6,16 @@
 
 The resulting configuration that was merged from its different [sources](./kassette.configurationpropertysource.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type IMergedConfiguration = {
+export type IMergedConfiguration = {
     readonly filePath: string | null;
 } & {
     readonly [k in keyof ConfigurationSpec]-?: IConfigurationProperty<Required<ConfigurationSpec>[k]>;
 };
 ```
-<b>References:</b> [ConfigurationSpec](./kassette.configurationspec.md)<!-- -->, [IConfigurationProperty](./kassette.iconfigurationproperty.md)
+**References:** [ConfigurationSpec](./kassette.configurationspec.md)<!-- -->, [IConfigurationProperty](./kassette.iconfigurationproperty.md)
 
 ## Remarks
 

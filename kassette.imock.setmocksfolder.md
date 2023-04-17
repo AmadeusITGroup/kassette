@@ -6,7 +6,7 @@
 
 Sets the [mocksFolder](./kassette.imock.mocksfolder.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMocksFolder(value: RecursiveArray<string | null | undefined> | null): void;
@@ -18,7 +18,7 @@ setMocksFolder(value: RecursiveArray<string | null | undefined> | null): void;
 |  --- | --- | --- |
 |  value | [RecursiveArray](./kassette.recursivearray.md)<!-- -->&lt;string \| null \| undefined&gt; \| null | any combination of arrays of path parts, (as it is also possible for [setLocalPath](./kassette.imock.setlocalpath.md)<!-- -->). You can pass an absolute path, or a relative one which will be resolved against [options.root](./kassette.mockingoptions.root.md)<!-- -->. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.mocksfolder.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

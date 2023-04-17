@@ -6,7 +6,7 @@
 
 Default mode for `CONNECT` requests.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly proxyConnectMode?: ProxyConnectMode;

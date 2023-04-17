@@ -6,7 +6,7 @@
 
 target hostname
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hostname: string;

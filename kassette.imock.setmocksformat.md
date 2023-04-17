@@ -6,7 +6,7 @@
 
 Sets the [mocksFormat](./kassette.imock.mocksformat.md) value.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMocksFormat(value: MocksFormat | null): void;
@@ -18,7 +18,7 @@ setMocksFormat(value: MocksFormat | null): void;
 |  --- | --- | --- |
 |  value | [MocksFormat](./kassette.mocksformat.md) \| null | the mocks format to use for this request. Passing null resets the value to the default coming from [the global setting](./kassette.cliconfigurationspec.mocksformat.md)<!-- -->. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Information about the cache. This is not implemented in kassette.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cache?: any;

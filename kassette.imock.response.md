@@ -6,7 +6,7 @@
 
 The wrapper around the output response
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly response: IResponse;

@@ -6,7 +6,7 @@
 
 If run from the API, this is the context value provided (if any) through [runFromAPI()](./kassette.runfromapi.md)<!-- -->. Otherwise it is undefined.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 context: any;

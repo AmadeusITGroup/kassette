@@ -6,7 +6,7 @@
 
 Http version of the server when the mock was recorded. Will most likely be '1.1' or perhaps '1.0'. It is not used when replaying responses.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly httpVersion?: string;

@@ -6,7 +6,7 @@
 
 Specifies whether and how to include the query part of the url in the hash. The default value is `true`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 query?: ListOrFilter | boolean;

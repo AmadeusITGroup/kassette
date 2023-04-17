@@ -6,7 +6,7 @@
 
 Time waiting for a response from the server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wait?: number;

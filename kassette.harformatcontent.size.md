@@ -6,7 +6,7 @@
 
 Size of the content in bytes.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 size?: number;

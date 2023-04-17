@@ -6,7 +6,7 @@
 
 Total time of the request, in milliseconds. This is the sum of all timings in the [timings object](./kassette.harformatentry.timings.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 time?: number;

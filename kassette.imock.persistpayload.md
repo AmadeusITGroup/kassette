@@ -6,7 +6,7 @@
 
 Take the given wrapped payload and persist it in local files.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 persistPayload(payload: PayloadWithOrigin): Promise<void>;
@@ -18,7 +18,7 @@ persistPayload(payload: PayloadWithOrigin): Promise<void>;
 |  --- | --- | --- |
 |  payload | [PayloadWithOrigin](./kassette.payloadwithorigin.md) | payload to persist in local files |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

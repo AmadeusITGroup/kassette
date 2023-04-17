@@ -6,7 +6,7 @@
 
 Details about the time spent for each phase of a request-response round trip. All times are specified in milliseconds.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface RequestTimings 
@@ -16,11 +16,11 @@ export interface RequestTimings
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [blocked?](./kassette.requesttimings.blocked.md) |  | number | <i>(Optional)</i> Time spent in a queue waiting for a network connection. Can be -1 if the timing does not apply to the current request. |
-|  [connect?](./kassette.requesttimings.connect.md) |  | number | <i>(Optional)</i> Time required to create TCP connection. Can be -1 if the timing does not apply to the current request. |
-|  [dns?](./kassette.requesttimings.dns.md) |  | number | <i>(Optional)</i> The time required to resolve a host name. Can be -1 if the timing does not apply to the current request. |
-|  [receive?](./kassette.requesttimings.receive.md) |  | number | <i>(Optional)</i> Time required to read entire response from the server. |
-|  [send?](./kassette.requesttimings.send.md) |  | number | <i>(Optional)</i> Time required to send HTTP request to the server. |
-|  [ssl?](./kassette.requesttimings.ssl.md) |  | number | <i>(Optional)</i> Time required for SSL/TLS negotiation. This time is also included in the [RequestTimings.connect](./kassette.requesttimings.connect.md) field. Can be -1 if the timing does not apply to the current request. |
-|  [wait?](./kassette.requesttimings.wait.md) |  | number | <i>(Optional)</i> Time waiting for a response from the server. |
+|  [blocked?](./kassette.requesttimings.blocked.md) |  | number | _(Optional)_ Time spent in a queue waiting for a network connection. Can be -1 if the timing does not apply to the current request. |
+|  [connect?](./kassette.requesttimings.connect.md) |  | number | _(Optional)_ Time required to create TCP connection. Can be -1 if the timing does not apply to the current request. |
+|  [dns?](./kassette.requesttimings.dns.md) |  | number | _(Optional)_ The time required to resolve a host name. Can be -1 if the timing does not apply to the current request. |
+|  [receive?](./kassette.requesttimings.receive.md) |  | number | _(Optional)_ Time required to read entire response from the server. |
+|  [send?](./kassette.requesttimings.send.md) |  | number | _(Optional)_ Time required to send HTTP request to the server. |
+|  [ssl?](./kassette.requesttimings.ssl.md) |  | number | _(Optional)_ Time required for SSL/TLS negotiation. This time is also included in the [RequestTimings.connect](./kassette.requesttimings.connect.md) field. Can be -1 if the timing does not apply to the current request. |
+|  [wait?](./kassette.requesttimings.wait.md) |  | number | _(Optional)_ Time waiting for a response from the server. |
 

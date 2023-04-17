@@ -6,12 +6,12 @@
 
 Sends the response, applying some data previously specified but not set yet
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 send(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

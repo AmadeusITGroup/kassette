@@ -6,7 +6,7 @@
 
 Key used by kassette to select the correct mock to replay.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 _kassetteMockKey?: string;

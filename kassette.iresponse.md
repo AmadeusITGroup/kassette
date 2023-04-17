@@ -6,7 +6,7 @@
 
 A handier wrapper around a server response
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface IResponse 

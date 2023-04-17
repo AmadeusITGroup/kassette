@@ -6,7 +6,7 @@
 
 Information about the response body, as stored in a har file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HarFormatContent 
@@ -16,10 +16,10 @@ export interface HarFormatContent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [comment?](./kassette.harformatcontent.comment.md) |  | string | <i>(Optional)</i> Any comment as a string. This is not used by kassette. |
-|  [compression?](./kassette.harformatcontent.compression.md) |  | number | <i>(Optional)</i> Number of bytes saved by compression. This is not implemented by kassette. |
-|  [encoding?](./kassette.harformatcontent.encoding.md) |  | string | <i>(Optional)</i> Encoding used for the [text](./kassette.harformatcontent.text.md) field, such as "base64". |
-|  [mimeType?](./kassette.harformatcontent.mimetype.md) |  | string | <i>(Optional)</i> Value of the <code>Content-Type</code> response header. |
-|  [size?](./kassette.harformatcontent.size.md) |  | number | <i>(Optional)</i> Size of the content in bytes. |
-|  [text?](./kassette.harformatcontent.text.md) |  | string | <i>(Optional)</i> Response body. |
+|  [comment?](./kassette.harformatcontent.comment.md) |  | string | _(Optional)_ Any comment as a string. This is not used by kassette. |
+|  [compression?](./kassette.harformatcontent.compression.md) |  | number | _(Optional)_ Number of bytes saved by compression. This is not implemented by kassette. |
+|  [encoding?](./kassette.harformatcontent.encoding.md) |  | string | _(Optional)_ Encoding used for the [text](./kassette.harformatcontent.text.md) field, such as "base64". |
+|  [mimeType?](./kassette.harformatcontent.mimetype.md) |  | string | _(Optional)_ Value of the <code>Content-Type</code> response header. |
+|  [size?](./kassette.harformatcontent.size.md) |  | number | _(Optional)_ Size of the content in bytes. |
+|  [text?](./kassette.harformatcontent.text.md) |  | string | _(Optional)_ Response body. |
 

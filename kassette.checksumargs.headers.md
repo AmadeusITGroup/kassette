@@ -6,7 +6,7 @@
 
 Specifies whether and how to include the headers in the hash. The default value is `false`<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 headers?: ListOrFilter | boolean;

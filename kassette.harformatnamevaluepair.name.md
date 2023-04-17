@@ -6,7 +6,7 @@
 
 Name of the header or query parameter.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 name: string;

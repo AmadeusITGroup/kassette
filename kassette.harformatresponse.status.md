@@ -6,7 +6,7 @@
 
 Response status.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 status?: number;

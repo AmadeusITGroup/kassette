@@ -6,7 +6,7 @@
 
 Data such as http status and headers, response delay.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 data: MockData;
