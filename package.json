@@ -75,7 +75,7 @@
     "memfs": "^3.4.13",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "playwright": "^1.32.1",
+    "playwright": "^1.32.3",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
     "rollup": "^3.20.2",

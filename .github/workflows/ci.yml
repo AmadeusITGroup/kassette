@@ -37,6 +37,9 @@ jobs:
       - name: Run unit tests
         run: npm run ut:coverage
 
+      - name: Install playwright dependencies
+        run: npx playwright install-deps
+
       - name: Run end to end tests
         run: npm run e2e:coverage
 
