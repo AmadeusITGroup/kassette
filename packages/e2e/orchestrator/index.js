@@ -4,7 +4,7 @@ const { promises: fs } = require('fs');
 
 // ------------------------------------------------------------------------- 3rd
 
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const picocolors = require('picocolors');
 
 // -------------------------------------------------------------------- internal
