@@ -17,7 +17,7 @@ const _getSocketConnections = (socket: Socket | ServerHttp2Stream): Connection[]
   let result: Connection[] = (socket as any)[connectionsSymbol];
   if (!result) {
     if ('session' in socket) {
-      const parentSocket = socket.session.socket;
+      const parentSocket = socket.session!.socket;
       result = _getSocketConnections(parentSocket).slice(0);
     } else {
       result = [
