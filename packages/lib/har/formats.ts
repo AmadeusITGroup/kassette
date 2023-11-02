@@ -25,6 +25,5 @@ export const yamlFormat: FileFormat = {
 };
 
 const yamlRegExp = /\.ya?ml$/i;
-export const detectHarFormat = (fileName: string): FileFormat => {
-  return yamlRegExp.test(fileName) ? yamlFormat : jsonFormat;
-};
+export const detectHarFormat = (fileName: string): FileFormat =>
+  yamlRegExp.test(fileName) ? yamlFormat : jsonFormat;

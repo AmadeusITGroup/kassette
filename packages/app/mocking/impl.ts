@@ -72,9 +72,8 @@ import { detectHarFormat } from '../../lib/har/formats';
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-const isRemotePayload = (payload: PayloadWithOrigin): payload is RemotePayload => {
-  return payload.origin === 'remote' && 'requestOptions' in payload;
-};
+const isRemotePayload = (payload: PayloadWithOrigin): payload is RemotePayload =>
+  payload.origin === 'remote' && 'requestOptions' in payload;
 
 const splitFromHarHeaders = (
   headers?: HarFormatNameValuePair[],

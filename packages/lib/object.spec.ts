@@ -15,11 +15,11 @@ describe('object', () => {
     });
 
     it('should handle primitive types with constructors', () => {
-      // tslint:disable-next-line
+      // eslint-disable-next-line no-new-wrappers
       expect(isObject(new Boolean(false))).toBe(false);
-      // tslint:disable-next-line
+      // eslint-disable-next-line no-new-wrappers
       expect(isObject(new Number(1))).toBe(false);
-      // tslint:disable-next-line
+      // eslint-disable-next-line no-new-wrappers
       expect(isObject(new String('1'))).toBe(false);
       expect(isObject(new Array(1))).toBe(false);
       expect(isObject(new Object())).toBe(true);

@@ -45,9 +45,9 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'protocol',
-    await processSpec<IncludableSpec>(spec.protocol, false, () => {
-      return mock.request.protocol.toLowerCase();
-    }),
+    await processSpec<IncludableSpec>(spec.protocol, false, () =>
+      mock.request.protocol.toLowerCase(),
+    ),
     false,
   );
 
@@ -60,19 +60,11 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
     false,
   );
 
-  push(
-    'port',
-    await processSpec<IncludableSpec>(spec.port, false, () => {
-      return mock.request.port;
-    }),
-    false,
-  );
+  push('port', await processSpec<IncludableSpec>(spec.port, false, () => mock.request.port), false);
 
   push(
     'method',
-    await processSpec<IncludableSpec>(spec.method, false, () => {
-      return mock.request.method.toLowerCase();
-    }),
+    await processSpec<IncludableSpec>(spec.method, false, () => mock.request.method.toLowerCase()),
   );
 
   push(
@@ -93,16 +85,20 @@ export async function computeContent(mock: IMock, spec: ChecksumArgs): Promise<s
 
   push(
     'query',
-    await processSpec<ListOrFilter>(spec.query, true, async (spec) => {
-      return await processList(spec, mock.request.queryParameters, true);
-    }),
+    await processSpec<ListOrFilter>(
+      spec.query,
+      true,
+      async (spec) => await processList(spec, mock.request.queryParameters, true),
+    ),
   );
 
   push(
     'headers',
-    await processSpec<ListOrFilter>(spec.headers, false, async (spec) => {
-      return await processList(spec, mock.request.headers, false);
-    }),
+    await processSpec<ListOrFilter>(
+      spec.headers,
+      false,
+      async (spec) => await processList(spec, mock.request.headers, false),
+    ),
   );
 
   push('custom data', stringifyPretty(spec.customData));

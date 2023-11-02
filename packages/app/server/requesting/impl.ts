@@ -51,15 +51,13 @@ const timestamp = () => {
   };
 };
 
-const computeDiffFactory = (curTime: number) => {
-  return (nextTime: ReturnType<typeof timestamp>) => {
-    if (nextTime.defined) {
-      const diff = nextTime.value! - curTime;
-      curTime = nextTime.value!;
-      return diff;
-    }
-    return -1;
-  };
+const computeDiffFactory = (curTime: number) => (nextTime: ReturnType<typeof timestamp>) => {
+  if (nextTime.defined) {
+    const diff = nextTime.value! - curTime;
+    curTime = nextTime.value!;
+    return diff;
+  }
+  return -1;
 };
 
 const timingCollector = () => {
