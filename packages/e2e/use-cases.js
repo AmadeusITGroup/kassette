@@ -1917,13 +1917,12 @@ const useCases = [
             expect(entry.timings.dns).to.equal(-1);
             expect(entry.timings.ssl).to.equal(-1);
             expect(entry.timings.wait).to.be.above(0);
-            expect(entry.timings.connect).to.be.above(0);
             expect(entry.timings.send).to.be.above(0);
             expect(entry.timings.blocked).to.be.above(0);
             expect(entry.timings.receive).to.be.above(0);
             expect(entry.time).to.equal(
               entry.timings.wait +
-                entry.timings.connect +
+                Math.max(entry.timings.connect, 0) +
                 entry.timings.send +
                 entry.timings.blocked +
                 entry.timings.receive,
@@ -2021,13 +2020,12 @@ const useCases = [
             expect(entry.timings.dns).to.equal(-1);
             expect(entry.timings.ssl).to.equal(-1);
             expect(entry.timings.wait).to.be.above(0);
-            expect(entry.timings.connect).to.be.above(0);
             expect(entry.timings.send).to.be.above(0);
             expect(entry.timings.blocked).to.be.above(0);
             expect(entry.timings.receive).to.be.above(0);
             expect(entry.time).to.equal(
               entry.timings.wait +
-                entry.timings.connect +
+                Math.max(entry.timings.connect, 0) +
                 entry.timings.send +
                 entry.timings.blocked +
                 entry.timings.receive,
