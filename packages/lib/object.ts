@@ -5,7 +5,7 @@
 type ObjectMap<T> = { [key in string]: T };
 
 export const isObject = <T>(value: any): value is ObjectMap<T> =>
-  ({}.toString.call(value).slice(8, -1) === 'Object');
+  ({}).toString.call(value).slice(8, -1) === 'Object';
 
 export const copyDeep = (object: Readonly<ObjectMap<any>>): ObjectMap<any> => {
   const copy: ObjectMap<any> = {};

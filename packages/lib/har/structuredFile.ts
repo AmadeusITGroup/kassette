@@ -12,7 +12,10 @@ export abstract class StructuredFile<T> extends EventEmitter {
   private _lastReadSize = 0;
   private _busyState = false;
 
-  constructor(private _fileHandler: FileHandler, private _fileFormat: FileFormat) {
+  constructor(
+    private _fileHandler: FileHandler,
+    private _fileFormat: FileFormat,
+  ) {
     super();
   }
 
