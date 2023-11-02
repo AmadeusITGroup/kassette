@@ -22,7 +22,10 @@ import { IFetchedServerResponse, ServerResponseStatus } from './model';
  * @param buffer The body of the response (that can be retrieved through `body`)
  */
 export class ServerResponse implements IFetchedServerResponse {
-  constructor(public readonly original: IncomingMessage, public readonly body: Buffer) {}
+  constructor(
+    public readonly original: IncomingMessage,
+    public readonly body: Buffer,
+  ) {}
 
   @CachedProperty()
   get headers(): IncomingHttpHeaders {

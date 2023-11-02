@@ -14,7 +14,11 @@ export type TYPE = 'file_configuration' | 'server_error' | 'missing_remote_url';
  * stores the `original` error, if any (otherwise returns `null`).
  */
 export class AppError extends Error {
-  constructor(public readonly original: Error | null, public readonly type: TYPE, message: string) {
+  constructor(
+    public readonly original: Error | null,
+    public readonly type: TYPE,
+    message: string,
+  ) {
     super(message);
   }
 }
@@ -33,7 +37,10 @@ export const isAppError = (error: any): error is AppError => error instanceof Ap
  * @param path The path of the configuration file
  */
 export class FileConfigurationError extends AppError {
-  constructor(original: Error, public readonly path: string) {
+  constructor(
+    original: Error,
+    public readonly path: string,
+  ) {
     super(original, 'file_configuration', `File configuration could not be loaded: ${path}`);
     this.name = 'FileConfigurationError';
   }
