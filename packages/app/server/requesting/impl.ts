@@ -31,6 +31,7 @@ import { Socket } from 'net';
 import { TLSSocket } from 'tls';
 import { SecureClientSessionOptions } from 'http2';
 import { RequestTimings } from '../../../lib/har/harTypes';
+import { constants } from 'crypto';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -161,6 +162,7 @@ export async function sendRequest({
     // forces the use of http/1.x in case http/1.x is used in the original request:
     ...(original.original?.httpVersionMajor < 2 ? forceHttp1 : {}),
     rejectUnauthorized: false,
+    secureOptions: constants.SSL_OP_LEGACY_SERVER_CONNECT,
     method: requestOptions.method,
     headers: requestOptions.headers,
     agent: {
