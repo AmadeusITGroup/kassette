@@ -55,7 +55,7 @@ kassette is a development server, used mainly for testing, which proxies request
 |  [ConfigurationPropertySource](./kassette.configurationpropertysource.md) | The id of the source of the resolved value. |
 |  [Delay](./kassette.delay.md) | Delay that will be used to send the response to the client when the data is taken from the local mock. |
 |  [HarKeyManager](./kassette.harkeymanager.md) | Each entry in a har file is supposed to have a corresponding unique key (a string). The har key manager is both a getter and a setter for the key of an entry. |
-|  [Headers](./kassette.headers.md) | A map from strings to strings or array of strings |
+|  [Headers\_2](./kassette.headers_2.md) | A map from strings to strings or array of strings |
 |  [IMergedConfiguration](./kassette.imergedconfiguration.md) | The resulting configuration that was merged from its different [sources](./kassette.configurationpropertysource.md)<!-- -->. |
 |  [ListOrFilter](./kassette.listorfilter.md) | Type used in [ChecksumArgs](./kassette.checksumargs.md) for each piece of data that has a map structure, such as the query and headers, to specify if and how they are included in the hash computed by the [checksum](./kassette.imock.checksum.md) method. |
 |  [MocksFormat](./kassette.mocksformat.md) | Specifies the mocks format to use. It can be defined globally through the [mocksFormat](./kassette.cliconfigurationspec.mocksformat.md) setting or per-request from the [hook](./kassette.configurationspec.hook.md) method through [setMocksFormat](./kassette.imock.setmocksformat.md)<!-- -->. |
