@@ -75,7 +75,7 @@ export type Mode =
  *
  * @public
  */
-export type MocksFormat = 'folder' | 'har';
+export type MocksFormat = 'folder' | 'har' | 'filePerRequest';
 
 /**
  * Delay that will be used to send the response to the client

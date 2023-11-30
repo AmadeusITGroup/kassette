@@ -176,10 +176,16 @@ export interface IMock {
   setMocksHarKeyManager(value: HarKeyManager | null): void;
 
   /**
-   * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
+   * Used when the {@link IMock.mocksFormat|mocks format} is 'folder' and 'filePerRequest', specifies the local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
    * It is either the one set by the user through {@link IMock.setLocalPath|setLocalPath} or {@link IMock.defaultLocalPath|defaultLocalPath}.
    */
   readonly localPath: string;
+
+  /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'filePerRequest', specifies the local file name of the mock, relative to {@link IMock.mocksFolder|mocksFolder}/{@link IMock.localPath|localPath}.
+   * It is either the one set by the user through {@link IMock.setLocalPath|setLocalFileName} or {@link IMock.defaultLocalPath|defaultLocalFileName}.
+   */
+  readonly localFileName: string;
 
   /**
    * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the default local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}, .
@@ -250,6 +256,19 @@ export interface IMock {
    */
   setLocalPath(pathParts: RecursiveArray<string | null | undefined>): void;
 
+  /**
+   * Sets the {@link IMock.localFileName|localFileName} value.
+   *
+   * @param fileName - any combination of  string values to identify a file name
+   * which will eventually be encoded to ensure an OS-safe file name. The file will be stored as JSON.
+   *
+   * @example
+   * The following example will set the file name to input-request
+   * ```
+   * mock.setLocalFileName('input-request')
+   * ```
+   */
+  setLocalFileName(fileName: string): void
   /**
    * Returns true if the mock exists locally.
    *

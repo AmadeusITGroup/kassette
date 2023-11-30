@@ -98,6 +98,11 @@ export class Mock implements IMock {
       inputOrigin === 'none' ? this.defaultLocalPath : joinPath(input),
   });
 
+  private _localFileName = new UserProperty<string, string>({
+    transform: ({ inputOrigin, input }) =>
+      inputOrigin === 'none' || input === undefined ? this.defaultLocalPath : encodeURI(input),
+  });
+
   private _delay = new UserProperty<Delay, number>({
     getDefaultInput: () => this.options.userConfiguration.delay.value,
     transform: ({ input }) => {
@@ -346,6 +351,13 @@ export class Mock implements IMock {
     return this._localPath.output;
   }
 
+  public setLocalFileName(value: string): void {
+    this._localFileName.set(value);
+  }
+  get localFileName(): string {
+    return this._localPath.output;
+  }
+
   @CachedProperty()
   get defaultLocalPath(): string {
     return flatten([getURLPathParts(this.request.url), this.request.method])
@@ -355,6 +367,11 @@ export class Mock implements IMock {
       .join('/');
   }
 
+  @CachedProperty()
+  get defaultFileName() {
+    return 'request-file';
+  }
+
   get mockFolderFullPath(): string {
     return nodePath.join(this.mocksFolder, this.localPath);
   }
@@ -362,6 +379,8 @@ export class Mock implements IMock {
   public async hasLocalMock(): Promise<boolean> {
     if (this.mocksFormat === 'folder') {
       return this._folderFmtDataFile.exists();
+    } else if (this.mocksFormat === 'filePerRequest') {
+      return this._folderFmtFilePerRequest.exists();
     } else {
       return !!(await this.readLocalPayload());
     }
@@ -524,6 +543,11 @@ export class Mock implements IMock {
   }
 
   @CachedProperty()
+  private get _folderFmtFilePerRequest(): FileHandler {
+    return this._folderFmtCreateFileHandler(`${this.localFileName}.json`);
+  }
+
+  @CachedProperty()
   private get _folderFmtInputRequestFile(): FileHandler {
     return this._folderFmtCreateFileHandler(`${CONF.inputRequestBaseFilename}.json`);
   }
@@ -578,7 +602,30 @@ export class Mock implements IMock {
       case 'har':
         await this._harFmtPersistPayload(payload);
         break;
+      case 'filePerRequest':
+        await this._filePerRequestFmtPersistPayload(payload);
+        break;
     }
+  }
+
+  private async _filePerRequestFmtPersistPayload(payload: PayloadWithOrigin) {
+    const {
+      payload: { data, body },
+    } = payload;
+    const dataFile = this._folderFmtFilePerRequest;
+    const allInfo = {
+      request: {
+        headers: this.request.headers,
+        method: this.request.method,
+        url: this.request.url,
+        body: this.request.body.toString(),
+      },
+      response: {
+        ...data,
+      },
+      responseBody: body,
+    };
+    dataFile.write(stringifyPretty(allInfo));
   }
 
   private async _folderFmtPersistPayload(payload: PayloadWithOrigin) {
@@ -761,6 +808,18 @@ export class Mock implements IMock {
         payload = {
           data,
           body: await this._folderFmtCreateFileHandler(data.bodyFileName).read(),
+        };
+        break;
+      }
+      case 'filePerRequest': {
+        const fileContent = await this._folderFmtFilePerRequest.read();
+        if (!fileContent) {
+          return;
+        }
+        const fileData = JSON.parse(fileContent.toString());
+        payload = {
+          data: fileData.response,
+          body: fileData.responseBody,
         };
         break;
       }
