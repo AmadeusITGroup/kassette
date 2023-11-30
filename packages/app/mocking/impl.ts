@@ -39,6 +39,7 @@ import {
   PayloadWithOrigin,
   Payload,
   RemotePayload,
+  OneFilePerRequestFilePayload,
 } from './model';
 
 import { computeChecksum } from './checksum/impl';
@@ -613,19 +614,29 @@ export class Mock implements IMock {
       payload: { data, body },
     } = payload;
     const dataFile = this._folderFmtFilePerRequest;
-    const allInfo = {
-      request: {
-        headers: this.request.headers,
-        method: this.request.method,
-        url: this.request.url,
-        body: this.request.body.toString(),
-      },
+    let payloadInfo: OneFilePerRequestFilePayload = {
       response: {
         ...data,
       },
       responseBody: body,
     };
-    dataFile.write(stringifyPretty(allInfo));
+    if (this.saveInputRequestData) {
+      payloadInfo = {
+        ...payloadInfo,
+        request: {
+          headers: this.request.headers,
+          method: this.request.method,
+          url: this.request.url,
+        },
+      };
+    }
+    if (this.saveInputRequestBody) {
+      payloadInfo.requestBody = this.request.body.toString();
+    }
+    if (this.saveChecksumContent) {
+      payloadInfo.checksumContent = this.checksumContent;
+    }
+    dataFile.write(stringifyPretty(payloadInfo));
   }
 
   private async _folderFmtPersistPayload(payload: PayloadWithOrigin) {

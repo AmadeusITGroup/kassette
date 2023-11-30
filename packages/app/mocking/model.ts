@@ -268,7 +268,7 @@ export interface IMock {
    * mock.setLocalFileName('input-request')
    * ```
    */
-  setLocalFileName(fileName: string): void
+  setLocalFileName(fileName: string): void;
   /**
    * Returns true if the mock exists locally.
    *
@@ -647,4 +647,33 @@ export interface RemotePayload extends PayloadWithOrigin<'remote'> {
    * Request used to get this remote payload.
    */
   requestOptions: RequestPayload;
+}
+
+/**
+ * The payload that will be saved to the request file
+ * @public
+ */
+export interface OneFilePerRequestFilePayload {
+  /**
+   * Request made.
+   */
+  request?: Object | null;
+  /**
+   * Body of the request made
+   */
+  requestBody?: Object | null;
+  /**
+   * Response data that will be returned
+   * This is a required field
+   */
+  response: Object;
+  /**
+   * Response body that will be returned
+   * This is a required field
+   */
+  responseBody: any;
+  /**
+   * Content produced by the last call to the checksum method, as it was passed to the hash algorithm.
+   */
+  checksumContent?: string | null;
 }
