@@ -97,6 +97,55 @@ describe('mocking', () => {
     });
   });
 
+  describe('fileNames', () => {
+    it('should work', () => {
+      const mock = new Mock({
+        options: {
+          root: 'root',
+          userConfiguration: {},
+        },
+        request: {
+          url: { pathname: '/url/path' },
+          method: 'post',
+        },
+      } as any);
+
+      mock.setLocalFileName('mock-file');
+      expect(mock.localFileName).toEqual('mock-file');
+    });
+
+    it('should set local file name to the default', () => {
+      const mock = new Mock({
+        options: {
+          root: 'root',
+          userConfiguration: {},
+        },
+        request: {
+          url: { pathname: '/url/path' },
+          method: 'post',
+        },
+      } as any);
+
+      expect(mock.localFileName).toEqual('request-file');
+    });
+
+    it('should encode the local file name', () => {
+      const mock = new Mock({
+        options: {
+          root: 'root',
+          userConfiguration: {},
+        },
+        request: {
+          url: { pathname: '/url/path' },
+          method: 'post',
+        },
+      } as any);
+
+      mock.setLocalFileName('unsafe>filename<');
+      expect(mock.localFileName).toEqual('unsafe%3Efilename%3C');
+    });
+  });
+
   describe('payloads', () => {
     describe('createPayload', () => {
       it('should work', () => {

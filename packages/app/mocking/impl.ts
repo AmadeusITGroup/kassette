@@ -100,8 +100,11 @@ export class Mock implements IMock {
   });
 
   private _localFileName = new UserProperty<string, string>({
-    transform: ({ inputOrigin, input }) =>
-      inputOrigin === 'none' || input === undefined ? this.defaultLocalPath : encodeURI(input),
+    transform: ({ inputOrigin, input }) => {
+      return inputOrigin === 'none' || input === undefined
+        ? this.defaultFileName
+        : encodeURI(input);
+    },
   });
 
   private _delay = new UserProperty<Delay, number>({
@@ -356,7 +359,7 @@ export class Mock implements IMock {
     this._localFileName.set(value);
   }
   get localFileName(): string {
-    return this._localPath.output;
+    return this._localFileName.output;
   }
 
   @CachedProperty()
