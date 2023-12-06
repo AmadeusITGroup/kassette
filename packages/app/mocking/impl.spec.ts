@@ -145,5 +145,24 @@ describe('mocking', () => {
         expect(response.status).toEqual(status);
       });
     });
+
+    describe('saveStringBodies', () => {
+      it('should work', () => {
+        const mock = new Mock({
+          options: {
+            root: 'root',
+            userConfiguration: {},
+          },
+          request: {
+            url: { pathname: '/url/path' },
+            method: 'post',
+          },
+        } as any);
+
+        expect(mock.saveStringBodies).toBe(true);
+        mock.setSaveStringBodies(false);
+        expect(mock.saveStringBodies).toBe(false);
+      });
+    });
   });
 });
