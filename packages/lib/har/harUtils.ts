@@ -64,10 +64,22 @@ export const toHarContentBase64 = (body: Buffer, mimeType?: string): HarFormatCo
   encoding: 'base64',
 });
 
-export const toHarContent = (body: string | Buffer | null, mimeType?: string): HarFormatContent => {
+export const toHarContent = (
+  saveAsString: boolean,
+  body: string | Buffer | null,
+  mimeType?: string,
+): HarFormatContent => {
   if (Buffer.isBuffer(body)) {
     if (isBinary(mimeType ? `file.${extension(mimeType)}` : null, body)) {
       return toHarContentBase64(body, mimeType);
+    }
+
+    if (mimeType === 'application/json' && !saveAsString) {
+      return {
+        mimeType: mimeType ?? '',
+        size: body?.length ?? 0,
+        text: JSON.parse(body.toString('binary')),
+      };
     }
 
     return {
@@ -91,15 +103,24 @@ export const fromHarContent = (content?: HarFormatContent) => {
 };
 
 export const toHarPostData = (
+  saveAsString: boolean,
   body?: string | Buffer,
   mimeType?: string,
-): HarFormatPostData | undefined =>
-  body && body.length > 0
-    ? {
+): HarFormatPostData | undefined => {
+  if (body && body.length > 0) {
+    if (mimeType === 'application/json' && !saveAsString) {
+      return {
         mimeType: mimeType,
-        text: body.toString('binary'),
-      }
-    : undefined;
+        text: JSON.parse(body.toString('binary')),
+      };
+    }
+    return {
+      mimeType: mimeType,
+      text: body.toString('binary'),
+    };
+  }
+  return undefined;
+};
 
 export const toHarQueryString = (searchParams: URLSearchParams): HarFormatNameValuePair[] => {
   const res: HarFormatNameValuePair[] = [];

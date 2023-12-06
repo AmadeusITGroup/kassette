@@ -176,6 +176,21 @@ export interface IMock {
   setMocksHarKeyManager(value: HarKeyManager | null): void;
 
   /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har',
+   * specifies if the request and response bodies should be saved as JSON objects or as strings.
+   * This will only be applicable to request bodies if {@link IMock.saveInputRequestBody|saveInputRequestBody} is set to true
+   * Default value will be true and will only be overridden by {@link IMock.setSaveStringBodies|setSaveStringBodies}
+   */
+  readonly saveStringBodies: boolean;
+
+  /**
+   * Sets the {@link IMock.saveBodiesAsJson|saveBodiesAsJson} value.
+   *
+   * @param value - whether the request and response bodies should be saved as strings
+   */
+  setSaveStringBodies(value: boolean): void;
+
+  /**
    * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
    * It is either the one set by the user through {@link IMock.setLocalPath|setLocalPath} or {@link IMock.defaultLocalPath|defaultLocalPath}.
    */
