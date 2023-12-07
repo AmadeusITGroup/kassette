@@ -90,7 +90,7 @@ describe('harUtils', () => {
   describe('content', () => {
     it('should work with empty content', () => {
       expect(toHarContent(true, null)).toEqual({ mimeType: '', size: 0, text: '' });
-      const emptyBuffer = fromHarContent({});
+      const emptyBuffer = fromHarContent(true, {});
       expect(Buffer.isBuffer(emptyBuffer)).toBeTruthy();
       expect(emptyBuffer.length).toBe(0);
     });
@@ -113,12 +113,12 @@ describe('harUtils', () => {
         encoding: 'base64',
         text: content,
       });
-      const outputBuffer = fromHarContent({
+      const outputBuffer = fromHarContent(true, {
         mimeType: 'application/octet-stream',
         size: 25,
         encoding: 'base64',
         text: content,
-      });
+      }) as Buffer;
       expect(buffer.equals(outputBuffer)).toBeTruthy();
     });
 
@@ -145,11 +145,11 @@ describe('harUtils', () => {
         size: 6,
         text: content,
       });
-      const outputBuffer = fromHarContent({
+      const outputBuffer = fromHarContent(true, {
         mimeType: 'text/plain',
         size: 6,
         text: content,
-      });
+      }) as Buffer;
       expect(buffer.equals(outputBuffer)).toBeTruthy();
     });
 
@@ -231,6 +231,29 @@ describe('harUtils', () => {
         mimeType: 'application/json',
         text: content,
       });
+    });
+  });
+
+  describe('fromHarContent', () => {
+    it('should return content if saveStringBodies is false', () => {
+      const content = { test: 'hello' };
+      const returned = fromHarContent(false, {
+        mimeType: 'application/json',
+        size: 17,
+        text: content,
+      });
+      expect(returned).toEqual(content);
+    });
+
+    it('should convert from a buffer if saveStringBodies is true ', () => {
+      const content = '{"test": "hello"}';
+      const buffer = Buffer.from(content, 'utf8');
+      const returned = fromHarContent(true, {
+        mimeType: 'application/json',
+        size: 17,
+        text: buffer,
+      });
+      expect(buffer.equals(returned)).toBeTruthy();
     });
   });
 

@@ -95,8 +95,11 @@ export const toHarContent = (
   };
 };
 
-export const fromHarContent = (content?: HarFormatContent) => {
+export const fromHarContent = (saveAsString: boolean, content?: HarFormatContent) => {
   if (content?.text) {
+    if (!saveAsString) {
+      return content.text;
+    }
     return Buffer.from(content.text, content.encoding === 'base64' ? 'base64' : 'binary');
   }
   return Buffer.alloc(0);

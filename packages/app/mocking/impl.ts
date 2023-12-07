@@ -805,7 +805,7 @@ export class Mock implements IMock {
         };
         payload = {
           data,
-          body: fromHarContent(entry.response.content),
+          body: fromHarContent(this.saveStringBodies, entry.response.content),
         };
         break;
       }

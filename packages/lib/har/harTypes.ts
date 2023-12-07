@@ -353,7 +353,7 @@ export interface HarFormatContent {
    *
    * The response body can be encoded in base64 if this is specified in the {@link HarFormatContent.encoding | encoding} field.
    */
-  text?: string;
+  text?: any;
 
   /**
    * Encoding used for the {@link HarFormatContent.text | text} field, such as "base64".
