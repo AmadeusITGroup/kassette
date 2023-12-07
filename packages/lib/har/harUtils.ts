@@ -65,7 +65,7 @@ export const toHarContentBase64 = (body: Buffer, mimeType?: string): HarFormatCo
 });
 
 export const toHarContent = (
-  saveAsString: boolean,
+  parseMimeTypesAsJson: string[],
   body: string | Buffer | null,
   mimeType?: string,
 ): HarFormatContent => {
@@ -74,12 +74,8 @@ export const toHarContent = (
       return toHarContentBase64(body, mimeType);
     }
 
-    if (mimeType === 'application/json' && !saveAsString) {
-      return {
-        mimeType: mimeType ?? '',
-        size: body?.length ?? 0,
-        text: JSON.parse(body.toString('binary')),
-      };
+    if (mimeType && parseMimeTypesAsJson.includes(mimeType)) {
+      return { ...checkMimeTypeListAndParseJson(body, mimeType), size: body?.length ?? 0 };
     }
 
     return {
@@ -95,27 +91,41 @@ export const toHarContent = (
   };
 };
 
-export const fromHarContent = (saveAsString: boolean, content?: HarFormatContent) => {
+export const fromHarContent = (content?: HarFormatContent) => {
   if (content?.text) {
-    if (!saveAsString) {
-      return content.text;
-    }
     return Buffer.from(content.text, content.encoding === 'base64' ? 'base64' : 'binary');
+  }
+  if (content?.json) {
+    return content?.json;
   }
   return Buffer.alloc(0);
 };
 
+const checkMimeTypeListAndParseJson = (
+  body: string | Buffer,
+  mimeType?: string,
+): HarFormatPostData => {
+  try {
+    return {
+      mimeType: mimeType,
+      json: JSON.parse(body.toString('utf-8')),
+    };
+  } catch (error) {
+    return {
+      mimeType: mimeType,
+      text: body.toString('binary'),
+    };
+  }
+};
+
 export const toHarPostData = (
-  saveAsString: boolean,
+  parseMimeTypesAsJson: string[],
   body?: string | Buffer,
   mimeType?: string,
 ): HarFormatPostData | undefined => {
   if (body && body.length > 0) {
-    if (mimeType === 'application/json' && !saveAsString) {
-      return {
-        mimeType: mimeType,
-        text: JSON.parse(body.toString('binary')),
-      };
+    if (mimeType && parseMimeTypesAsJson.includes(mimeType)) {
+      return checkMimeTypeListAndParseJson(body, mimeType);
     }
     return {
       mimeType: mimeType,

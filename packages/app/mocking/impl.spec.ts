@@ -146,8 +146,8 @@ describe('mocking', () => {
       });
     });
 
-    describe('saveStringBodies', () => {
-      it('should work', () => {
+    describe('harMimeTypesParseJson', () => {
+      it('should return default and be able to be overridden', () => {
         const mock = new Mock({
           options: {
             root: 'root',
@@ -159,9 +159,8 @@ describe('mocking', () => {
           },
         } as any);
 
-        expect(mock.saveStringBodies).toBe(true);
-        mock.setSaveStringBodies(false);
-        expect(mock.saveStringBodies).toBe(false);
+        mock.setHarMimeTypesParseJson(['application/json']);
+        expect(mock.harMimeTypesParseJson).toEqual(['application/json']);
       });
     });
   });

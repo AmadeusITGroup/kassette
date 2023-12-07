@@ -89,8 +89,8 @@ describe('harUtils', () => {
 
   describe('content', () => {
     it('should work with empty content', () => {
-      expect(toHarContent(true, null)).toEqual({ mimeType: '', size: 0, text: '' });
-      const emptyBuffer = fromHarContent(true, {});
+      expect(toHarContent([], null)).toEqual({ mimeType: '', size: 0, text: '' });
+      const emptyBuffer = fromHarContent({});
       expect(Buffer.isBuffer(emptyBuffer)).toBeTruthy();
       expect(emptyBuffer.length).toBe(0);
     });
@@ -101,19 +101,19 @@ describe('harUtils', () => {
         'hex',
       ).toString('base64');
       const buffer = Buffer.from(content, 'base64');
-      expect(toHarContent(true, buffer, 'application/octet-stream')).toEqual({
+      expect(toHarContent([], buffer, 'application/octet-stream')).toEqual({
         mimeType: 'application/octet-stream',
         size: 25,
         encoding: 'base64',
         text: content,
       });
-      expect(toHarContent(true, buffer)).toEqual({
+      expect(toHarContent([], buffer)).toEqual({
         mimeType: '',
         size: 25,
         encoding: 'base64',
         text: content,
       });
-      const outputBuffer = fromHarContent(true, {
+      const outputBuffer = fromHarContent({
         mimeType: 'application/octet-stream',
         size: 25,
         encoding: 'base64',
@@ -125,27 +125,27 @@ describe('harUtils', () => {
     it('should work with text content', () => {
       const content = 'Hello!';
       const buffer = Buffer.from(content, 'utf8');
-      expect(toHarContent(true, buffer, 'text/plain')).toEqual({
+      expect(toHarContent([], buffer, 'text/plain')).toEqual({
         mimeType: 'text/plain',
         size: 6,
         text: content,
       });
-      expect(toHarContent(true, buffer)).toEqual({
+      expect(toHarContent([], buffer)).toEqual({
         mimeType: '',
         size: 6,
         text: content,
       });
-      expect(toHarContent(true, content, 'text/plain')).toEqual({
+      expect(toHarContent([], content, 'text/plain')).toEqual({
         mimeType: 'text/plain',
         size: 6,
         text: content,
       });
-      expect(toHarContent(true, content)).toEqual({
+      expect(toHarContent([], content)).toEqual({
         mimeType: '',
         size: 6,
         text: content,
       });
-      const outputBuffer = fromHarContent(true, {
+      const outputBuffer = fromHarContent({
         mimeType: 'text/plain',
         size: 6,
         text: content,
@@ -156,17 +156,17 @@ describe('harUtils', () => {
     it('should parse json data', () => {
       const content = '{"test": "hello"}';
       const buffer = Buffer.from(content, 'utf8');
-      expect(toHarContent(false, buffer, 'application/json')).toEqual({
+      expect(toHarContent(['application/json'], buffer, 'application/json')).toEqual({
         mimeType: 'application/json',
         size: 17,
-        text: { test: 'hello' },
+        json: { test: 'hello' },
       });
     });
 
     it('should not parse json data when mimeType is not application/json', () => {
       const content = '{"test": "hello"}';
       const buffer = Buffer.from(content, 'utf8');
-      expect(toHarContent(false, buffer, 'text/plain')).toEqual({
+      expect(toHarContent(['application/json'], buffer, 'text/plain')).toEqual({
         mimeType: 'text/plain',
         size: 17,
         text: content,
@@ -176,7 +176,7 @@ describe('harUtils', () => {
     it('should not parse json data when saveAsString is true', () => {
       const content = '{"test": "hello"}';
       const buffer = Buffer.from(content, 'utf8');
-      expect(toHarContent(true, buffer, 'text/plain')).toEqual({
+      expect(toHarContent([], buffer, 'text/plain')).toEqual({
         mimeType: 'text/plain',
         size: 17,
         text: content,
@@ -186,12 +186,12 @@ describe('harUtils', () => {
 
   describe('postData', () => {
     it('should work with no data', () => {
-      expect(toHarPostData(true, Buffer.alloc(0))).toBe(undefined);
+      expect(toHarPostData([], Buffer.alloc(0))).toBe(undefined);
     });
 
     it('should work with binary data', () => {
       const buffer = Buffer.from('000102030405060708090a0b0c0d0e0f414243444546474849', 'hex');
-      expect(toHarPostData(true, buffer, 'application/octet-stream')).toEqual({
+      expect(toHarPostData([], buffer, 'application/octet-stream')).toEqual({
         mimeType: 'application/octet-stream',
         text: buffer.toString('binary'),
       });
@@ -199,11 +199,11 @@ describe('harUtils', () => {
 
     it('should work with text data', () => {
       const content = 'Hello!';
-      expect(toHarPostData(true, Buffer.from(content, 'utf8'), 'text/plain')).toEqual({
+      expect(toHarPostData([], Buffer.from(content, 'utf8'), 'text/plain')).toEqual({
         mimeType: 'text/plain',
         text: content,
       });
-      expect(toHarPostData(true, content, 'text/plain')).toEqual({
+      expect(toHarPostData([], content, 'text/plain')).toEqual({
         mimeType: 'text/plain',
         text: content,
       });
@@ -211,49 +211,34 @@ describe('harUtils', () => {
 
     it('should parse json data', () => {
       const content = '{"test": "hello"}';
-      expect(toHarPostData(false, Buffer.from(content, 'utf8'), 'application/json')).toEqual({
+      expect(
+        toHarPostData(['application/json'], Buffer.from(content, 'utf8'), 'application/json'),
+      ).toEqual({
         mimeType: 'application/json',
-        text: { test: 'hello' },
+        json: { test: 'hello' },
       });
     });
 
     it('should not parse json data when mimeType is not application/json', () => {
       const content = '{"test": "hello"}';
-      expect(toHarPostData(false, Buffer.from(content, 'utf8'), 'text/plain')).toEqual({
+      expect(
+        toHarPostData(['application/json'], Buffer.from(content, 'utf8'), 'text/plain'),
+      ).toEqual({
         mimeType: 'text/plain',
-        text: content,
-      });
-    });
-
-    it('should not parse json data when saveAsString is true', () => {
-      const content = '{"test": "hello"}';
-      expect(toHarPostData(true, Buffer.from(content, 'utf8'), 'application/json')).toEqual({
-        mimeType: 'application/json',
         text: content,
       });
     });
   });
 
   describe('fromHarContent', () => {
-    it('should return content if saveStringBodies is false', () => {
+    it('should return content if json is set', () => {
       const content = { test: 'hello' };
-      const returned = fromHarContent(false, {
+      const returned = fromHarContent({
         mimeType: 'application/json',
         size: 17,
-        text: content,
+        json: content,
       });
       expect(returned).toEqual(content);
-    });
-
-    it('should convert from a buffer if saveStringBodies is true ', () => {
-      const content = '{"test": "hello"}';
-      const buffer = Buffer.from(content, 'utf8');
-      const returned = fromHarContent(true, {
-        mimeType: 'application/json',
-        size: 17,
-        text: buffer,
-      });
-      expect(buffer.equals(returned)).toBeTruthy();
     });
   });
 

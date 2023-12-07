@@ -323,6 +323,11 @@ export interface HarFormatPostData {
    * Any comment as a string. This is not used by kassette.
    */
   comment?: string;
+
+  /**
+   * Response body saved as an object.
+   */
+  json?: any;
 }
 
 /**
@@ -353,7 +358,7 @@ export interface HarFormatContent {
    *
    * The response body can be encoded in base64 if this is specified in the {@link HarFormatContent.encoding | encoding} field.
    */
-  text?: any;
+  text?: string;
 
   /**
    * Encoding used for the {@link HarFormatContent.text | text} field, such as "base64".
@@ -364,6 +369,11 @@ export interface HarFormatContent {
    * Any comment as a string. This is not used by kassette.
    */
   comment?: string;
+
+  /**
+   * Response body saved as an object.
+   */
+  json?: any;
 }
 
 /**

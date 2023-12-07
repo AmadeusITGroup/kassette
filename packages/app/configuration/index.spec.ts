@@ -118,6 +118,7 @@ describe('configuration', () => {
       expect(configuration.onExit.value()).toBeUndefined();
       expect(configuration.hook.value(undefined as any)).toBeUndefined();
       expect(configuration.console.value).toBe(console);
+      expect(configuration.harMimeTypesParseJson.value).toEqual([]);
     });
   });
 });

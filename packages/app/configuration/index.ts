@@ -101,6 +101,12 @@ export async function getConfiguration({
       apiValue: apiConfiguration.mocksHarKeyManager,
       defaultValue: defaultHarKeyManager,
     }),
+    harMimeTypesParseJson: buildProperty<Array<string>>({
+      cliValue: cliConfiguration.harMimeTypesParseJson,
+      fileValue: fileConfiguration.harMimeTypesParseJson,
+      apiValue: apiConfiguration.harMimeTypesParseJson,
+      defaultValue: [],
+    }),
     mode: buildProperty<Mode>({
       cliValue: cliConfiguration.mode,
       fileValue: fileConfiguration.mode,

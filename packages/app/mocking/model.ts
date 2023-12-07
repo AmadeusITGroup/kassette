@@ -177,18 +177,18 @@ export interface IMock {
 
   /**
    * Used only when the {@link IMock.mocksFormat|mocks format} is 'har',
-   * specifies if the request and response bodies should be saved as JSON objects or as strings.
+   * specifies a list of mime types that will attempt to parse the request/response body as JSON.
    * This will only be applicable to request bodies if {@link IMock.saveInputRequestBody|saveInputRequestBody} is set to true
-   * Default value will be true and will only be overridden by {@link IMock.setSaveStringBodies|setSaveStringBodies}
+   * Default value will be [] and will only be overridden by {@link IMock.setHarSaveParsedJsonBody|setHarSaveParsedJsonBody}
    */
-  readonly saveStringBodies: boolean;
+  readonly harMimeTypesParseJson: string[];
 
   /**
-   * Sets the {@link IMock.saveBodiesAsJson|saveBodiesAsJson} value.
+   * Sets the {@link IMock.harMimeTypesParseJson|harMimeTypesParseJson} value.
    *
-   * @param value - whether the request and response bodies should be saved as strings
+   * @param value - The mime types that should attempt to parse the body as json
    */
-  setSaveStringBodies(value: boolean): void;
+  setHarMimeTypesParseJson(value: string[]): void;
 
   /**
    * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
