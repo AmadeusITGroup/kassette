@@ -142,9 +142,7 @@ export class Mock implements IMock {
   });
 
   private _harMimeTypesParseJson = new UserProperty<Array<string>>({
-    getDefaultInput: () => {
-      return this.options.userConfiguration.harMimeTypesParseJson.value;
-    },
+    getDefaultInput: () => this.options.userConfiguration.harMimeTypesParseJson.value,
   });
 
   private _mockHarKey = new UserProperty<NonSanitizedArray<string>, string | undefined>({
