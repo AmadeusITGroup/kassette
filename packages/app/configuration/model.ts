@@ -342,7 +342,7 @@ export interface CLIConfigurationSpec {
    * Used only when the {@link IMock.mocksFormat|mocks format} is 'har',
    * specifies a list of mime types that will attempt to parse the request/response body as JSON.
    * This will only be applicable to request bodies if {@link IMock.saveInputRequestBody|saveInputRequestBody} is set to true
-   * Default value will be [] and will only be overridden by {@link IMock.setHarSaveParsedJsonBody|setHarSaveParsedJsonBody}
+   * Default value will be [] and will only be overridden by {@link IMock.setHarMimeTypesParseJson|setHarMimeTypesParseJson}
    */
   readonly harMimeTypesParseJson?: string[];
 }
