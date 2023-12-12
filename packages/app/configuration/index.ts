@@ -102,7 +102,7 @@ export async function getConfiguration({
       defaultValue: defaultHarKeyManager,
     }),
     harMimeTypesParseJson: buildProperty<Array<string>>({
-      cliValue: [],
+      cliValue: null,
       fileValue: fileConfiguration.harMimeTypesParseJson,
       apiValue: apiConfiguration.harMimeTypesParseJson,
       defaultValue: [],
