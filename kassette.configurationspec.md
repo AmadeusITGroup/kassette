@@ -18,6 +18,7 @@ export interface ConfigurationSpec extends CLIConfigurationSpec
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [console?](./kassette.configurationspec.console.md) | <code>readonly</code> | [ConsoleSpec](./kassette.consolespec.md) | _(Optional)_ Custom implementation of the [ConsoleSpec](./kassette.consolespec.md) interface, with methods [log](./kassette.consolespec.log.md) and [error](./kassette.consolespec.error.md)<!-- -->, each receiving one single argument of any type. Useful to capture the logs of the application. |
+|  [harMimeTypesParseJson?](./kassette.configurationspec.harmimetypesparsejson.md) | <code>readonly</code> | string\[\] | _(Optional)_ Used only when the [mocks format](./kassette.imock.mocksformat.md) is 'har', specifies a list of mime types that will attempt to parse the request/response body as JSON. If the list includes an empty string: '' and there is no mimeType set in the request, it will attempt to parse the body as JSON. This will only be applicable to request bodies if [saveInputRequestBody](./kassette.imock.saveinputrequestbody.md) is set to true Default value will be \[\] and will only be overridden by [setHarMimeTypesParseJson](./kassette.imock.setharmimetypesparsejson.md) |
 |  [mocksHarKeyManager?](./kassette.configurationspec.mocksharkeymanager.md) | <code>readonly</code> | [HarKeyManager](./kassette.harkeymanager.md) | _(Optional)_ Function called to get or set the key of a mock in a har file, as explained in [HarKeyManager](./kassette.harkeymanager.md)<!-- -->. |
 
 ## Methods
