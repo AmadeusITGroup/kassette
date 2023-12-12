@@ -120,7 +120,7 @@ describe('harUtils', () => {
         size: 25,
         encoding: 'base64',
         text: content,
-      }) as Buffer;
+      });
       expect(buffer.equals(outputBuffer)).toBeTruthy();
     });
 
@@ -151,7 +151,7 @@ describe('harUtils', () => {
         mimeType: 'text/plain',
         size: 6,
         text: content,
-      }) as Buffer;
+      });
       expect(buffer.equals(outputBuffer)).toBeTruthy();
     });
 
