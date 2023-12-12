@@ -96,7 +96,7 @@ export const fromHarContent = (content?: HarFormatContent) => {
   return Buffer.alloc(0);
 };
 
-const checkMimeTypeListAndParseBody = (
+export const checkMimeTypeListAndParseBody = (
   parseMimeTypesAsJson: string[],
   body: string | Buffer,
   mimeType?: string,

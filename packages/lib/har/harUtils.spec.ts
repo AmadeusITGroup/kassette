@@ -9,6 +9,7 @@ import {
   toHarHttpVersion,
   toHarPostData,
   toHarQueryString,
+  checkMimeTypeListAndParseBody,
 } from './harUtils';
 
 describe('harUtils', () => {
@@ -241,6 +242,30 @@ describe('harUtils', () => {
         json: content,
       });
       expect(buffer.equals(returned)).toBeTruthy();
+    });
+  });
+
+  describe('checkMimeTypeListAndParseBody', () => {
+    it('should return text if cant parse JSON', () => {
+      const content = 'Hello!';
+      const returned = checkMimeTypeListAndParseBody(
+        ['application/json'],
+        content,
+        'application/json',
+      );
+      expect(returned).toEqual({
+        mimeType: 'application/json',
+        text: content,
+      });
+    });
+
+    it('should parse json if no mimeType is passed and mimeTypeList contains empty string', () => {
+      const content = '{"test": "hello"}';
+      const returned = checkMimeTypeListAndParseBody([''], content);
+      expect(returned).toEqual({
+        mimeType: undefined,
+        json: { test: 'hello' },
+      });
     });
   });
 
