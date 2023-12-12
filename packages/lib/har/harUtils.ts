@@ -3,6 +3,7 @@ import { appendHeader, headersContainer } from '../headers';
 import { extension } from 'mime-types';
 import { isBinary } from 'istextorbinary';
 import { IncomingHttpHeaders } from 'http';
+import { stringifyPretty } from '../json';
 
 export const emptyHar = (): HarFormat => ({
   log: {
@@ -65,23 +66,17 @@ export const toHarContentBase64 = (body: Buffer, mimeType?: string): HarFormatCo
 });
 
 export const toHarContent = (
-  parseMimeTypesAsJson: string[],
   body: string | Buffer | null,
   mimeType?: string,
+  parseMimeTypesAsJson: string[] = [],
 ): HarFormatContent => {
   if (Buffer.isBuffer(body)) {
     if (isBinary(mimeType ? `file.${extension(mimeType)}` : null, body)) {
       return toHarContentBase64(body, mimeType);
     }
-
-    if (mimeType && parseMimeTypesAsJson.includes(mimeType)) {
-      return { ...checkMimeTypeListAndParseJson(body, mimeType), size: body?.length ?? 0 };
-    }
-
     return {
-      mimeType: mimeType ?? '',
+      ...checkMimeTypeListAndParseBody(parseMimeTypesAsJson, body, mimeType),
       size: body?.length ?? 0,
-      text: body.toString('binary'),
     };
   }
   return {
@@ -92,45 +87,47 @@ export const toHarContent = (
 };
 
 export const fromHarContent = (content?: HarFormatContent) => {
-  if (content?.text) {
+  if (content?.text !== undefined) {
     return Buffer.from(content.text, content.encoding === 'base64' ? 'base64' : 'binary');
   }
-  if (content?.json) {
-    return content?.json;
+  if (content?.json !== undefined) {
+    return Buffer.from(stringifyPretty(content.json), 'utf8');
   }
   return Buffer.alloc(0);
 };
 
-const checkMimeTypeListAndParseJson = (
+const checkMimeTypeListAndParseBody = (
+  parseMimeTypesAsJson: string[],
   body: string | Buffer,
   mimeType?: string,
 ): HarFormatPostData => {
-  try {
-    return {
-      mimeType: mimeType,
-      json: JSON.parse(body.toString('utf-8')),
-    };
-  } catch (error) {
-    return {
-      mimeType: mimeType,
-      text: body.toString('binary'),
-    };
+  const defaultTextReturn = {
+    mimeType: mimeType ?? '',
+    text: body.toString('binary'),
+  };
+  if (
+    (mimeType && parseMimeTypesAsJson.includes(mimeType)) ||
+    (!mimeType && parseMimeTypesAsJson.includes(''))
+  ) {
+    try {
+      return {
+        mimeType,
+        json: JSON.parse(body.toString('utf-8')),
+      };
+    } catch (error) {
+      return defaultTextReturn;
+    }
   }
+  return defaultTextReturn;
 };
 
 export const toHarPostData = (
-  parseMimeTypesAsJson: string[],
   body?: string | Buffer,
   mimeType?: string,
+  parseMimeTypesAsJson: string[] = [],
 ): HarFormatPostData | undefined => {
   if (body && body.length > 0) {
-    if (mimeType && parseMimeTypesAsJson.includes(mimeType)) {
-      return checkMimeTypeListAndParseJson(body, mimeType);
-    }
-    return {
-      mimeType: mimeType,
-      text: body.toString('binary'),
-    };
+    return checkMimeTypeListAndParseBody(parseMimeTypesAsJson, body, mimeType);
   }
   return undefined;
 };

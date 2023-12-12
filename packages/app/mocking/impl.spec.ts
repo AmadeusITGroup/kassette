@@ -147,7 +147,7 @@ describe('mocking', () => {
     });
 
     describe('harMimeTypesParseJson', () => {
-      it('should return default and be able to be overridden', () => {
+      it('should be able to be overridden', () => {
         const mock = new Mock({
           options: {
             root: 'root',
@@ -158,7 +158,6 @@ describe('mocking', () => {
             method: 'post',
           },
         } as any);
-
         mock.setHarMimeTypesParseJson(['application/json']);
         expect(mock.harMimeTypesParseJson).toEqual(['application/json']);
       });

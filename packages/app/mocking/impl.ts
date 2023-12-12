@@ -576,9 +576,9 @@ export class Mock implements IMock {
   @CachedProperty()
   private get _harFmtPostData(): HarFormatPostData | undefined {
     return toHarPostData(
-      this.harMimeTypesParseJson,
       this.request.body,
       this.request.headers['content-type'],
+      this.harMimeTypesParseJson,
     );
   }
 
@@ -669,7 +669,7 @@ export class Mock implements IMock {
       message: CONF.messages.writingHarFile,
       data: this._harFmtFile.path,
     });
-    const saveParsedJsonBody = this.harMimeTypesParseJson;
+    const harMimeTypesParseJson = this.harMimeTypesParseJson;
     const entry: HarFormatEntry = {
       _kassetteChecksumContent:
         this.saveChecksumContent && this.checksumContent ? this.checksumContent : undefined,
@@ -688,7 +688,7 @@ export class Mock implements IMock {
         cookies: [], // cookies parsing is not implemented
         headersSize: -1,
         bodySize: body?.length ?? 0,
-        content: toHarContent(saveParsedJsonBody, body, data.headers?.['content-type']),
+        content: toHarContent(body, data.headers?.['content-type'], harMimeTypesParseJson),
       },
     };
     if (this.saveInputRequestData) {
@@ -718,9 +718,9 @@ export class Mock implements IMock {
           entry._kassetteForwardedRequest = {};
         }
         entry._kassetteForwardedRequest.postData = toHarPostData(
-          this.harMimeTypesParseJson,
           payload.requestOptions.body,
           payload.requestOptions.headers['content-type'],
+          this.harMimeTypesParseJson,
         );
       }
     }
