@@ -101,10 +101,6 @@ export const checkMimeTypeListAndParseBody = (
   body: string | Buffer,
   mimeType?: string,
 ): HarFormatPostData => {
-  const defaultTextReturn = {
-    mimeType: mimeType ?? '',
-    text: body.toString('binary'),
-  };
   if (
     (mimeType && parseMimeTypesAsJson.includes(mimeType)) ||
     (!mimeType && parseMimeTypesAsJson.includes(''))
@@ -114,11 +110,12 @@ export const checkMimeTypeListAndParseBody = (
         mimeType,
         json: JSON.parse(body.toString('utf-8')),
       };
-    } catch (error) {
-      return defaultTextReturn;
-    }
+    } catch (error) {}
   }
-  return defaultTextReturn;
+  return {
+    mimeType: mimeType ?? '',
+    text: body.toString('binary'),
+  };
 };
 
 export const toHarPostData = (
