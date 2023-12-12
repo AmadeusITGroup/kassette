@@ -140,6 +140,11 @@ export class Mock implements IMock {
   private _mocksHarKeyManager = new UserProperty<HarKeyManager>({
     getDefaultInput: () => this.options.userConfiguration.mocksHarKeyManager.value,
   });
+
+  private _harMimeTypesParseJson = new UserProperty<Array<string>>({
+    getDefaultInput: () => this.options.userConfiguration.harMimeTypesParseJson.value,
+  });
+
   private _mockHarKey = new UserProperty<NonSanitizedArray<string>, string | undefined>({
     transform: ({ inputOrigin, input }) =>
       inputOrigin === 'none' ? this.defaultMockHarKey : joinPath(input),
@@ -333,6 +338,13 @@ export class Mock implements IMock {
   }
   public setSkipLog(value: boolean) {
     this._setUserProperty(this._skipLog, value);
+  }
+
+  public get harMimeTypesParseJson(): string[] {
+    return this._harMimeTypesParseJson.output;
+  }
+  public setHarMimeTypesParseJson(value: string[]): void {
+    this._setUserProperty(this._harMimeTypesParseJson, value);
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -563,7 +575,11 @@ export class Mock implements IMock {
 
   @CachedProperty()
   private get _harFmtPostData(): HarFormatPostData | undefined {
-    return toHarPostData(this.request.body, this.request.headers['content-type']);
+    return toHarPostData(
+      this.request.body,
+      this.request.headers['content-type'],
+      this.harMimeTypesParseJson,
+    );
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -653,6 +669,7 @@ export class Mock implements IMock {
       message: CONF.messages.writingHarFile,
       data: this._harFmtFile.path,
     });
+    const harMimeTypesParseJson = this.harMimeTypesParseJson;
     const entry: HarFormatEntry = {
       _kassetteChecksumContent:
         this.saveChecksumContent && this.checksumContent ? this.checksumContent : undefined,
@@ -671,7 +688,7 @@ export class Mock implements IMock {
         cookies: [], // cookies parsing is not implemented
         headersSize: -1,
         bodySize: body?.length ?? 0,
-        content: toHarContent(body, data.headers?.['content-type']),
+        content: toHarContent(body, data.headers?.['content-type'], harMimeTypesParseJson),
       },
     };
     if (this.saveInputRequestData) {
@@ -703,6 +720,7 @@ export class Mock implements IMock {
         entry._kassetteForwardedRequest.postData = toHarPostData(
           payload.requestOptions.body,
           payload.requestOptions.headers['content-type'],
+          this.harMimeTypesParseJson,
         );
       }
     }

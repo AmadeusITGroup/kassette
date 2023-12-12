@@ -393,6 +393,15 @@ export interface ConfigurationSpec extends CLIConfigurationSpec {
    * Useful to capture the logs of the application.
    */
   readonly console?: ConsoleSpec;
+
+  /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har',
+   * specifies a list of mime types that will attempt to parse the request/response body as JSON.
+   * If the list includes an empty string: '' and there is no mimeType set in the request, it will attempt to parse the body as JSON.
+   * This will only be applicable to request bodies if {@link IMock.saveInputRequestBody|saveInputRequestBody} is set to true
+   * Default value will be [] and will only be overridden by {@link IMock.setHarMimeTypesParseJson|setHarMimeTypesParseJson}
+   */
+  readonly harMimeTypesParseJson?: string[];
 }
 
 ////////////////////////////////////////////////////////////////////////////////

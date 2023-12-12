@@ -176,6 +176,21 @@ export interface IMock {
   setMocksHarKeyManager(value: HarKeyManager | null): void;
 
   /**
+   * Used only when the {@link IMock.mocksFormat|mocks format} is 'har',
+   * specifies a list of mime types that will attempt to parse the request/response body as JSON.
+   * This will only be applicable to request bodies if {@link IMock.saveInputRequestBody|saveInputRequestBody} is set to true
+   * Default value will be [] and will only be overridden by {@link IMock.setHarMimeTypesParseJson|setHarMimeTypesParseJson}
+   */
+  readonly harMimeTypesParseJson: string[];
+
+  /**
+   * Sets the {@link IMock.harMimeTypesParseJson|harMimeTypesParseJson} value.
+   *
+   * @param value - The mime types that should attempt to parse the body as json
+   */
+  setHarMimeTypesParseJson(value: string[]): void;
+
+  /**
    * Used only when the {@link IMock.mocksFormat|mocks format} is 'folder', specifies the local path of the mock, relative to {@link IMock.mocksFolder|mocksFolder}.
    * It is either the one set by the user through {@link IMock.setLocalPath|setLocalPath} or {@link IMock.defaultLocalPath|defaultLocalPath}.
    */

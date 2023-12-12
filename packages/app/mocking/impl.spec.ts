@@ -145,5 +145,22 @@ describe('mocking', () => {
         expect(response.status).toEqual(status);
       });
     });
+
+    describe('harMimeTypesParseJson', () => {
+      it('should be able to be overridden', () => {
+        const mock = new Mock({
+          options: {
+            root: 'root',
+            userConfiguration: {},
+          },
+          request: {
+            url: { pathname: '/url/path' },
+            method: 'post',
+          },
+        } as any);
+        mock.setHarMimeTypesParseJson(['application/json']);
+        expect(mock.harMimeTypesParseJson).toEqual(['application/json']);
+      });
+    });
   });
 });

@@ -1,3 +1,4 @@
+import { stringifyPretty } from '../json';
 import {
   fromHarContent,
   fromHarHeaders,
@@ -8,6 +9,7 @@ import {
   toHarHttpVersion,
   toHarPostData,
   toHarQueryString,
+  checkMimeTypeListAndParseBody,
 } from './harUtils';
 
 describe('harUtils', () => {
@@ -152,6 +154,36 @@ describe('harUtils', () => {
       });
       expect(buffer.equals(outputBuffer)).toBeTruthy();
     });
+
+    it('should parse json data', () => {
+      const content = '{"test": "hello"}';
+      const buffer = Buffer.from(content, 'utf8');
+      expect(toHarContent(buffer, 'application/json', ['application/json'])).toEqual({
+        mimeType: 'application/json',
+        size: 17,
+        json: { test: 'hello' },
+      });
+    });
+
+    it('should not parse json data when mimeType is not application/json', () => {
+      const content = '{"test": "hello"}';
+      const buffer = Buffer.from(content, 'utf8');
+      expect(toHarContent(buffer, 'text/plain', ['application/json'])).toEqual({
+        mimeType: 'text/plain',
+        size: 17,
+        text: content,
+      });
+    });
+
+    it('should not parse json data when parseMimeTypesAsJson is empty', () => {
+      const content = '{"test": "hello"}';
+      const buffer = Buffer.from(content, 'utf8');
+      expect(toHarContent(buffer, 'text/plain')).toEqual({
+        mimeType: 'text/plain',
+        size: 17,
+        text: content,
+      });
+    });
   });
 
   describe('postData', () => {
@@ -176,6 +208,63 @@ describe('harUtils', () => {
       expect(toHarPostData(content, 'text/plain')).toEqual({
         mimeType: 'text/plain',
         text: content,
+      });
+    });
+
+    it('should parse json data', () => {
+      const content = '{"test": "hello"}';
+      expect(
+        toHarPostData(Buffer.from(content, 'utf8'), 'application/json', ['application/json']),
+      ).toEqual({
+        mimeType: 'application/json',
+        json: { test: 'hello' },
+      });
+    });
+
+    it('should not parse json data when mimeType is not application/json', () => {
+      const content = '{"test": "hello"}';
+      expect(
+        toHarPostData(Buffer.from(content, 'utf8'), 'text/plain', ['application/json']),
+      ).toEqual({
+        mimeType: 'text/plain',
+        text: content,
+      });
+    });
+  });
+
+  describe('fromHarContent', () => {
+    it('should return content if json is set', () => {
+      const content = { test: 'hello' };
+      const buffer = Buffer.from(stringifyPretty(content), 'utf8');
+      const returned = fromHarContent({
+        mimeType: 'application/json',
+        size: 17,
+        json: content,
+      });
+      expect(buffer.equals(returned)).toBeTruthy();
+    });
+  });
+
+  describe('checkMimeTypeListAndParseBody', () => {
+    it('should return text if cant parse JSON', () => {
+      const content = 'Hello!';
+      const returned = checkMimeTypeListAndParseBody(
+        ['application/json'],
+        content,
+        'application/json',
+      );
+      expect(returned).toEqual({
+        mimeType: 'application/json',
+        text: content,
+      });
+    });
+
+    it('should parse json if no mimeType is passed and mimeTypeList contains empty string', () => {
+      const content = '{"test": "hello"}';
+      const returned = checkMimeTypeListAndParseBody([''], content);
+      expect(returned).toEqual({
+        mimeType: undefined,
+        json: { test: 'hello' },
       });
     });
   });

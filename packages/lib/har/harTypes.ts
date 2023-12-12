@@ -323,6 +323,11 @@ export interface HarFormatPostData {
    * Any comment as a string. This is not used by kassette.
    */
   comment?: string;
+
+  /**
+   * Response body saved as an object.
+   */
+  json?: any;
 }
 
 /**
@@ -364,6 +369,11 @@ export interface HarFormatContent {
    * Any comment as a string. This is not used by kassette.
    */
   comment?: string;
+
+  /**
+   * Response body saved as an object.
+   */
+  json?: any;
 }
 
 /**

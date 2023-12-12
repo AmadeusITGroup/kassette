@@ -115,6 +115,7 @@ describe('server configuration', () => {
           saveInputRequestBody: { value: true, origin: 'default' },
           saveForwardedRequestData: { value: true, origin: 'default' },
           saveForwardedRequestBody: { value: true, origin: 'default' },
+          harMimeTypesParseJson: { value: [], origin: 'default' },
         },
       });
 
@@ -183,6 +184,7 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
           saveInputRequestBody: { value: true, origin: 'default' },
           saveForwardedRequestData: { value: true, origin: 'default' },
           saveForwardedRequestBody: { value: true, origin: 'default' },
+          harMimeTypesParseJson: { value: [], origin: 'default' },
         },
       });
 
