@@ -5,7 +5,14 @@ import { RecursiveArray } from '../../lib/array';
 
 // ------------------------------------------------------------------------- app
 
-import { IMergedConfiguration, Mode, Delay, MocksFormat } from '../configuration';
+import {
+  IMergedConfiguration,
+  Mode,
+  Delay,
+  MocksFormat,
+  ConfigurationSpec,
+  CLIConfigurationSpec,
+} from '../configuration';
 
 import { Status, IFetchedRequest, IResponse, RequestPayload } from '../server/model';
 

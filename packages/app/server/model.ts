@@ -1,6 +1,12 @@
 // ------------------------------------------------------------------------- app
 
-import { ConfigurationSpec, CLIConfigurationSpec, IMergedConfiguration } from '../configuration';
+import {
+  ConfigurationSpec,
+  CLIConfigurationSpec,
+  IMergedConfiguration,
+  IConfigurationFile,
+  GetConfigurationProps,
+} from '../configuration';
 
 ////////////////////////////////////////////////////////////////////////////////
 //

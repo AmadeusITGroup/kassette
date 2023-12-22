@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'http';
 import { ServerHttp2Stream, Http2ServerRequest } from 'http2';
 import { Socket } from 'net';
-import { ProxyConnectMode } from '../../configuration';
+import { ProxyConnectMode, ConfigurationSpec, CLIConfigurationSpec } from '../../configuration';
 import { Connection } from '../request';
 
 /**

@@ -15,7 +15,7 @@ import { readAll } from '../../lib/stream';
 
 import { createGlobalLogger, logInfo, logSeparator, getConsole, logError } from '../logger';
 
-import { IMergedConfiguration } from '../configuration';
+import { IMergedConfiguration, ConfigurationSpec } from '../configuration';
 
 import { Mock } from '../mocking';
 

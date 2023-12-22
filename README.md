@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/AmadeusITGroup/kassette/branch/master/graph/badge.svg)](https://codecov.io/gh/AmadeusITGroup/kassette)
 
 <p align="center">
-  <img src="doc/assets/images/kassette-logo.png" alt="kassette-logo" width="200px" height="90px"/>
+  <img src="https://raw.githubusercontent.com/AmadeusITGroup/kassette/master/doc/assets/images/kassette-logo.png" alt="kassette-logo" width="200px" height="90px"/>
   <br>
   <i>kassette is a development server, used mainly for testing, which proxies requests and
     <br>is able to easily manage local mocks.</i>
@@ -46,7 +46,7 @@ With this configuration, input requests targeting URLs starting with `/api/` wil
 
 Note that kassette can also be configured to run as a browser proxy, reading the target URL from the request, and intercepting HTTPS communications.
 
-Check [_Getting started_](./doc/getting-started.md) to learn more.
+Check [_Getting started_](https://github.com/AmadeusITGroup/kassette/blob/master/doc/getting-started.md) to learn more.
 
 ## Main features
 
@@ -85,8 +85,8 @@ If you want to install it locally though, you need to add one more step. You won
 
 ## User documentation
 
-It is advised to start with the [_Getting started_](./doc/getting-started.md) article which describes a few practical usage examples, then check the [configuration guide](./doc/configuration.md) and the [API guide](./doc/api.md). The [API reference](https://amadeusitgroup.github.io/kassette/kassette.html) is also available.
+It is advised to start with the [_Getting started_](https://github.com/AmadeusITGroup/kassette/blob/master/doc/getting-started.md) article which describes a few practical usage examples, then check the [configuration guide](https://github.com/AmadeusITGroup/kassette/blob/master/doc/configuration.md) and the [API guide](https://github.com/AmadeusITGroup/kassette/blob/master/doc/api.md). The [API reference](https://amadeusitgroup.github.io/kassette/) is also available.
 
 ## Developing / Contributing
 
-See [developer guide](./DEVELOPER.md) for details.
+See [developer guide](https://github.com/AmadeusITGroup/kassette/blob/master/DEVELOPER.md) for details.

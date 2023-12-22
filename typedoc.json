@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["packages/index.ts"],
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "out": "build/apidoc",
+  "readme": "README.md",
+  "treatValidationWarningsAsErrors": true,
+  "tsconfig": "packages/tsconfig.dts.json",
+  "visibilityFilters": {}
+}

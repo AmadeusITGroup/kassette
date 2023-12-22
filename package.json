@@ -11,9 +11,9 @@
     "ut": "jest",
     "ut:watch": "jest --watch",
     "ut:coverage": "jest --coverage",
-    "build": "rimraf ./dist ./build && rollup --failAfterWarnings -c ./packages/rollup.config.js && tsc -p ./packages/tsconfig.dts.json",
+    "build": "rimraf ./dist ./build && rollup --failAfterWarnings -c ./packages/rollup.config.js && tsc -p ./packages/tsconfig.dts.json && api-extractor run --config ./packages/api-extractor.json --verbose",
     "build:coverage": "rimraf ./dist && rollup --failAfterWarnings -c ./packages/rollup.cov.config.js",
-    "apidoc": "rimraf ./build/apidoc && api-extractor run --config ./packages/api-extractor.json --verbose && api-documenter markdown -i build/apidoc/input -o build/apidoc/output",
+    "apidoc": "typedoc",
     "e2e": "npm run build && mocha packages/e2e/run.js",
     "e2e:coverage": "npm run build:coverage && nyc mocha packages/e2e/run.js"
   },
@@ -55,7 +55,6 @@
     "@babel/plugin-syntax-typescript": "^7.22.5",
     "@commitlint/cli": "^18.2.0",
     "@commitlint/config-conventional": "^18.1.0",
-    "@microsoft/api-documenter": "^7.23.10",
     "@microsoft/api-extractor": "^7.38.1",
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-typescript": "^11.1.5",
@@ -86,6 +85,7 @@
     "rollup": "^4.2.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
+    "typedoc": "^0.25.4",
     "typescript": "^5.2.2"
   },
   "dependencies": {
