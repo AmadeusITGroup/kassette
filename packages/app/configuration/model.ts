@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------- app
 
-import { HookAPI } from '../mocking';
+import { HookAPI, IMock, MockData } from '../mocking';
 import { IProxyConnectAPI } from '../server/proxy';
 
 import { ConsoleSpec } from '../logger';

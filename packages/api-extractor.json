@@ -22,7 +22,6 @@
     "publicTrimmedFilePath": "<projectFolder>/../dist/index.d.ts"
   },
   "docModel": {
-    "enabled": true,
-    "apiJsonFilePath": "<projectFolder>/../build/apidoc/input/kassette.api.json"
+    "enabled": false
   }
 }
