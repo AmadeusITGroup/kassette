@@ -15,19 +15,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.x
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - name: npm version
-        run: |
+      - run: |
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
-          npm version ${{ inputs.version }}
+      - run: npm version ${{ inputs.version }}
+        if: inputs.version != 'doconly'
       - run: git show HEAD
-      - name: npm login
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - run: |
           npm whoami
-      - run: npm publish --access=public
+          npm publish --access=public
+        if: inputs.version != 'doconly'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: git push origin master v${{ inputs.version }}
+        if: inputs.version != 'doconly'
       - name: Fetching gh-pages branch
         uses: actions/checkout@v4
         with:
