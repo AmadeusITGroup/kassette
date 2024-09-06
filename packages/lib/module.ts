@@ -55,13 +55,9 @@ export async function load<Module = any>({
 
     filenameParts.reverse();
     const paths = filenameParts
-      .reduce<string[][]>(
-        (extensionsList, currentPart): any => [
-          sanitize([currentPart, extensionsList[0]]),
-          ...extensionsList,
-        ],
-        [],
-      )
+      .reduce<
+        string[][]
+      >((extensionsList, currentPart): any => [sanitize([currentPart, extensionsList[0]]), ...extensionsList], [])
       .map((extension) => nodePath.join(basePath, ['index', ...extension].join('.'))); // "index" is just a dummy name, it could be anything
 
     registered =

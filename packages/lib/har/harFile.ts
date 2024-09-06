@@ -161,7 +161,7 @@ export class HarFile extends StructuredFile<HarFormat> {
     }
     const keys = this._getKeys(keyManager);
 
-    let entryIndex = key == null ? -1 : keys.get(key) ?? -1;
+    let entryIndex = key == null ? -1 : (keys.get(key) ?? -1);
     if (entryIndex === -1) {
       entryIndex = content.log.entries.length;
       if (key) {
