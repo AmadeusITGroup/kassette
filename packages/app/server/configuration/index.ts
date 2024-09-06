@@ -42,8 +42,8 @@ export function logProperty(
     checked: !checkable
       ? undefined
       : checkable === 'boolValue'
-      ? property.value
-      : property.origin !== 'default',
+        ? property.value
+        : property.origin !== 'default',
     data: checkable ? undefined : stringifyPretty(property.value),
     message: buildString([
       '- (',
