@@ -4,7 +4,7 @@ import { ServerResponse, IncomingHttpHeaders } from 'http';
 
 // ---------------------------------------------------------------------- common
 
-import { headersContainer } from '../../../lib/headers';
+import { headersContainer, singleValueHeaders } from '../../../lib/headers';
 import { stringifyPretty } from '../../../lib/json';
 import { UserProperty } from '../../../lib/user-property';
 import { logError } from '../../logger';
@@ -104,13 +104,19 @@ export class Response implements IResponse {
       code = CONF.defaultStatusCode;
     }
     const { message } = status;
+    const http2 = response instanceof Http2ServerResponse;
 
     Object.entries(headers)
       .map(([key, value]) => ({ key, value }))
       .filter((header) => header.value != null)
       .forEach((header) => {
         try {
-          response.setHeader(header.key, header.value!);
+          const { key, value } = header;
+          if (http2 && Array.isArray(value) && singleValueHeaders.has(key.toLowerCase())) {
+            response.setHeader(key, value[0]);
+          } else {
+            response.setHeader(key, value!);
+          }
         } catch (exception) {
           logError({
             message: `${CONF.messages.setHeaderError}\n${JSON.stringify(header)}`,
@@ -118,7 +124,7 @@ export class Response implements IResponse {
           });
         }
       });
-    if (response instanceof Http2ServerResponse) {
+    if (http2) {
       response.writeHead(code);
     } else {
       response.writeHead(code, message);
