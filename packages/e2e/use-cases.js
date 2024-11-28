@@ -1398,6 +1398,54 @@ const useCases = [
   },
 
   {
+    name: 'http2-header-single-value',
+    iterations: 1,
+
+    async nodeRequest({ proxyPort, iteration }) {
+      const http2 = require('http2');
+      const connection = http2.connect(`https://localhost:${proxyPort}`, {
+        rejectUnauthorized: false,
+      });
+      const request = connection.request({
+        [http2.constants.HTTP2_HEADER_METHOD]: 'GET',
+        [http2.constants.HTTP2_HEADER_PATH]: '/',
+      });
+      request.end();
+      const response = await new Promise((resolve) => request.on('response', resolve));
+      let data = '';
+      request.on('data', (chunk) => (data += chunk.toString('utf8')));
+      await new Promise((resolve) => request.on('end', resolve));
+      await new Promise((resolve) => connection.close(resolve));
+      return {
+        proxyPort,
+        data,
+        headers: response,
+      };
+    },
+
+    serve: async ({ req, response }) => {
+      response.set('Content-Type', 'text/plain');
+      response.set('X-Content-Type-Options', ['nosniff', 'nosniff']);
+      response.set('Access-Control-Allow-Origin', '*');
+      response.status = 200;
+      response.body = 'ok';
+    },
+
+    proxy: async ({ mock }) => {
+      mock.setMode('remote');
+    },
+
+    defineAssertions: ({ it, getData, expect }) => {
+      it('checks response headers', () => {
+        const { data } = getData(0);
+        expect(data.client.data).to.equal('ok');
+        console.log(data.client.headers);
+        expect(data.client.headers['x-content-type-options']).to.equal('nosniff');
+      });
+    },
+  },
+
+  {
     name: 'http2-client',
     description: 'http2 client test',
     iterations: 3,
