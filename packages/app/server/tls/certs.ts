@@ -1,6 +1,8 @@
 import { pki, md, util } from 'node-forge';
 
-const TEN_YEARS_IN_MS = 10 * 365 * 24 * 60 * 60 * 1000;
+// Validity max duration in ms:
+// Apple requires 825 days or fewer (cf https://support.apple.com/en-us/103769)
+const VALIDITY_DURATION = 825 * 24 * 60 * 60 * 1000;
 
 interface CertificateOptions {
   issuer?: pki.Certificate;
@@ -40,7 +42,9 @@ export async function createCertificate(
   const now = Date.now();
   cert.serialNumber = `${now}`;
   cert.validity.notBefore = new Date(now);
-  cert.validity.notAfter = issuer ? issuer.validity.notAfter : new Date(now + TEN_YEARS_IN_MS);
+  cert.validity.notAfter = new Date(
+    Math.min(issuer?.validity.notAfter.getTime() ?? Infinity, now + VALIDITY_DURATION),
+  );
   const subject = [
     {
       name: 'commonName',
