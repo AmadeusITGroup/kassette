@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------- std
 
-import { createServer as createHttp2Server, Http2ServerRequest, Http2ServerResponse } from 'http2';
 import { createServer as createHttp1Server, IncomingMessage, ServerResponse } from 'http';
+import { createServer as createHttp2Server, Http2ServerRequest, Http2ServerResponse } from 'http2';
 
-import { createServer as createNetServer, Server, Socket, AddressInfo } from 'net';
+import { AddressInfo, createServer as createNetServer, Server, Socket } from 'net';
 
 import { TLSSocket } from 'tls';
 
@@ -13,23 +13,23 @@ import { readAll } from '../../lib/stream';
 
 // ------------------------------------------------------------------------- app
 
-import { createGlobalLogger, logInfo, logSeparator, getConsole, logError } from '../logger';
+import { createGlobalLogger, getConsole, logError, logInfo, logSeparator } from '../logger';
 
-import { IMergedConfiguration, ConfigurationSpec } from '../configuration';
+import { ConfigurationSpec, IMergedConfiguration } from '../configuration';
 
 import { Mock } from '../mocking';
 
 // -------------------------------------------------------------------- internal
 
-import { CLIOptions, APIOptions, ApplicationData } from './model';
+import { APIOptions, ApplicationData, CLIOptions } from './model';
 
+import { build as buildConfiguration, logApplicationData } from './configuration';
 import { Request } from './request';
 import { Response } from './response';
-import { logApplicationData, build as buildConfiguration } from './configuration';
 
-import { TLSManager } from './tls';
-import { ProxyConnectAPI } from './proxy';
 import { setConnectionProtocol } from './connection';
+import { ProxyConnectAPI } from './proxy';
+import { TLSManager } from './tls';
 
 // ------------------------------------------------------------------------ conf
 
@@ -69,11 +69,13 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
       response: new Response(response),
     });
 
-    logInfo({
-      timestamp: true,
-      message: CONF.messages.handlingRequest,
-      data: `${request.method} ${request.url}`,
-    });
+    if (!configuration.skipLog) {
+      logInfo({
+        timestamp: true,
+        message: CONF.messages.handlingRequest,
+        data: `${request.method} ${request.url}`,
+      });
+    }
 
     await configuration.hook.value({ mock, console: getConsole() });
     await mock.process();
@@ -128,11 +130,14 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
       socket.unshift(data);
     }
     const api = new ProxyConnectAPI(request, configuration.proxyConnectMode.value, handleSocket);
-    logInfo({
-      timestamp: true,
-      message: CONF.messages.handlingRequest,
-      data: `${request.method} ${api.hostname}:${api.port}`,
-    });
+
+    if (!configuration.skipLog) {
+      logInfo({
+        timestamp: true,
+        message: CONF.messages.handlingRequest,
+        data: `${request.method} ${api.hostname}:${api.port}`,
+      });
+    }
     await configuration.onProxyConnect.value(api);
     api.process();
   };
