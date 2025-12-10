@@ -1,3 +1,5 @@
+import type { IMock, ConfigurationSpec } from '../../index';
+
 // cf http://www.softwareishard.com/blog/har-12-spec/
 
 export interface HarFormat {

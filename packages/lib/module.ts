@@ -4,9 +4,9 @@ import * as nodePath from 'path';
 
 // ------------------------------------------------------------------------- 3rd
 
-// @ts-ignore
+// @ts-expect-error Missing types for rechoir package
 import { prepare } from 'rechoir';
-// @ts-ignore
+// @ts-expect-error Missing types for interpret package
 import { extensions } from 'interpret';
 
 // -------------------------------------------------------------------- internal
@@ -65,7 +65,7 @@ export async function load<Module = any>({
         try {
           prepare(extensions, testPath);
           return true;
-        } catch (exception) {
+        } catch {
           return false;
         }
       }) !== -1;

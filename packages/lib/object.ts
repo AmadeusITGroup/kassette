@@ -18,6 +18,8 @@ export const copyDeep = (object: Readonly<ObjectMap<any>>): ObjectMap<any> => {
   return copy;
 };
 
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+
 export const mergeDeepLeft = (
   leftOriginal: Readonly<ObjectMap<any>>,
   right: Readonly<ObjectMap<any>>,
@@ -25,7 +27,7 @@ export const mergeDeepLeft = (
   const left = copyDeep(leftOriginal);
 
   Object.entries(right).forEach(([key, rightValue]) => {
-    if (!left.hasOwnProperty(key)) {
+    if (!hasOwnProperty.call(left, key)) {
       left[key] = !isObject(rightValue) ? rightValue : copyDeep(rightValue);
     } else {
       const leftValue = left[key];
@@ -42,6 +44,6 @@ export const fromPairs = <T>(pairs: [string, T][]): ObjectMap<T> =>
   pairs.reduce<ObjectMap<T>>((output, [key, value]) => ((output[key] = value), output), {});
 
 export const rejectVoid = <T = any>(object: ObjectMap<T>): ObjectMap<NonNullable<T>> =>
-  fromPairs(Object.entries(object).filter(([_key, value]) => value != null)) as ObjectMap<
+  fromPairs(Object.entries(object).filter(([, value]) => value != null)) as ObjectMap<
     NonNullable<T>
   >;

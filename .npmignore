@@ -19,7 +19,6 @@
 /build
 
 tsconfig*.json
-tslint.json
 *.spec.ts
 __mocks__
 __test__

@@ -110,7 +110,7 @@ export const checkMimeTypeListAndParseBody = (
         mimeType,
         json: JSON.parse(body.toString('utf-8')),
       };
-    } catch (error) {}
+    } catch {}
   }
   return {
     mimeType: mimeType ?? '',
