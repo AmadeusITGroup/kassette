@@ -6,6 +6,8 @@ import { IProxyConnectAPI } from '../server/proxy';
 import { ConsoleSpec } from '../logger';
 import { HarKeyManager } from '../../lib/har/harFile';
 
+import type { runFromAPI, HarFormatEntry, RequestTimings } from '../../index';
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -375,8 +377,8 @@ export interface ConfigurationSpec extends CLIConfigurationSpec {
   /**
    * Callback called when the proxy is started and listening.
    *
-   * @param parameters - the port property contains the port on which the
-   * proxy is listening.
+   * @param parameters - proxy parameters
+   * @param parameters.port - port on which the proxy is listening
    */
   onListen?(parameters: { port: number }): void;
 

@@ -7,6 +7,7 @@ import {
   IConfigurationFile,
   GetConfigurationProps,
 } from '../configuration';
+import type { runFromAPI } from './impl';
 
 ////////////////////////////////////////////////////////////////////////////////
 //

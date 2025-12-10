@@ -1,3 +1,4 @@
+import type { IMock } from '../../index';
 import { RecursiveArray } from '../array';
 import { FileHandler } from '../fs';
 import { HarFormatEntry, HarFormat } from './harTypes';

@@ -4,7 +4,7 @@
   "description": "Development server, used mainly for testing, which proxies requests and is able to easily manage local mocks.",
   "scripts": {
     "prepare": "husky && npm run build && npm run apidoc",
-    "lint": "eslint \"packages/**/*.ts\"",
+    "lint": "eslint .",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "test": "npm run ut",
@@ -64,6 +64,9 @@
     "@types/yargs": "^17.0.35",
     "babel-plugin-istanbul": "^7.0.1",
     "chai": "^6.2.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsdoc": "^61.5.0",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "memfs": "^4.51.1",
@@ -76,7 +79,8 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.15",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
   },
   "dependencies": {
     "date-fns": "^4.1.0",

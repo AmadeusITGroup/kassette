@@ -77,8 +77,9 @@ export const logSeparator = () => logInfo(separator);
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 const _isChunk = (value: any): value is StringChunk =>
-  value != null && value.hasOwnProperty('text');
+  value != null && hasOwnProperty.call(value, 'text');
 
 /**
  * Formats a string made of several parts.

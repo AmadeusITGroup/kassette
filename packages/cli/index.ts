@@ -18,6 +18,7 @@ import { runFromCLI, Mode, ProxyConnectMode, MocksFormat } from '..';
 // specified in file configuration for instance, making them useless.
 ////////////////////////////////////////////////////////////////////////////////
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { version } = require('../../package.json');
 
 (async () => {

@@ -60,8 +60,7 @@ describe('requesting', () => {
       expect(sentRequest.body).toEqual('Original');
       expect(sentRequest.secure).toBeFalsy();
 
-      const timestampPattern = /\d{4}\/\d{2}\/\d{2} \d{2}\:\d{2}\:\d{2}[ap]m [+-]\d{2}\:\d{2}/
-        .source;
+      const timestampPattern = /\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}[ap]m [+-]\d{2}:\d{2}/.source;
 
       const messagePattern = ` - Sending request to: ${highlighted(
         'http://target:5000/original?original=original',

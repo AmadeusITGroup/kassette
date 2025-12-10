@@ -48,7 +48,7 @@ export async function createCertificate(
   const subject = [
     {
       name: 'commonName',
-      value: hostNames[0].replace(/[\[\]]/g, ''),
+      value: hostNames[0].replace(/[[\]]/g, ''),
     },
   ];
   cert.setSubject(subject);

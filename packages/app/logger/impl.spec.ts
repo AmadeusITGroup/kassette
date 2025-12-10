@@ -25,7 +25,7 @@ function createLogger() {
   return { output, clear };
 }
 
-const TIMESTAMP_REGEXP = /\d{4,}\/\d{2}\/\d{2} \d{2}\:\d{2}\:\d{2}[ap]m [\+\-]\d{2}\:\d{2}/;
+const TIMESTAMP_REGEXP = /\d{4,}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}[ap]m [+-]\d{2}:\d{2}/;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -88,7 +88,7 @@ describe('logger', () => {
       logInfo({ message: 'header', timestamp: true });
       expect(output).toEqual([
         {
-          message: expect.stringMatching(new RegExp(TIMESTAMP_REGEXP.source + / \- header/.source)),
+          message: expect.stringMatching(new RegExp(TIMESTAMP_REGEXP.source + / - header/.source)),
           type: 'log',
         },
       ]);
@@ -121,7 +121,7 @@ describe('logger', () => {
       logSeparator();
       expect(output).toEqual([
         {
-          message: expect.stringMatching(/\n\-{40,100}\n/),
+          message: expect.stringMatching(/\n-{40,100}\n/),
           type: 'log',
         },
       ]);

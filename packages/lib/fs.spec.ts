@@ -39,7 +39,7 @@ describe('fs', () => {
       const name = 'filename';
       const handler = new FileHandler({ root, name });
       expect(handler.name).toBe(name);
-      expect(handler.path.split(/[\\\/]/g)).toEqual(['', 'root', name]);
+      expect(handler.path.split(/[\\/]/g)).toEqual(['', 'root', name]);
     });
 
     it('should be created with a root and name', async () => {
