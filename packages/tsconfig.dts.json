@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig.rollup.json",
   "compilerOptions": {
-    "outDir": "../build/dts",
+    "outDir": "../dist",
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "emitDeclarationOnly": true
   }
 }
