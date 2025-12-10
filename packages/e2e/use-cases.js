@@ -84,6 +84,15 @@ async function getHarYamlFile({ file }) {
 // Data
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @type {{
+ *   name: string,
+ *   serve(context: {request: import('http').IncomingMessage, response: import('http').ServerResponse}, contextInfo): Promise<any>,
+ *   alternativeServe(context: {request: import('http').IncomingMessage, response: import('http').ServerResponse}, contextInfo): Promise<any>,
+ *   onProxyConnect(api: import("..").IProxyConnectAPI, contextInfo): Promise<any>,
+ *   proxy(api: import("..").HookAPI, contextInfo): Promise<any>,
+ * }[]}
+ */
 const useCases = [
   //////////////////////////////////////////////////////////////////////////////
   // Example
@@ -192,9 +201,7 @@ const useCases = [
           },
         ]);
 
-      headers.forEach(({ name, value }) => response.set(name, value));
-
-      response.status = 200;
+      headers.forEach(({ name, value }) => response.setHeader(name, value ?? ''));
 
       return { providedHeaders, overriddenHeaders };
     },
@@ -298,15 +305,17 @@ const useCases = [
 
     alternativeServe: async ({ response }) => {
       const output = {};
-      response.body = output.body = 'from alternative backend';
-      response.status = output.status = 200;
+      output.body = 'from alternative backend';
+      response.statusCode = output.status = 200;
+      response.end(output.body);
       return output;
     },
 
     serve: async ({ response }) => {
       const output = {};
-      response.body = output.body = 'from main backend';
-      response.status = output.status = 404;
+      output.body = 'from main backend';
+      response.statusCode = output.status = 404;
+      response.end(output.body);
       return output;
     },
 
@@ -374,8 +383,9 @@ const useCases = [
     serve: async ({ response, request }) => {
       const output = {};
       const iteration = request.headers['x-iteration'];
-      response.body = output.body = `from backend: ${iteration}`;
-      response.status = output.status = 200;
+      output.body = `from backend: ${iteration}`;
+      response.statusCode = output.status = 200;
+      response.end(output.body);
       return output;
     },
 
@@ -581,8 +591,9 @@ const useCases = [
     serve: async ({ response, request }) => {
       const output = {};
       const iteration = request.headers['x-iteration'];
-      response.body = output.body = `from backend: ${iteration}`;
-      response.status = output.status = 200;
+      output.body = `from backend: ${iteration}`;
+      response.statusCode = output.status = 200;
+      response.end(output.body);
       return output;
     },
 
@@ -789,8 +800,9 @@ const useCases = [
     serve: async ({ response, request }) => {
       const output = {};
       const iteration = request.headers['x-iteration'];
-      response.body = output.body = `from backend: ${iteration}`;
-      response.status = output.status = 200;
+      output.body = `from backend: ${iteration}`;
+      response.statusCode = output.status = 200;
+      response.end(output.body);
       return output;
     },
 
@@ -1004,13 +1016,14 @@ const useCases = [
     serve: async ({ response, request }) => {
       const output = {};
       const url = request.url;
-      response.body = output.body =
+      output.body =
         url === '/0'
           ? 'hello from server!'
           : Buffer.from('AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gZWZnaGlqa2xtbm9w', 'base64');
-      response.status = output.status = 200;
-      response.set('Access-Control-Allow-Origin', '*');
-      response.set('Content-Type', url === '/0' ? 'text/plain' : 'application/octet-stream');
+      response.statusCode = output.status = 200;
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Content-Type', url === '/0' ? 'text/plain' : 'application/octet-stream');
+      response.end(output.body);
       return output;
     },
 
@@ -1097,13 +1110,14 @@ const useCases = [
     serve: async ({ response, request }) => {
       const output = {};
       const url = request.url;
-      response.body = output.body =
+      output.body =
         url === '/0'
           ? 'hello from server!'
           : Buffer.from('AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gZWZnaGlqa2xtbm9w', 'base64');
-      response.status = output.status = 200;
-      response.set('Access-Control-Allow-Origin', '*');
-      response.set('Content-Type', url === '/0' ? 'text/plain' : 'application/octet-stream');
+      response.statusCode = output.status = 200;
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Content-Type', url === '/0' ? 'text/plain' : 'application/octet-stream');
+      response.end(output.body);
       return output;
     },
 
@@ -1217,8 +1231,9 @@ const useCases = [
     serve: async ({ response, request }) => {
       const output = {};
       const iteration = request.headers['x-iteration'];
-      response.body = output.body = `from backend: ${iteration}`;
-      response.status = output.status = 200;
+      output.body = `from backend: ${iteration}`;
+      response.statusCode = output.status = 200;
+      response.end(output.body);
       return output;
     },
 
@@ -1272,8 +1287,9 @@ const useCases = [
 
     serve: async ({ response }) => {
       const output = {};
-      response.body = output.body = 'This comes from the backend and has no custom delay';
-      response.status = output.status = 200;
+      output.body = 'This comes from the backend and has no custom delay';
+      response.statusCode = output.status = 200;
+      response.end(output.body);
       return output;
     },
 
@@ -1359,13 +1375,13 @@ const useCases = [
       };
     },
 
-    serve: async ({ req, response }) => {
+    serve: async ({ request, response }) => {
       const output = {};
-      output.rawHeaders = req.rawHeaders;
-      response.set('Check-Response-Header-With-UPPER-CASE', ['value-2']);
-      response.set('Check-Response-Header-Duplicate', ['line-1', 'line-2']);
-      response.status = 200;
-      response.body = 'ok';
+      output.rawHeaders = request.rawHeaders;
+      response.setHeader('Check-Response-Header-With-UPPER-CASE', ['value-2']);
+      response.setHeader('Check-Response-Header-Duplicate', ['line-1', 'line-2']);
+      response.statusCode = 200;
+      response.end('ok');
       return output;
     },
 
@@ -1423,12 +1439,12 @@ const useCases = [
       };
     },
 
-    serve: async ({ req, response }) => {
-      response.set('Content-Type', 'text/plain');
-      response.set('X-Content-Type-Options', ['nosniff', 'nosniff']);
-      response.set('Access-Control-Allow-Origin', '*');
-      response.status = 200;
-      response.body = 'ok';
+    serve: async ({ response }) => {
+      response.setHeader('Content-Type', 'text/plain');
+      response.setHeader('X-Content-Type-Options', ['nosniff', 'nosniff']);
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.statusCode = 200;
+      response.end('ok');
     },
 
     proxy: async ({ mock }) => {
@@ -1439,7 +1455,6 @@ const useCases = [
       it('checks response headers', () => {
         const { data } = getData(0);
         expect(data.client.data).to.equal('ok');
-        console.log(data.client.headers);
         expect(data.client.headers['x-content-type-options']).to.equal('nosniff');
       });
     },
@@ -1458,17 +1473,18 @@ const useCases = [
       };
     },
 
-    http2Serve: async ({ req, response }) => {
+    http2Serve: async ({ request, response }) => {
       const output = {};
-      response.body = output.body = `from http2 backend with http version = ${req.httpVersion}`;
-      response.status = output.status = 200;
-      response.set('my-response-header', 'my-value');
-      response.set('Access-Control-Allow-Origin', '*');
-      response.set('Access-Control-Expose-Headers', '*');
+      output.body = `from http2 backend with http version = ${request.httpVersion}`;
+      response.statusCode = output.status = 200;
+      response.setHeader('my-response-header', 'my-value');
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Expose-Headers', '*');
+      response.end(output.body);
       return output;
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { context, iteration }) => {
+    proxy: async ({ mock }, { context, iteration }) => {
       mock.setRemoteURL(context.http2RemoteURL);
       mock.setMocksFormat('har');
       mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har']);
@@ -1531,13 +1547,13 @@ const useCases = [
     description: 'http1 request from client should reach the server as http1',
     iterations: 1,
 
-    http2Serve: async ({ req, response }) => {
+    http2Serve: async ({ request, response }) => {
       const output = {
-        body: `using http ${req.httpVersion}`,
+        body: `using http ${request.httpVersion}`,
         statusCode: 200,
       };
-      response.status = output.statusCode;
-      response.body = output.body;
+      response.statusCode = output.statusCode;
+      response.end(output.body);
       return output;
     },
 
@@ -1554,7 +1570,7 @@ const useCases = [
       };
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { context }) => {
+    proxy: async ({ mock }, { context }) => {
       mock.setMode('remote');
       mock.setRemoteURL(context.http2RemoteURL);
     },
@@ -1599,16 +1615,16 @@ const useCases = [
       };
     },
 
-    serve: async ({ req, response }) => {
+    serve: async ({ request, response }) => {
       const output = {};
-      output.headers = req.headers;
-      response.set('check-response-header', 'value-2');
-      response.status = 200;
-      response.body = 'ok';
+      output.headers = request.headers;
+      response.setHeader('check-response-header', 'value-2');
+      response.statusCode = 200;
+      response.end('ok');
       return output;
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+    proxy: async ({ mock }, { iteration }) => {
       mock.setMode('remote');
       mock.setMocksFormat('har');
       mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
@@ -1690,25 +1706,25 @@ const useCases = [
       };
     },
 
-    serve: async ({ req, response }) => {
+    serve: async ({ request, response }) => {
       const output = {};
-      output.headers = req.headers;
-      response.set('check-response-header', 'value-2');
-      response.status = 200;
-      response.body = 'server-ok';
+      output.headers = request.headers;
+      response.setHeader('check-response-header', 'value-2');
+      response.statusCode = 200;
+      response.end('server-ok');
       return output;
     },
 
-    alternativeServe: async ({ req, response }) => {
+    alternativeServe: async ({ request, response }) => {
       const output = {};
-      output.headers = req.headers;
-      response.set('check-response-header', 'value-2');
-      response.status = 200;
-      response.body = 'alt-server-ok';
+      output.headers = request.headers;
+      response.setHeader('check-response-header', 'value-2');
+      response.statusCode = 200;
+      response.end('alt-server-ok');
       return output;
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+    proxy: async ({ mock }, { iteration }) => {
       mock.setRemoteURL('*');
       mock.setMocksFormat('har');
       mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
@@ -1807,18 +1823,19 @@ const useCases = [
 
     alternativeServe: async ({ response }) => {
       const output = {};
-      response.body = output.body = 'from https server';
-      response.status = output.status = 200;
-      response.set('my-resp-header', 'my-value');
+      output.body = 'from https server';
+      response.statusCode = output.status = 200;
+      response.setHeader('my-resp-header', 'my-value');
+      response.end(output.body);
       return output;
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }) => {
+    proxy: async ({ mock }) => {
       mock.setMode('remote');
       mock.setRemoteURL('*');
     },
 
-    onProxyConnect: async (/** @type {import("..").IProxyConnectAPI} */ request) => {
+    onProxyConnect: async (request) => {
       request.setMode('intercept');
     },
 
@@ -1873,7 +1890,7 @@ const useCases = [
       return {};
     },
 
-    onProxyConnect: async (/** @type {import("..").IProxyConnectAPI} */ request, { iteration }) => {
+    onProxyConnect: async (request, { iteration }) => {
       if (iteration === 0) {
         request.setMode('forward');
       } else {
@@ -1913,11 +1930,11 @@ const useCases = [
     },
 
     serve: async ({ response }) => {
-      response.status = 200;
-      response.body = 'ok';
+      response.statusCode = 200;
+      response.end('ok');
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+    proxy: async ({ mock }, { iteration }) => {
       mock.setMode('download');
       mock.setLocalPath([
         mock.localPath,
@@ -2028,11 +2045,11 @@ const useCases = [
     },
 
     serve: async ({ response }) => {
-      response.status = 200;
-      response.body = 'ok';
+      response.statusCode = 200;
+      response.end('ok');
     },
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }, { iteration }) => {
+    proxy: async ({ mock }, { iteration }) => {
       mock.setMode('download');
       mock.setMocksFormat('har');
       mock.setMocksHarFile([mock.mockFolderFullPath, `mocks-${iteration}.har`]);
@@ -2142,9 +2159,10 @@ const useCases = [
 
     serve: async ({ response }) => {
       const output = {};
-      response.type = output.extension = 'yaml';
-      response.body = '- some yaml';
-      response.status = 200;
+      output.extension = 'yaml';
+      response.statusCode = 200;
+      response.setHeader('Content-Type', 'text/yaml');
+      response.end('- some yaml');
       return output;
     },
 
@@ -2233,7 +2251,7 @@ const useCases = [
       'user should be able to detect missing mock and return custom one, as well as persist it',
     iterations: 2,
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local');
 
       const hasNoLocalFiles = await mock.hasNoLocalFiles();
@@ -2276,7 +2294,7 @@ const useCases = [
       'user should be able to detect missing mock and return custom one, as well as persist it',
     iterations: 2,
 
-    proxy: async (/** @type {import("..").HookAPI} */ { mock }) => {
+    proxy: async ({ mock }) => {
       mock.setMode('local');
       mock.setMocksFormat('har');
       mock.setMocksHarFile([mock.mockFolderFullPath, 'mocks.har']);
@@ -2332,7 +2350,7 @@ const useCases = [
     iterations: 2,
 
     serve: async ({ response }) => {
-      response.status = 404;
+      response.statusCode = 404;
     },
 
     proxy: async ({ mock }) => {
@@ -2414,14 +2432,14 @@ const useCases = [
       const gzip = require('util').promisify(require('zlib').gzip);
 
       const output = {};
-      response.status = 200;
+      response.statusCode = 200;
       let body = 'raw body';
       output.body = body;
       if (request.headers['accept-encoding'] !== 'identity') {
-        response.set('content-encoding', 'gzip');
+        response.setHeader('content-encoding', 'gzip');
         body = await gzip(body);
       }
-      response.body = body;
+      response.end(body);
       return output;
     },
 
@@ -2546,7 +2564,7 @@ const useCases = [
         },
       };
     },
-    onProxyConnect: async (/** @type {import("../..").IProxyConnectAPI} */ request) => {
+    onProxyConnect: async (request) => {
       request.setMode('intercept');
     },
     proxy: async (/** @type {import("../..").HookAPI} */ { mock }) => {
@@ -2593,15 +2611,12 @@ const useCases = [
         },
       };
     },
-    alternativeServe: async (/** @type {import("koa").Context} */ { response }) => {
-      response.body = 'alternativeResponse';
-      response.set('Access-Control-Allow-Origin', '*');
-      response.status = 200;
+    alternativeServe: async ({ response }) => {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.statusCode = 200;
+      response.end('alternativeResponse');
     },
-    onProxyConnect: async (
-      /** @type {import("../..").IProxyConnectAPI} */ request,
-      { context },
-    ) => {
+    onProxyConnect: async (request, { context }) => {
       const url = new URL(context.alternativeRemoteURL);
       request.setDestination(url.hostname, +url.port);
     },

@@ -4,11 +4,6 @@ const http = require('http');
 const https = require('https');
 const http2 = require('http2');
 
-// ------------------------------------------------------------------------- 3rd
-
-const Koa = require('koa');
-const KoaRouter = require('koa-router');
-
 // -------------------------------------------------------------------- internal
 
 const { KEY, CERTIFICATE } = require('./tls');
@@ -31,15 +26,7 @@ async function readBody({ req, request }, next) {
 }
 exports.readBody = readBody;
 
-function createServer({ registerRoutes, onStart, onExit, secure = false, http2Server = false }) {
-  const application = new Koa();
-
-  application.use(readBody);
-
-  const router = new KoaRouter();
-  registerRoutes(router);
-  application.use(router.routes());
-
+function createServer({ onRequest, onStart, onExit, secure = false, http2Server = false }) {
   const options = {};
   const createServer = secure
     ? http2Server
@@ -56,7 +43,7 @@ function createServer({ registerRoutes, onStart, onExit, secure = false, http2Se
     }
   }
 
-  const server = createServer(options, application.callback());
+  const server = createServer(options, onRequest);
 
   server.on('listening', function () {
     onStart({ port: this.address().port });
