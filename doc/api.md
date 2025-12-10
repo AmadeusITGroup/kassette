@@ -63,7 +63,6 @@ You likely won't have to change that, since most of the time you will want to ke
 - `setLocalPath(value)`: set `localPath` by providing any combination of arrays of path parts.
 
   Examples:
-
   - `setLocalPath([mock.request.method, mock.request.pathname])` will use the HTTP method followed by the URL pathname
   - `setLocalPath([prefix, mock.request.pathname.split('/').slice(2), addSuffix ? [suffix, '-static-suffix'] : null])` will concatenate
     - `prefix`

@@ -94,7 +94,10 @@ export async function createCertificate(
     });
   }
   cert.setExtensions(extensions);
-  cert.sign(issuer ? issuer.privateKey : keyPair.privateKey, md.sha256.create());
+  cert.sign(
+    issuer ? (issuer.privateKey as pki.rsa.PrivateKey) : keyPair.privateKey,
+    md.sha256.create(),
+  );
   return {
     object: cert,
     key: pki.privateKeyToPem(keyPair.privateKey),

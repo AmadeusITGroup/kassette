@@ -66,6 +66,7 @@ async function create({
           }
         } else {
           const context = await browser.newContext({
+            permissions: ['local-network-access'],
             ignoreHTTPSErrors: true,
             proxy: browserProxy
               ? {
