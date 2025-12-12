@@ -1,6 +1,9 @@
 // ------------------------------------------------------------------------- std
 
 import * as nodePath from 'path';
+import type { Agent as HttpAgent } from 'http';
+import type { Agent as Http2Agent } from 'http2-wrapper';
+import type { Agent as HttpsAgent } from 'https';
 
 // ------------------------------------------------------------------------- 3rd
 
@@ -182,6 +185,18 @@ export class Mock implements IMock {
     getDefaultInput: () => this.options.userConfiguration.remoteURL.value,
   });
 
+  private _httpAgent = new UserProperty<HttpAgent>({
+    getDefaultInput: () => this.options.userConfiguration.httpAgent.value,
+  });
+
+  private _httpsAgent = new UserProperty<HttpsAgent>({
+    getDefaultInput: () => this.options.userConfiguration.httpsAgent.value,
+  });
+
+  private _http2Agent = new UserProperty<Http2Agent>({
+    getDefaultInput: () => this.options.userConfiguration.http2Agent.value,
+  });
+
   public sourcePayload: PayloadWithOrigin | undefined;
 
   private __localPayload: PayloadWithOrigin<'local' | 'user'> | undefined;
@@ -289,6 +304,27 @@ export class Mock implements IMock {
   }
   public setRemoteURL(value: string | null) {
     this._setUserProperty(this._remoteURL, value);
+  }
+
+  public get httpAgent(): HttpAgent {
+    return this._httpAgent.output;
+  }
+  public setHttpAgent(value: HttpAgent | null) {
+    this._setUserProperty(this._httpAgent, value);
+  }
+
+  public get httpsAgent(): HttpsAgent {
+    return this._httpsAgent.output;
+  }
+  public setHttpsAgent(value: HttpsAgent | null) {
+    this._setUserProperty(this._httpsAgent, value);
+  }
+
+  public get http2Agent(): Http2Agent {
+    return this._http2Agent.output;
+  }
+  public setHttp2Agent(value: Http2Agent | null) {
+    this._setUserProperty(this._http2Agent, value);
   }
 
   public get mocksFolder(): string {
@@ -950,6 +986,9 @@ export class Mock implements IMock {
       baseUrl,
       original: this.request,
       skipLog: this.skipLog,
+      httpAgent: this.httpAgent,
+      httpsAgent: this.httpsAgent,
+      http2Agent: this.http2Agent,
     });
   }
 

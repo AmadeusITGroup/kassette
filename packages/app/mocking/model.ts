@@ -1,6 +1,8 @@
 // ---------------------------------------------------------------------- common
 
-import { IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders, Agent as HttpAgent } from 'http';
+import type { Agent as Http2Agent } from 'http2-wrapper';
+import type { Agent as HttpsAgent } from 'https';
 import { RecursiveArray } from '../../lib/array';
 
 // ------------------------------------------------------------------------- app
@@ -89,6 +91,42 @@ export interface IMock {
    * @param url - the URL to set, or null to use the default value from {@link CLIConfigurationSpec.remoteURL|the global setting}
    */
   setRemoteURL(url: string | null): void;
+
+  /**
+   * The current http agent, configured either by a call to {@link IMock.setHttpAgent|setHttpAgent},
+   * or by {@link ConfigurationSpec.httpAgent|the global setting}.
+   */
+  readonly httpAgent: HttpAgent;
+
+  /**
+   * Sets the {@link IMock.httpAgent|http agent} for the current request.
+   * @param value - the http agent to set, or null to use the default value from {@link ConfigurationSpec.httpAgent|the global setting}
+   */
+  setHttpAgent(value: HttpAgent | null): void;
+
+  /**
+   * The current https agent, configured either by a call to {@link IMock.setHttpsAgent|setHttpsAgent},
+   * or by {@link ConfigurationSpec.httpsAgent|the global setting}.
+   */
+  readonly httpsAgent: HttpsAgent;
+
+  /**
+   * Sets the {@link IMock.httpsAgent|https agent} for the current request.
+   * @param value - the https agent to set, or null to use the default value from {@link ConfigurationSpec.httpsAgent|the global setting}
+   */
+  setHttpsAgent(value: HttpsAgent | null): void;
+
+  /**
+   * The current http 2 agent, configured either by a call to {@link IMock.setHttp2Agent|setHttp2Agent},
+   * or by {@link ConfigurationSpec.http2Agent|the global setting}.
+   */
+  readonly http2Agent: Http2Agent;
+
+  /**
+   * Sets the {@link IMock.http2Agent|http 2 agent} for the current request.
+   * @param value - the http 2 agent to set, or null to use the default value from {@link ConfigurationSpec.http2Agent|the global setting}
+   */
+  setHttp2Agent(value: Http2Agent | null): void;
 
   /**
    * The currently computed delay that will be applied, configured either by a call to {@link IMock.setDelay|setDelay},

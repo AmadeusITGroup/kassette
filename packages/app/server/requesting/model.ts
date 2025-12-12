@@ -1,6 +1,8 @@
 // ------------------------------------------------------------------------- std
 
-import { IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders, Agent as HttpAgent } from 'http';
+import type { Agent as HttpsAgent } from 'https';
+import type { Agent as Http2Agent } from 'http2-wrapper';
 
 // -------------------------------------------------------------------- internal
 
@@ -42,6 +44,9 @@ export interface SendRequestSpec {
   baseUrl: string;
   original: IFetchedRequest;
   skipLog?: boolean;
+  httpAgent: HttpAgent;
+  httpsAgent: HttpsAgent;
+  http2Agent: Http2Agent;
 }
 
 export interface SendRequestOutput {

@@ -1,6 +1,9 @@
 // ------------------------------------------------------------------------- std
 
 import * as nodePath from 'path';
+import { globalAgent as defaultHttpAgent } from 'http';
+import { globalAgent as defaultHttp2Agent } from 'http2-wrapper';
+import { globalAgent as defaultHttpsAgent } from 'https';
 
 // ---------------------------------------------------------------------- common
 
@@ -27,6 +30,7 @@ import {
 import { defaultHarKeyManager, HarKeyManager } from '../../lib/har/harFile';
 
 export * from './model';
+export { defaultHttpAgent, defaultHttpsAgent, defaultHttp2Agent };
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -192,6 +196,24 @@ export async function getConfiguration({
       fileValue: fileConfiguration.remoteURL,
       apiValue: apiConfiguration.remoteURL,
       defaultValue: '*',
+    }),
+    httpAgent: buildProperty({
+      cliValue: null,
+      fileValue: fileConfiguration.httpAgent,
+      apiValue: apiConfiguration.httpAgent,
+      defaultValue: defaultHttpAgent,
+    }),
+    httpsAgent: buildProperty({
+      cliValue: null,
+      fileValue: fileConfiguration.httpsAgent,
+      apiValue: apiConfiguration.httpsAgent,
+      defaultValue: defaultHttpsAgent,
+    }),
+    http2Agent: buildProperty({
+      cliValue: null,
+      fileValue: fileConfiguration.http2Agent,
+      apiValue: apiConfiguration.http2Agent,
+      defaultValue: defaultHttp2Agent,
     }),
     onListen: buildProperty({
       cliValue: null,

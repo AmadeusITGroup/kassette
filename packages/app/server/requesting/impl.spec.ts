@@ -1,6 +1,7 @@
 jest.mock('http2-wrapper');
 
 import picocolors from 'picocolors';
+import { defaultHttpAgent, defaultHttpsAgent, defaultHttp2Agent } from '../../configuration';
 
 import { sendRequest } from './impl';
 
@@ -27,6 +28,12 @@ function highlighted(text: string, color = 'green'): string {
   return picocolors.bold((picocolors as any)[color](text));
 }
 
+const agents = {
+  httpAgent: defaultHttpAgent,
+  httpsAgent: defaultHttpsAgent,
+  http2Agent: defaultHttp2Agent,
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +54,7 @@ describe('requesting', () => {
           body: 'Original',
           headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
+        ...agents,
       });
 
       expect(result.time).toBeGreaterThan(0);
@@ -94,6 +102,7 @@ describe('requesting', () => {
           body: 'Original',
           headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
+        ...agents,
       });
 
       expect(result.time).toBeGreaterThan(0);
@@ -122,6 +131,7 @@ describe('requesting', () => {
           body: 'Original',
           headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
+        ...agents,
       });
 
       expect(output).toEqual([]);
@@ -140,6 +150,7 @@ describe('requesting', () => {
           body: 'Original',
           headers: { 'x-original': 'original', host: 'original:8080' },
         } as unknown as IFetchedRequest,
+        ...agents,
       });
 
       expect(result.time).toBeGreaterThan(0);

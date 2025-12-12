@@ -4,6 +4,7 @@ import { createGlobalLogger } from '../../logger';
 import { defaultHarKeyManager } from '../../../lib/har/harFile';
 
 import { logProperty, logApplicationData, build } from './';
+import { defaultHttp2Agent, defaultHttpAgent, defaultHttpsAgent } from '../../configuration';
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -97,6 +98,9 @@ describe('server configuration', () => {
           proxyConnectMode: { value: 'intercept', origin: 'default' },
           onProxyConnect: { value: nop, origin: 'file' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
+          httpAgent: { value: defaultHttpAgent, origin: 'default' },
+          httpsAgent: { value: defaultHttpsAgent, origin: 'default' },
+          http2Agent: { value: defaultHttp2Agent, origin: 'default' },
           mocksFormat: { value: 'folder', origin: 'default' },
           mocksFolder: { value: 'dummy/relative', origin: 'file' },
           mocksHarFile: { value: 'dummy/relative.har', origin: 'file' },
@@ -166,6 +170,9 @@ Root folder used for relative paths resolution: ${highlighted('C:/dummy/root/fol
           proxyConnectMode: { value: 'forward', origin: 'cli' },
           onProxyConnect: { value: nop, origin: 'api' },
           remoteURL: { value: 'http://dummy.com:5555', origin: 'file' },
+          httpAgent: { value: defaultHttpAgent, origin: 'default' },
+          httpsAgent: { value: defaultHttpsAgent, origin: 'default' },
+          http2Agent: { value: defaultHttp2Agent, origin: 'default' },
           mocksFormat: { value: 'folder', origin: 'default' },
           mocksFolder: { value: 'dummy/relative', origin: 'file' },
           mocksHarFile: { value: 'mocks.har', origin: 'default' },

@@ -87,8 +87,10 @@ async function getHarYamlFile({ file }) {
 /**
  * @type {{
  *   name: string,
+ *   browserProxy: boolean,
  *   serve(context: {request: import('http').IncomingMessage, response: import('http').ServerResponse}, contextInfo): Promise<any>,
  *   alternativeServe(context: {request: import('http').IncomingMessage, response: import('http').ServerResponse}, contextInfo): Promise<any>,
+ *   http2Serve(context: {request: import('http').IncomingMessage, response: import('http').ServerResponse}, contextInfo): Promise<any>,
  *   onProxyConnect(api: import("..").IProxyConnectAPI, contextInfo): Promise<any>,
  *   proxy(api: import("..").HookAPI, contextInfo): Promise<any>,
  * }[]}
@@ -2671,6 +2673,101 @@ const useCases = [
         expect(data.proxy.connections[0].protocol).to.be.equal('http');
         expect(data.proxy.connections[0].hostname).to.include('127.0.0.1');
       });
+    },
+  },
+
+  {
+    name: 'custom-http-agent',
+    description: 'check agents can be customized',
+    iterations: 3,
+    browserProxy: true,
+
+    serve: ({ response }) => {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+    },
+
+    alternativeServe: ({ response }) => {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+    },
+
+    http2Serve: ({ response }) => {
+      response.setHeader('Access-Control-Allow-Origin', '*');
+    },
+
+    request: ({ backendPort, alternativeBackendPort, http2BackendPort, iteration }) => {
+      switch (iteration) {
+        case 0:
+          return {
+            request: {
+              url: `http://127.0.0.1:${backendPort}/`,
+            },
+            data: { port: backendPort, protocol: 'http', agent: 'http' },
+          };
+        case 1:
+          return {
+            request: {
+              url: `https://127.0.0.1:${alternativeBackendPort}/`,
+            },
+            data: { port: alternativeBackendPort, protocol: 'https', agent: 'https' },
+          };
+        case 2:
+          return {
+            request: {
+              url: `https://127.0.0.1:${http2BackendPort}/`,
+            },
+            data: { port: http2BackendPort, protocol: 'https', agent: 'http2' },
+          };
+      }
+    },
+
+    onProxyConnect: async (request) => {
+      request.setMode('intercept');
+    },
+
+    proxy: async ({ mock }, { iteration }) => {
+      mock.setRemoteURL('*');
+      mock.setMode('remote');
+      const http = require('http');
+      const https = require('https');
+      const http2 = require('http2-wrapper');
+      const calls = [];
+      class CustomHttpAgent extends http.Agent {
+        createConnection(options, callback) {
+          calls.push(`http-agent ${options.href}`);
+          return super.createConnection(options, callback);
+        }
+      }
+      mock.setHttpAgent(new CustomHttpAgent());
+      class CustomHttpsAgent extends https.Agent {
+        createConnection(options, callback) {
+          calls.push(`https-agent ${options.href}`);
+          return super.createConnection(options, callback);
+        }
+      }
+      mock.setHttpsAgent(new CustomHttpsAgent());
+      class CustomHttp2Agent extends http2.Agent {
+        createConnection(options, callback) {
+          calls.push(`http2-agent ${options.href}`);
+          return super.createConnection(options, callback);
+        }
+      }
+      mock.setHttp2Agent(new CustomHttp2Agent());
+      await mock.process();
+      return {
+        calls,
+      };
+    },
+
+    defineAssertions: ({ useCase: { iterations, name }, it, getData, expect }) => {
+      for (let i = 0; i < iterations; i++) {
+        it(`iteration ${i}`, () => {
+          const data = getData().results[name].iterations[i];
+          const clientData = data.clientData;
+          expect(data.proxy.calls).to.deep.equal([
+            `${clientData.agent}-agent ${clientData.protocol}://127.0.0.1:${clientData.port}/`,
+          ]);
+        });
+      }
     },
   },
 ];
