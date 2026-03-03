@@ -1,10 +1,11 @@
 // ------------------------------------------------------------------------- 3rd
 
-import * as yargs from 'yargs';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 // ------------------------------------------------------------------------- app
 
-import { runFromCLI, Mode, ProxyConnectMode, MocksFormat } from '..';
+import { runFromCLI, Mode, ProxyConnectMode, MocksFormat } from '../index.js';
 
 ////////////////////////////////////////////////////////////////////////////////
 // XXX 2019-01-09T16:24:12+01:00 IMPORTANT
@@ -18,11 +19,10 @@ import { runFromCLI, Mode, ProxyConnectMode, MocksFormat } from '..';
 // specified in file configuration for instance, making them useless.
 ////////////////////////////////////////////////////////////////////////////////
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { version } = require('../../package.json');
+const version = process.env.KASSETTE_VERSION as string;
 
 (async () => {
-  const options = await yargs
+  const options = await yargs(hideBin(process.argv))
     .scriptName('kassette')
     .wrap(null)
     .usage(`$0 version ${version}`)
