@@ -1,7 +1,12 @@
 // ------------------------------------------------------------------------- std
 
 import { createServer as createHttp1Server, IncomingMessage, ServerResponse } from 'http';
-import { createServer as createHttp2Server, Http2ServerRequest, Http2ServerResponse } from 'http2';
+import {
+  createServer as createHttp2Server,
+  Http2ServerRequest,
+  Http2ServerResponse,
+  ServerHttp2Stream,
+} from 'http2';
 
 import { AddressInfo, createServer as createNetServer, Server, Socket } from 'net';
 
@@ -91,8 +96,8 @@ export async function spawnServer({ configuration, root }: ApplicationData): Pro
   });
   await tlsManager.init();
 
-  const handleSocket = (socket: Socket) => {
-    socket.once('data', async (data) => {
+  const handleSocket = (socket: Socket | ServerHttp2Stream) => {
+    socket.once('data', async (data: Buffer) => {
       socket.pause();
       socket.unshift(data);
       // cf https://github.com/mscdex/httpolyglot/issues/3#issuecomment-173680155

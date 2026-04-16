@@ -3,7 +3,7 @@ import { FileHandler } from '../fs';
 import { FileFormat } from './formats';
 
 export abstract class StructuredFile<T> extends EventEmitter {
-  protected _fileContent: T | null;
+  protected _fileContent: T | null = null;
   private _modified = false;
   private _readingPromise: Promise<void> | null = null;
   private _writingPromise: Promise<void> | null = null;

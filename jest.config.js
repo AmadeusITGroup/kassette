@@ -5,7 +5,7 @@ module.exports = {
   transform: {
     'packages[\\/\\\\].*\\.ts$': [
       '<rootDir>/packages/jestTransform.js',
-      { tsconfig: 'packages/tsconfig.json' },
+      { tsconfig: 'packages/tsconfig.jest.json' },
     ],
   },
   testRegex: 'packages[\\/\\\\].*\\.spec\\.ts$',
