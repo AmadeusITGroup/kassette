@@ -1,10 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-
-    "module": "commonjs",
-    "moduleResolution": "node",
-
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "noEmitOnError": true,
@@ -18,6 +13,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "useUnknownInCatchVariables": false,
 
     "target": "es2019",
     "lib": ["es2019"],

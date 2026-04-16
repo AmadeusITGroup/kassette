@@ -5,8 +5,8 @@ describe('stream', () => {
   describe('fetchContent', () => {
     it('should handle stream-like objects', () => {
       class MyStream {
-        private _onData: (chunk: Buffer) => {};
-        private _onEnd: () => {};
+        private _onData!: (chunk: Buffer) => {};
+        private _onEnd!: () => {};
 
         on(eventName: string, callback: any) {
           if (eventName === 'data') {

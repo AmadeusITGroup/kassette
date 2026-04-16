@@ -40,11 +40,11 @@ const connectionError = (socket: Socket | ServerHttp2Stream) => {
 
 export class ProxyConnectAPI implements IProxyConnectAPI {
   connectionsStack: readonly Readonly<Connection>[];
-  readonly hostname: string;
-  readonly port: number;
-  destinationHostname: string;
-  destinationPort: number;
-  private _processed: boolean;
+  readonly hostname!: string;
+  readonly port!: number;
+  destinationHostname!: string;
+  destinationPort!: number;
+  private _processed = false;
 
   constructor(
     public readonly request: IncomingMessage | Http2ServerRequest,

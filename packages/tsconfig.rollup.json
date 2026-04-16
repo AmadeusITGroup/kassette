@@ -3,6 +3,8 @@
   "exclude": ["**/*.spec.ts", "**/__test__"],
   "compilerOptions": {
     "module": "esnext",
+    "moduleResolution": "bundler",
+    "customConditions": ["node"],
     "sourceMap": false
   }
 }

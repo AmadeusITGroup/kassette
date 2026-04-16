@@ -5,10 +5,11 @@ import { pem, pki, asn1 } from 'node-forge';
 import { createSecureContext, SecureContext, TLSSocket } from 'tls';
 import { createCertificate } from './certs';
 import { forwardSocketConnections, getSocketConnection } from '../connection';
+import { ServerHttp2Stream } from 'http2';
 
 export class TLSManager {
-  private _caObject: pki.Certificate;
-  private _caPem: string;
+  private _caObject!: pki.Certificate;
+  private _caPem!: string;
   private _contexts = new Map<string, Promise<SecureContext>>();
 
   constructor(
@@ -89,7 +90,7 @@ export class TLSManager {
   }
 
   public async process(
-    socket: Socket,
+    socket: Socket | ServerHttp2Stream,
     ALPNProtocols: string[],
     hostname = getSocketConnection(socket).hostname,
   ): Promise<Socket> {
