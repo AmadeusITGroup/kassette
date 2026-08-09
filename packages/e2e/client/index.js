@@ -28,6 +28,7 @@ async function create({
   proxyPort,
   backendPort,
   alternativeBackendPort,
+  http2BackendPort,
   pushClientData,
   pushClientResult,
   console,
@@ -61,6 +62,7 @@ async function create({
               proxyPort,
               backendPort,
               alternativeBackendPort,
+              http2BackendPort,
             });
             await pushClientResult({ useCase: name, iteration, data: result });
           }
@@ -122,6 +124,7 @@ async function create({
               proxyPort,
               backendPort,
               alternativeBackendPort,
+              http2BackendPort,
             });
           }
         }

@@ -203,7 +203,7 @@ async function run() {
     proxyPort: proxy.port,
     backendPort: backend.port,
     alternativeBackendPort: alternativeBackend.port,
-    http2Backend: http2Backend.port,
+    http2BackendPort: http2Backend.port,
 
     pushClientData: results.pusher('clientData'),
     pushClientResult,

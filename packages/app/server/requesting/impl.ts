@@ -1,8 +1,7 @@
 // ------------------------------------------------------------------------- std
 
-import { IncomingMessage, globalAgent as httpAgent } from 'http';
-import { auto as httpRequest, globalAgent as http2Agent } from 'http2-wrapper';
-import { globalAgent as httpsAgent } from 'https';
+import { IncomingMessage } from 'http';
+import { auto as httpRequest } from 'http2-wrapper';
 
 import { URL } from 'url';
 
@@ -122,6 +121,9 @@ export async function sendRequest({
   baseUrl,
   original,
   skipLog,
+  httpAgent,
+  httpsAgent,
+  http2Agent,
 }: SendRequestSpec): Promise<SendRequestOutput> {
   const targetURL = new URL(baseUrl);
 

@@ -1,3 +1,7 @@
+import type { Agent as HttpAgent } from 'http';
+import type { Agent as HttpsAgent } from 'https';
+import type { Agent as Http2Agent } from 'http2-wrapper';
+
 // ------------------------------------------------------------------------- app
 
 import { HookAPI, IMock, MockData } from '../mocking';
@@ -387,6 +391,21 @@ export interface ConfigurationSpec extends CLIConfigurationSpec {
    * be done by using the callback returned from {@link runFromAPI})
    */
   onExit?(): void;
+
+  /**
+   * HTTP agent to use for requests done by kassette.
+   */
+  httpAgent?: HttpAgent;
+
+  /**
+   * HTTPS agent to use for requests done by kassette.
+   */
+  httpsAgent?: HttpsAgent;
+
+  /**
+   * HTTP2 agent to use for requests done by kassette.
+   */
+  http2Agent?: Http2Agent;
 
   /**
    * Custom implementation of the {@link ConsoleSpec} interface, with methods
